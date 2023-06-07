@@ -79,7 +79,7 @@ public class Fighter {
 	private void fighterJoin() {
 		this.initializeFighterVars();
 		this.downloadDatabase();
-		chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + ChatColor.BOLD + player.getDisplayName() + "'s Spawn", VanaByte.hubSpawn, player);
+		//chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + ChatColor.BOLD + player.getDisplayName() + "'s Spawn", VanaByte.hubSpawn, player);
 		this.grantUnlocked();
 		this.scoreBoardObject = new ScoreBoardObject(player);
 		this.giveKit();
