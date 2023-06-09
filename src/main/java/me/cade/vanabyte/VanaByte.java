@@ -57,7 +57,7 @@ public class VanaByte extends JavaPlugin {
 		registerListeners();
 		Borders.startCheckingBorders();
 		Experience.makeExpNeeded();
-		//A_CakeManager.startCakePackage();
+		A_CakeManager.startCakePackage();
 		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		// do last
 		addPlayersToFighters();

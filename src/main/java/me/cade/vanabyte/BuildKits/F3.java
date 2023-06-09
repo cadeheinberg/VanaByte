@@ -49,7 +49,7 @@ public class F3 extends FighterKit {
 		this.rechargeTicks = 50;
 		this.meleeDamage = 0;
 		this.projectileDamage = 2.5;
-		this.specialDamage = 4;
+		this.specialDamage = 0.5;
 		this.cooldownTicks = 5;
 		this.material = Material.BOW;
 		this.primaryEnchantment = new EnchantmentPair(Enchantment.ARROW_INFINITE, 1);
@@ -105,7 +105,11 @@ public class F3 extends FighterKit {
 			Fighter.get(player).fighterDismountParachute();
 			victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
 		}
-		DealDamage.dealAmount(super.player, victim, this.getProjectileDamage());
+		if(Fighter.get(player).isAbilityActive()){
+			DealDamage.dealAmount(player, victim, this.getSpecialDamage());
+		}else {
+			DealDamage.dealAmount(player, victim, this.getProjectileDamage());
+		}
 		if (arrow.getFireTicks() > 0) {
 			victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
 		}
@@ -127,27 +131,39 @@ public class F3 extends FighterKit {
 		if (force > 0.75) {
 			Arrow arrow1 = player.launchProjectile(Arrow.class);
 			arrow1.setVelocity(arrow.getVelocity().add(new Vector(0, 0.25, 0)));
-			arrow1.setFireTicks(1000);
+			arrow1.setFireTicks(2000);
+			arrow1.setShooter(player);
+			FighterProjectile.addMetadataToProjectile(arrow1);
 
 			Arrow arrow2 = player.launchProjectile(Arrow.class);
 			arrow2.setVelocity(arrow.getVelocity().add(new Vector(0, -0.25, 0)));
-			arrow2.setFireTicks(1000);
+			arrow2.setFireTicks(2000);
+			arrow2.setShooter(player);
+			FighterProjectile.addMetadataToProjectile(arrow2);
 
 			Arrow arrow3 = player.launchProjectile(Arrow.class);
 			arrow3.setVelocity(arrow.getVelocity().add(new Vector(0.25, 0, 0)));
-			arrow3.setFireTicks(1000);
+			arrow3.setFireTicks(2000);
+			arrow3.setShooter(player);
+			FighterProjectile.addMetadataToProjectile(arrow3);
 
 			Arrow arrow4 = player.launchProjectile(Arrow.class);
 			arrow4.setVelocity(arrow.getVelocity().add(new Vector(-0.25, 0, 0)));
-			arrow4.setFireTicks(1000);
+			arrow4.setFireTicks(2000);
+			arrow4.setShooter(player);
+			FighterProjectile.addMetadataToProjectile(arrow4);
 
 			Arrow arrow5 = player.launchProjectile(Arrow.class);
 			arrow5.setVelocity(arrow.getVelocity().add(new Vector(0, 0, 0.25)));
-			arrow5.setFireTicks(1000);
+			arrow5.setFireTicks(2000);
+			arrow5.setShooter(player);
+			FighterProjectile.addMetadataToProjectile(arrow5);
 
 			Arrow arrow6 = player.launchProjectile(Arrow.class);
 			arrow6.setVelocity(arrow.getVelocity().add(new Vector(0, 0, -0.25)));
-			arrow6.setFireTicks(1000);
+			arrow6.setFireTicks(2000);
+			arrow6.setShooter(player);
+			FighterProjectile.addMetadataToProjectile(arrow6);
 			return;
 		}
 	}

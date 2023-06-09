@@ -42,8 +42,8 @@ public class F2 extends FighterKit {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
 		this.meleeDamage = 6;
-		this.projectileDamage = 0.25;
-		this.specialDamage = 1.0;
+		this.projectileDamage = 1;
+		this.specialDamage = 1.5;
 		this.cooldownTicks = 30;
 		this.material = Material.IRON_SHOVEL;
 		this.primaryEnchantment = null;
@@ -101,7 +101,11 @@ public class F2 extends FighterKit {
 		if (snowball.getFireTicks() > 0) {
 			victim.setFireTicks(50);
 		}
-		DealDamage.dealAmount(super.player, victim, this.getProjectileDamage());
+		if(Fighter.get(player).isAbilityActive()){
+			DealDamage.dealAmount(player, victim, this.getSpecialDamage());
+		}else {
+			DealDamage.dealAmount(player, victim, this.getProjectileDamage());
+		}
 	}
 
 	public void doSnowballHitGround(Location location, Snowball snowball) {

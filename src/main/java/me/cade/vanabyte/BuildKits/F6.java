@@ -43,7 +43,7 @@ public class F6 extends FighterKit {
 	public void setUpPrivateKitVariables() {
 		this.durationTicks = 200;
 		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
+		this.meleeDamage = 8;
 		this.projectileDamage = 4;
 		this.specialDamage = 4;
 		this.cooldownTicks = 0;

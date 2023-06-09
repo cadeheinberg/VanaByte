@@ -49,7 +49,7 @@ public class F5 extends FighterKit {
 		this.projectileDamage = 4;
 		this.specialDamage = 4;
 		this.cooldownTicks = 180;
-		this.material = Material.BAMBOO;
+		this.material = Material.BLAZE_ROD;
 		this.primaryEnchantment = new EnchantmentPair(Enchantment.KNOCKBACK, 3);
 		this.sceondaryMeleeDamage = 0;
 		this.secondaryProjectileDamage = 0;

@@ -37,7 +37,6 @@ public class D_ProtocolStand {
 		packet.getIntegers().write(1, 1);
 		// Set yaw pitch
 		packet.getIntegers().write(4, 0);
-		packet.getIntegers().write(5, 0);
 		// Set location
 		packet.getDoubles().write(0, location.getX());
 		packet.getDoubles().write(1, location.getY());

@@ -17,7 +17,6 @@ public class PickingUp implements Listener{
       return;
     }
     if (!(e.getEntity() instanceof Player)) {
-      e.setCancelled(true);
       return;
     }
     if (((Player) e.getEntity()).getGameMode() == GameMode.CREATIVE) {
