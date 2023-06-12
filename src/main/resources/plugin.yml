@@ -10,3 +10,6 @@ commands:
   hidescoreboard:
   unhidescoreboard:
   fly:
+  heal:
+  vanascuteness:
+

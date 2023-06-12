@@ -13,15 +13,23 @@ import me.cade.vanabyte.PlayerJoin.*;
 import me.cade.vanabyte.ScoreBoard.Experience;
 import me.cade.vanabyte.SpecialItems.SpecialItemsListener;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 
 public class VanaByte extends JavaPlugin {
 
@@ -33,6 +41,8 @@ public class VanaByte extends JavaPlugin {
 	public static World thirdWorld;
 	public static Location thirdWorldSpawn;
 	public static MySQL mysql;
+
+	public static MySQL_Upgrades mySQL_upgrades;
 
 	private static Plugin plugin = null;
 	private static ProtocolManager protocolManager;
@@ -63,8 +73,9 @@ public class VanaByte extends JavaPlugin {
 		addPlayersToFighters();
 	}
 
-	private void startMySQL() {
+	private static void startMySQL() {
 		mysql = new MySQL();
+		mySQL_upgrades = new MySQL_Upgrades();
 	}
 
 	private void registerListeners() {
@@ -87,6 +98,7 @@ public class VanaByte extends JavaPlugin {
 			Fighter.get(player).fighterLeftServer();
 		}
 		mysql.closeConnection();
+		mySQL_upgrades.closeConnection();
 		A_CakeManager.stopCakePackage();
 		Borders.stopCheckingBorders();
 	}
@@ -122,13 +134,14 @@ public class VanaByte extends JavaPlugin {
 			if (!player.isOp()){
 				return false;
 			}
-			int input = Integer.parseInt(args[0].toString());
+			Player toSend = Bukkit.getPlayer(args[0].toString());
+			int input = Integer.parseInt(args[1].toString());
 			if(input == 0){
-				player.teleport(hubSpawn);
+				toSend.teleport(hubSpawn);
 			}else if (input == 1){
-				player.teleport(secondWorldSpawn);
+				toSend.teleport(secondWorldSpawn);
 			} else if (input == 2) {
-				player.teleport(thirdWorldSpawn);
+				toSend.teleport(thirdWorldSpawn);
 			}
 			return true;
 		} else if (label.equals("hidescoreboard")) {
@@ -153,6 +166,38 @@ public class VanaByte extends JavaPlugin {
 			}
 		      double input = Double.parseDouble(args[0].toString());
 		      player.setFlySpeed((float) input);
+		} else if (label.equals("heal")) {
+			if (!(player.isOp())) {
+				player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
+						+ " operator " + ChatColor.RED + "on this server");
+				return false;
+			}
+			player.setHealth(20);
+			player.setFoodLevel(20);
+		} else if (label.equals("vanascuteness")) {
+			if (!(player.isOp())) {
+				player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
+						+ " operator " + ChatColor.RED + "on this server");
+				return false;
+			}
+			ItemStack lhelmet = new ItemStack(Material.DIAMOND_HELMET, 1);
+			ItemMeta lhe = lhelmet.getItemMeta();
+			ItemStack lchest = new ItemStack(Material.DIAMOND_CHESTPLATE, 1);
+			ItemMeta lch = lchest.getItemMeta();
+			ItemStack lleggs = new ItemStack(Material.DIAMOND_LEGGINGS, 1);
+			ItemMeta lle = lleggs.getItemMeta();
+			ItemStack lboots = new ItemStack(Material.DIAMOND_BOOTS, 1);
+			ItemMeta lbo = lboots.getItemMeta();
+
+			lhe.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+			lch.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+			lle.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+			lbo.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+
+			player.getEquipment().setHelmet(lhelmet);
+			player.getEquipment().setChestplate(lchest);
+			player.getEquipment().setLeggings(lleggs);
+			player.getEquipment().setBoots(lboots);
 		}
 		return false;
 	}

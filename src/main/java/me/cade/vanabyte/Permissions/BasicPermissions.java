@@ -14,29 +14,42 @@ import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 
 public class BasicPermissions implements Listener {
 
 	@EventHandler
-	public void onMenuClick(InventoryClickEvent event) {
-		if(event.getWhoClicked() instanceof Player && ((Player) event.getWhoClicked()).getGameMode() == GameMode.CREATIVE){
+	public void onMenuClick(InventoryClickEvent e) {
+		if(e.getWhoClicked() instanceof Player && ((Player) e.getWhoClicked()).getGameMode() == GameMode.CREATIVE){
 			//if player is in creative mode ignore
 			return;
 		}
-		if(SafeZone.inHub(event.getWhoClicked().getWorld())){
-			event.setCancelled(true);
-			return;
-		}
-		if(event.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY || event.getAction() == InventoryAction.PICKUP_ALL || event.getAction() == InventoryAction.PLACE_SOME || event.getAction() == InventoryAction.PICKUP_HALF || event.getAction() == InventoryAction.PICKUP_ONE || event.getAction() == InventoryAction.PLACE_SOME || event.getAction() == InventoryAction.PLACE_ALL || event.getAction() == InventoryAction.PLACE_ONE){
-			if (event.getCursor() != null && event.getCursor().hasItemMeta()) {
-				if (FighterKit.isFighterWeaponOrSpecialItem(event.getCursor())) {
-					event.setCancelled(true);
+//		e.getWhoClicked().sendMessage("ClickedInventory: " + e.getClickedInventory().getType());
+//		e.getWhoClicked().sendMessage("Inventory: " + e.getInventory().getType());
+//		e.getWhoClicked().sendMessage("InventoryView: " + e.getView().getType());
+//		e.getWhoClicked().sendMessage("InventoryViewTop: " + e.getView().getTopInventory().getType());
+//		e.getWhoClicked().sendMessage("InventoryViewBottom: " + e.getView().getBottomInventory().getType());
+//		if(SafeZone.inHub(e.getWhoClicked().getWorld())){
+//			e.setCancelled(true);
+//			return;
+//		}
+		if(e.getInventory() != null && e.getInventory().getType() == InventoryType.CRAFTING){
+			if(e.getView() != null && e.getView().getTopInventory() != null && e.getView().getTopInventory().getType() == InventoryType.CRAFTING){
+				if(e.getView().getBottomInventory() != null && e.getView().getBottomInventory().getType() == InventoryType.PLAYER){
+					return;
 				}
 			}
-			if (event.getCurrentItem() != null && event.getCurrentItem().hasItemMeta()) {
-				if (FighterKit.isFighterWeaponOrSpecialItem(event.getCurrentItem())) {
-					event.setCancelled(true);
+		}
+		if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY || e.getAction() == InventoryAction.PICKUP_ALL || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PICKUP_HALF || e.getAction() == InventoryAction.PICKUP_ONE || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PLACE_ALL || e.getAction() == InventoryAction.PLACE_ONE){
+			if (e.getCursor() != null && e.getCursor().hasItemMeta()) {
+				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCursor())) {
+					e.setCancelled(true);
+				}
+			}
+			if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()) {
+				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCurrentItem())) {
+					e.setCancelled(true);
 				}
 			}
 		}

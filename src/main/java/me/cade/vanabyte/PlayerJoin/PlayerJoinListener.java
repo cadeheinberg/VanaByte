@@ -30,7 +30,7 @@ public class PlayerJoinListener implements Listener {
   @EventHandler
   public void onRespawn(PlayerRespawnEvent e) {
     e.setRespawnLocation(VanaByte.hubSpawn);
-   Fighter.get(e.getPlayer()).fighterRespawn();
+    Fighter.get(e.getPlayer()).fighterRespawn();
   }
   
 }

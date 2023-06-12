@@ -19,7 +19,7 @@ import java.util.ArrayList;
 
 public class FighterKit {
 
-	Player player;
+	Player player = null;
 	Fighter pFight;
 	Weapon[] weapons = new Weapon[2];
 
@@ -31,14 +31,14 @@ public class FighterKit {
 	private SpecialItem jetPackItem;
 
 	public FighterKit() {
-		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Creating FighterKit without player");
+//		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Creating FighterKit without player");
 		this.setUpPrivateKitVariables();
 		this.loadPrimaryWeapon();
 	}
 
 	public FighterKit(Player player) {
-		Bukkit.getConsoleSender()
-				.sendMessage(ChatColor.GREEN + "Creating FighterKit with player + " + player.getDisplayName());
+//		Bukkit.getConsoleSender()
+//				.sendMessage(ChatColor.GREEN + "Creating FighterKit with player + " + player.getDisplayName());
 		this.player = player;
 		this.pFight = Fighter.get(player);
 		this.setUpPrivateKitVariables();

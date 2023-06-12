@@ -1,6 +1,5 @@
 package me.cade.vanabyte.BuildKits;
 
-import me.cade.vanabyte.Damaging.DealDamage;
 import me.cade.vanabyte.Fighter;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
@@ -39,12 +38,21 @@ public class F2 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		this.durationTicks = 200;
-		this.rechargeTicks = 50;
-		this.meleeDamage = 6;
-		this.projectileDamage = 1;
-		this.specialDamage = 1.5;
-		this.cooldownTicks = 30;
+		if(this.pFight != null){
+			this.meleeDamage = 6 + this.pFight.getKitUpgradesConvertedDamage(2, 0);;
+			this.projectileDamage = 12 + this.pFight.getKitUpgradesConvertedDamage(2, 1);;
+			this.specialDamage = 12 + this.pFight.getKitUpgradesConvertedDamage(2, 2);
+			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(2, 3);
+			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(2, 4);
+			this.cooldownTicks = 30 - this.pFight.getKitUpgradesConvertedTicks(2, 5);
+		}else{
+			this.meleeDamage = 6;
+			this.projectileDamage = 12;
+			this.specialDamage = 12;
+			this.durationTicks = 200;
+			this.rechargeTicks = 50;
+			this.cooldownTicks = 30;
+		}
 		this.material = Material.IRON_SHOVEL;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -97,20 +105,17 @@ public class F2 extends FighterKit {
 		super.deActivateSpecial();
 	}
 
-	public void doSnowballHitEntity(LivingEntity victim, Snowball snowball) {
+	public double doSnowballHitEntity(LivingEntity victim, Snowball snowball) {
 		if (snowball.getFireTicks() > 0) {
 			victim.setFireTicks(50);
+			return this.getSpecialDamage();
 		}
-		if(Fighter.get(player).isAbilityActive()){
-			DealDamage.dealAmount(player, victim, this.getSpecialDamage());
-		}else {
-			DealDamage.dealAmount(player, victim, this.getProjectileDamage());
-		}
+		return this.getProjectileDamage();
 	}
 
 	public void doSnowballHitGround(Location location, Snowball snowball) {
 		if (snowball.getFireTicks() > 0) {
-			
+
 		}
 	}
 
@@ -126,26 +131,32 @@ public class F2 extends FighterKit {
 		Snowball ball = player.launchProjectile(Snowball.class);
 		ball.setVelocity(ball.getVelocity().add(new Vector(0, 0.25, 0)));
 		FighterProjectile.addMetadataToProjectile(ball);
+		ball.setShooter(player);
 
 		Snowball ball2 = player.launchProjectile(Snowball.class);
 		ball2.setVelocity(ball2.getVelocity().add(new Vector(0, -0.25, 0)));
 		FighterProjectile.addMetadataToProjectile(ball2);
+		ball2.setShooter(player);
 
 		Snowball ball3 = player.launchProjectile(Snowball.class);
 		ball3.setVelocity(ball3.getVelocity().add(new Vector(0.25, 0, 0)));
 		FighterProjectile.addMetadataToProjectile(ball3);
+		ball3.setShooter(player);
 
 		Snowball ball4 = player.launchProjectile(Snowball.class);
 		ball4.setVelocity(ball4.getVelocity().add(new Vector(-0.25, 0, 0)));
 		FighterProjectile.addMetadataToProjectile(ball4);
+		ball4.setShooter(player);
 
 		Snowball ball5 = player.launchProjectile(Snowball.class);
 		ball5.setVelocity(ball5.getVelocity().add(new Vector(0, 0, 0.25)));
 		FighterProjectile.addMetadataToProjectile(ball5);
+		ball5.setShooter(player);
 
 		Snowball ball6 = player.launchProjectile(Snowball.class);
 		ball6.setVelocity(ball6.getVelocity().add(new Vector(0, 0, -0.25)));
 		FighterProjectile.addMetadataToProjectile(ball6);
+		ball6.setShooter(player);
 		
 	    if (Fighter.fighters.get(player.getUniqueId()).isAbilityActive()) {
 			ball.setFireTicks(1000);
@@ -212,6 +223,9 @@ public class F2 extends FighterKit {
 
 	@Override
 	public int getRechargeTicks() {
+		if(rechargeTicks < 0){
+			return 0;
+		}
 		return rechargeTicks;
 	}
 
@@ -237,6 +251,9 @@ public class F2 extends FighterKit {
 
 	@Override
 	public int getCooldownTicks() {
+		if(cooldownTicks < 0){
+			return 0;
+		}
 		return cooldownTicks;
 	}
 	

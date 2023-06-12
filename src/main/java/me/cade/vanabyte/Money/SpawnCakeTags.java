@@ -18,19 +18,19 @@ public class SpawnCakeTags {
 
   public static void makeIceCake(String time) {
     Location local = new Location(VanaByte.hub, -1014.5, 67, -143.5);
-    D1_ArmorStand stand = new D1_ArmorStand(genericName, local, 0, false, true);
+    D1_ArmorStand stand = new D1_ArmorStand(genericName, local, 0, false, true, false);
     iceCake = stand.getStand().getUniqueId();
   }
 
   public static void makeSandCake(String time) {
     Location local = new Location(VanaByte.hub, -1057.5, 67, -101.5);
-    D1_ArmorStand stand = new D1_ArmorStand(genericName, local, 0, false, true);
+    D1_ArmorStand stand = new D1_ArmorStand(genericName, local, 0, false, true, false);
     sandCake = stand.getStand().getUniqueId();
   }
 
   public static void makeGrassCake(String time) {
     Location local = new Location(VanaByte.hub, -1092.5, 67, -93.5);
-    D1_ArmorStand stand = new D1_ArmorStand(genericName, local, 0, false, true);
+    D1_ArmorStand stand = new D1_ArmorStand(genericName, local, 0, false, true, false);
     grassCake = stand.getStand().getUniqueId();
   }
 

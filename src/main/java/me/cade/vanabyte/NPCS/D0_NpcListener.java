@@ -2,6 +2,7 @@ package me.cade.vanabyte.NPCS;
 
 import me.cade.vanabyte.Fighter;
 import me.cade.vanabyte.SafeZone;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -21,9 +22,30 @@ public class D0_NpcListener implements Listener {
 		if (e.getHand() == EquipmentSlot.OFF_HAND) {
 			return; // off hand packet, ignore.
 		}
+		if(e.getPlayer() == null){
+			return;
+		}
 		if(SafeZone.safeZone(e.getRightClicked().getLocation())) {
 			if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 				handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
+				return;
+			} else if (e.getRightClicked().getType() == EntityType.CAT) {
+				e.getPlayer().sendMessage(ChatColor.GREEN + "Coming soon!");
+				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_CAT_PURREOW, 8, 1);
+				return;
+			}else if (e.getRightClicked().getType() == EntityType.IRON_GOLEM) {
+				e.getPlayer().teleport(VanaByte.secondWorldSpawn);
+				return;
+			} else if (e.getRightClicked().getType() == EntityType.SNOWMAN) {
+				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0) + 10);
+				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1) + 10);
+				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2) + 10);
+				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3) + 40);
+				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4) + 1);
+				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5) + 1);
+				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
+				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
+				Fighter.get(e.getPlayer()).giveKit();
 				return;
 			}
 			return;

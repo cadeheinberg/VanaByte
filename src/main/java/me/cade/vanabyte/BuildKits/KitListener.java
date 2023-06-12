@@ -72,42 +72,21 @@ public class KitListener implements Listener {
 			if (SafeZone.safeZone(e.getHitBlock().getLocation())) {
 				return;
 			}
-			if (e.getEntityType() == EntityType.SNOWBALL && Fighter.get(shooter).getKitID() == 2) {
+			FighterKit fKit = Fighter.get(shooter).getFKit();
+			if (e.getEntity() instanceof Snowball && fKit.getKitID() == 2 && fKit instanceof F2) {
 				((F2) Fighter.get(shooter).getFKit()).doSnowballHitGround(e.getHitBlock().getLocation(),
 						(Snowball) e.getEntity());
-			}
-			if (e.getEntityType() == EntityType.ARROW && Fighter.get(shooter).getKitID() == 3) {
-				// check if shooter is heavy or goblin
+			} else if (e.getEntity() instanceof Arrow && fKit.getKitID() == 3 && fKit instanceof F3) {
 				e.getEntity().remove();
 			}
-			if (e.getEntityType() == EntityType.TRIDENT && Fighter.get(shooter).getKitID() == 4) {
+			if (e.getEntity() instanceof Trident && fKit.getKitID() == 4 && fKit instanceof F4) {
 				((F4) Fighter.get(shooter).getFKit()).doTridentHitGround(e.getHitBlock().getLocation(),
 						(Trident) e.getEntity());
 			}
 		}
-
 		// Hit an entity
 		if (e.getHitEntity() != null) {
-			if (SafeZone.safeZone(e.getHitEntity().getLocation())) {
-				return;
-			}
-			if (!(e.getHitEntity() instanceof LivingEntity)) {
-				return;
-			}
-			if(e.getHitEntity() == shooter) {
-				return;
-			}
-			if (e.getEntityType() == EntityType.SNOWBALL && Fighter.get(shooter).getKitID() == 2) {
-				((F2) Fighter.get(shooter).getFKit()).doSnowballHitEntity((LivingEntity) e.getHitEntity(),
-						(Snowball) e.getEntity());
-			}
-			if (e.getEntityType() == EntityType.ARROW && Fighter.get(shooter).getKitID() == 3) {
-					((F3) Fighter.get(shooter).getFKit()).doArrorwHitEntity((LivingEntity) e.getHitEntity(), (Arrow) e.getEntity());
-			}
-			if (e.getEntityType() == EntityType.TRIDENT && Fighter.get(shooter).getKitID() == 4) {
-				((F4) Fighter.get(shooter).getFKit()).doTridentHitEntity((LivingEntity) e.getHitEntity(),
-						(Trident) e.getEntity());
-			}
+			//moved to EntityDamage listener
 		}
 	}
 
@@ -117,21 +96,17 @@ public class KitListener implements Listener {
 			e.setCancelled(true);
 			return;
 		}
-		if (e.getEntityType() == EntityType.TRIDENT) {
-			if (e.getEntity().getShooter() instanceof Player) {
-				if(((Player) e.getEntity().getShooter()).getItemInUse().getItemMeta().getDisplayName().equals(F4.weaponName)){
-					if (Fighter.get((Player) e.getEntity().getShooter()).getKitID() == 4){
-						//If the Trident is Igors Trident and the player
-						//is the Igor kit then mark it as a Fighter projectile
-						FighterProjectile.addMetadataToProjectile(e.getEntity());
-					}
-				}else{
-					return;
-				}
-				if(!((F4) Fighter.get((Player) e.getEntity().getShooter()).getFKit()).doThrowTrident((Trident) e.getEntity())) {
-					//Set canceled if there is a cooldown
-					e.setCancelled(true);
-				}
+		if (e.getEntityType() != EntityType.TRIDENT) {
+			return;
+		}
+		if (!(e.getEntity().getShooter() instanceof Player)) {
+			return;
+		}
+		FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
+		if(fKit.getKitID() == 4 && fKit instanceof F4 && fKit.getPlayer().getItemInUse().getItemMeta().getDisplayName().equals(F4.weaponName)) {
+			if (!((F4) fKit).doThrowTrident((Trident) e.getEntity())) {
+				//Set canceled if there is a cooldown
+				e.setCancelled(true);
 			}
 		}
 	}
@@ -139,25 +114,19 @@ public class KitListener implements Listener {
 	@EventHandler
 	public void onBowShot(EntityShootBowEvent e) {
 		if (SafeZone.safeZone(e.getEntity().getLocation())) {
+			e.setCancelled(true);
 			return;
 		}
-		if (e.getEntity() instanceof Player) {
-			if (e.getProjectile().getType() == EntityType.ARROW) {
-				if(((Player) e.getEntity()).getItemInUse().getItemMeta().getDisplayName().equals(F3.weaponName)){
-					if (Fighter.get((Player) e.getEntity()).getKitID() == 3){
-						//If the Bow is Goblins Bow and the player
-						//is the Goblin kit then mark it as a Fighter projectile
-						FighterProjectile.addMetadataToProjectile(e.getProjectile());
-					}
-				}else{
-					return;
-				}
-				if (!((F3) Fighter.get((Player) e.getEntity()).getFKit()).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
-					//Set canceled if there is a cooldown
-					e.setCancelled(true);
-				}
+		if (!(e.getEntity() instanceof Player)) {
+			return;
+		}
+		FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
+		if (fKit.getKitID() == 3 && fKit instanceof F3 && fKit.getPlayer().getItemInUse().getItemMeta().getDisplayName().equals(F3.weaponName)) {
+			if (!((F3) fKit).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
+				//Set canceled if there is a cooldown
+				e.setCancelled(true);
 			}
 		}
-	}
 
+	}
 }

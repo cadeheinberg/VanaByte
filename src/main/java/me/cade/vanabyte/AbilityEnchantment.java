@@ -9,33 +9,61 @@ import org.bukkit.inventory.ItemStack;
 public class AbilityEnchantment {
 
   public static void makeEnchanted(Player player) {
+
     ItemStack helmet = player.getEquipment().getHelmet();
-    helmet.addEnchantment(Enchantment.DURABILITY, 1);
-    
     ItemStack chest = player.getEquipment().getChestplate();
-    chest.addEnchantment(Enchantment.DURABILITY, 1);
-    
-    ItemStack legs = player.getEquipment().getLeggings();
-    legs.addEnchantment(Enchantment.DURABILITY, 1);
-    
+    ItemStack leggings = player.getEquipment().getLeggings();
     ItemStack boots = player.getEquipment().getBoots();
-    boots.addEnchantment(Enchantment.DURABILITY, 1);
+
+    if(helmet != null){
+      helmet.addEnchantment(Enchantment.DURABILITY, 1);
+    }
+    if(chest != null){
+      chest.addEnchantment(Enchantment.DURABILITY, 1);
+    }
+    if(leggings != null){
+      leggings.addEnchantment(Enchantment.DURABILITY, 1);
+    }
+    if(boots != null){
+      boots.addEnchantment(Enchantment.DURABILITY, 1);
+    }
 
     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-      p.sendEquipmentChange(player, EquipmentSlot.HEAD, helmet);
-      p.sendEquipmentChange(player, EquipmentSlot.CHEST, chest);
-      p.sendEquipmentChange(player, EquipmentSlot.LEGS, legs);
-      p.sendEquipmentChange(player, EquipmentSlot.FEET, boots);
+      if(helmet != null){
+        p.sendEquipmentChange(player, EquipmentSlot.HEAD, helmet);
+      }
+      if(chest != null){
+        p.sendEquipmentChange(player, EquipmentSlot.CHEST, chest);
+      }
+      if(leggings != null){
+        p.sendEquipmentChange(player, EquipmentSlot.LEGS, leggings);
+      }
+      if(boots != null){
+        p.sendEquipmentChange(player, EquipmentSlot.FEET,  boots);
+      }
     }
   }
   
   public static void removeEnchanted(Player player) {
 
+    ItemStack helmet = player.getEquipment().getHelmet();
+    ItemStack chest = player.getEquipment().getChestplate();
+    ItemStack leggings = player.getEquipment().getLeggings();
+    ItemStack boots = player.getEquipment().getBoots();
+
     for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-      p.sendEquipmentChange(player, EquipmentSlot.HEAD, player.getEquipment().getHelmet());
-      p.sendEquipmentChange(player, EquipmentSlot.CHEST, player.getEquipment().getChestplate());
-      p.sendEquipmentChange(player, EquipmentSlot.LEGS, player.getEquipment().getLeggings());
-      p.sendEquipmentChange(player, EquipmentSlot.FEET,  player.getEquipment().getBoots());
+      if(helmet != null){
+        p.sendEquipmentChange(player, EquipmentSlot.HEAD, helmet);
+      }
+      if(chest != null){
+        p.sendEquipmentChange(player, EquipmentSlot.CHEST, chest);
+      }
+      if(leggings != null){
+        p.sendEquipmentChange(player, EquipmentSlot.LEGS, leggings);
+      }
+      if(boots != null){
+        p.sendEquipmentChange(player, EquipmentSlot.FEET,  boots);
+      }
     }
   }
 

@@ -6,6 +6,7 @@ import org.bukkit.*;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -57,9 +58,9 @@ public class ParachuteItem extends SpecialItem {
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 8, 1);
 		Chicken chicken = (Chicken) player.getWorld().spawnEntity(player.getLocation(), EntityType.CHICKEN);
 		chicken.addPassenger(player);
+		chicken.setMetadata("parachute", new FixedMetadataValue(VanaByte.getInstance(), true));
 		this.setChicken(chicken);
 		doGliding(chicken, player);
-		return;
 	}
 
 	private void doGliding(Chicken chicken, Player player) {

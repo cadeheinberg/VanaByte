@@ -15,7 +15,7 @@ public class D1_ArmorStand {
   private Location location;
   private ArmorStand stand;
   
-  public D1_ArmorStand(String name, Location location, int yaw, boolean visible, boolean marker) {
+  public D1_ArmorStand(String name, Location location, float yaw, boolean visible, boolean marker, boolean gravity) {
     this.name = name;
     this.location = location;
     this.location.setYaw(yaw);
@@ -24,7 +24,7 @@ public class D1_ArmorStand {
     stand.setAI(false);
     stand.setVisible(visible);
     stand.setMarker(marker);
-    stand.setGravity(visible);
+    stand.setGravity(gravity);
     stand.setCustomName(name);
     stand.setCustomNameVisible(true);
     stand.setRemoveWhenFarAway(false);

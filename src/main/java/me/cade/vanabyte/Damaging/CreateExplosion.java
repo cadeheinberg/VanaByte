@@ -1,12 +1,12 @@
 package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.SafeZone;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -29,11 +29,16 @@ public class CreateExplosion {
 			if (ent.isOnGround()) {
 				upShoot.setY(upShoot.getY() + 1);
 			}
+			if(ent instanceof Player) {
+				if(((Player) ent).getGameMode() == GameMode.CREATIVE) {
+					return;
+				}
+			}
 			Vector currentDirection = upShoot.toVector().subtract(location.toVector());
 			currentDirection = currentDirection.multiply(new Vector(power, power, power));
 			ent.setVelocity(currentDirection);
 			if (((LivingEntity) ent) != shooter) {
-				DealDamage.dealAmount(shooter, (LivingEntity) ent, damage);
+				((LivingEntity) ent).damage(damage, shooter);
 				if (confusion) {
 					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
 					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
@@ -41,5 +46,7 @@ public class CreateExplosion {
 			}
 		}
 	}
-
+//	EntityDamageByEntityEvent damage =
+//			new EntityDamageByEntityEvent(killer, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, amount);
+//					Bukkit.getServer().getPluginManager().callEvent(damage);
 }

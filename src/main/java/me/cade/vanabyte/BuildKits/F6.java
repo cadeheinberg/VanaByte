@@ -41,12 +41,21 @@ public class F6 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		this.durationTicks = 200;
-		this.rechargeTicks = 50;
-		this.meleeDamage = 8;
-		this.projectileDamage = 4;
-		this.specialDamage = 4;
-		this.cooldownTicks = 0;
+		if(this.pFight != null){
+			this.meleeDamage = 8 + this.pFight.getKitUpgradesConvertedDamage(6, 0);;
+			this.projectileDamage = 4 + this.pFight.getKitUpgradesConvertedDamage(6, 1);;
+			this.specialDamage = 4 + this.pFight.getKitUpgradesConvertedDamage(6, 2);
+			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(6, 3);
+			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(6, 4);
+			this.cooldownTicks = 0 - this.pFight.getKitUpgradesConvertedTicks(6, 5);
+		}else{
+			this.meleeDamage = 8;
+			this.projectileDamage = 4;
+			this.specialDamage = 4;
+			this.durationTicks = 200;
+			this.rechargeTicks = 50;
+			this.cooldownTicks = 0;
+		}
 		this.material = Material.NETHERITE_SWORD;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -162,6 +171,9 @@ public class F6 extends FighterKit {
 
 	@Override
 	public int getRechargeTicks() {
+		if(rechargeTicks < 0){
+			return 0;
+		}
 		return rechargeTicks;
 	}
 
@@ -187,6 +199,9 @@ public class F6 extends FighterKit {
 
 	@Override
 	public int getCooldownTicks() {
+		if(cooldownTicks < 0){
+			return 0;
+		}
 		return cooldownTicks;
 	}
 	

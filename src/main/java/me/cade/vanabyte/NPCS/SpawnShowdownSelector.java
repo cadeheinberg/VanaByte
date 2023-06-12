@@ -25,6 +25,6 @@ public class SpawnShowdownSelector {
         Cat vana = (Cat) battleroyale.getEntity();
         vana.setCatType(Cat.Type.BRITISH_SHORTHAIR);
         vana.setCollarColor(DyeColor.MAGENTA);
-        new D1_ArmorStand(join, joinlocation, 180, false, false);
+        new D1_ArmorStand(join, joinlocation, 180, false, false, false);
     }
 }

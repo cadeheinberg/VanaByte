@@ -1,7 +1,6 @@
 package me.cade.vanabyte.BuildKits;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
-import me.cade.vanabyte.Damaging.DealDamage;
 import me.cade.vanabyte.Fighter;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
@@ -39,12 +38,21 @@ public class F4 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		this.durationTicks = 200;
-		this.rechargeTicks = 50;
-		this.meleeDamage = 6;
-		this.projectileDamage = 3.5;
-		this.specialDamage = 4;
-		this.cooldownTicks = 5;
+		if(this.pFight != null){
+			this.meleeDamage = 6 + this.pFight.getKitUpgradesConvertedDamage(4, 0);;
+			this.projectileDamage = 10 + this.pFight.getKitUpgradesConvertedDamage(4, 1);;
+			this.specialDamage = 8 + this.pFight.getKitUpgradesConvertedDamage(4, 2);
+			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(4, 3);
+			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(4, 4);
+			this.cooldownTicks = 5 - this.pFight.getKitUpgradesConvertedTicks(4, 5);
+		}else{
+			this.meleeDamage = 6;
+			this.projectileDamage = 10;
+			this.specialDamage = 8;
+			this.durationTicks = 200;
+			this.rechargeTicks = 50;
+			this.cooldownTicks = 5;
+		}
 		this.material = Material.TRIDENT;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -97,19 +105,24 @@ public class F4 extends FighterKit {
 		if (Fighter.fighters.get((player).getUniqueId()).isAbilityActive()) {
 			trident.setFireTicks(1000);
 		}
-		player.getInventory().remove(Material.TRIDENT);
-		player.getInventory().addItem(this.getWeapons()[0].getWeaponItem());
+		FighterProjectile.addMetadataToProjectile(trident);
+		this.player.getInventory().remove(Fighter.getFighterFKit(player).getWeaponItem());
+		player.getInventory().setItem(0, this.getWeapons()[0].getWeaponItem());
+		trident.setShooter(player);
 		return true;
 	}
 
-	public void doTridentHitEntity(LivingEntity victim, Trident trident) {
+	//Returns the amount of damage to do to the player
+	public double doTridentHitEntity(LivingEntity victim, Trident trident) {
 		if (trident.getFireTicks() > 0) {
 			Location local = victim.getLocation();
 			local.setY(local.getY() - 0.5);
-			CreateExplosion.doAnExplosion(super.player, local, 0.7, 6.5, true);
-			trident.remove();
-		} else {
-			DealDamage.dealAmount(super.player, victim, this.getProjectileDamage());
+			CreateExplosion.doAnExplosion(super.player, local, 0.7, this.specialDamage, true);
+			//explosion will deal special damage ^^
+			return 0;
+		}
+		else{
+			return this.getProjectileDamage();
 		}
 	}
 
@@ -173,6 +186,9 @@ public class F4 extends FighterKit {
 
 	@Override
 	public int getRechargeTicks() {
+		if(rechargeTicks < 0){
+			return 0;
+		}
 		return rechargeTicks;
 	}
 
@@ -198,6 +214,9 @@ public class F4 extends FighterKit {
 
 	@Override
 	public int getCooldownTicks() {
+		if(cooldownTicks < 0){
+			return 0;
+		}
 		return cooldownTicks;
 	}
 	

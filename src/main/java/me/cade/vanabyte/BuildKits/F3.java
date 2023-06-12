@@ -1,6 +1,5 @@
 package me.cade.vanabyte.BuildKits;
 
-import me.cade.vanabyte.Damaging.DealDamage;
 import me.cade.vanabyte.Fighter;
 import me.cade.vanabyte.Weapon;
 import org.bukkit.ChatColor;
@@ -45,12 +44,21 @@ public class F3 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		this.durationTicks = 200;
-		this.rechargeTicks = 50;
-		this.meleeDamage = 0;
-		this.projectileDamage = 2.5;
-		this.specialDamage = 0.5;
-		this.cooldownTicks = 5;
+		if(this.pFight != null){
+			this.meleeDamage = 5 + this.pFight.getKitUpgradesConvertedDamage(3, 0);;
+			this.projectileDamage = 15 + this.pFight.getKitUpgradesConvertedDamage(3, 1);;
+			this.specialDamage = 12 + this.pFight.getKitUpgradesConvertedDamage(3, 2);
+			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(3, 3);
+			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(3, 4);
+			this.cooldownTicks = 5 - this.pFight.getKitUpgradesConvertedTicks(3, 5);
+		}else{
+			this.meleeDamage = 5;
+			this.projectileDamage = 15;
+			this.specialDamage = 12;
+			this.durationTicks = 200;
+			this.rechargeTicks = 50;
+			this.cooldownTicks = 5;
+		}
 		this.material = Material.BOW;
 		this.primaryEnchantment = new EnchantmentPair(Enchantment.ARROW_INFINITE, 1);
 		this.sceondaryMeleeDamage = 6;
@@ -99,20 +107,17 @@ public class F3 extends FighterKit {
 		super.deActivateSpecial();
 	}
 
-	public void doArrorwHitEntity(LivingEntity victim, Arrow arrow) {
+	public double doArrorwHitEntity(LivingEntity victim, Arrow arrow) {
 		// create your own form of knockback
 		if (victim instanceof Player) {
 			Fighter.get(player).fighterDismountParachute();
-			victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
-		}
-		if(Fighter.get(player).isAbilityActive()){
-			DealDamage.dealAmount(player, victim, this.getSpecialDamage());
-		}else {
-			DealDamage.dealAmount(player, victim, this.getProjectileDamage());
 		}
 		if (arrow.getFireTicks() > 0) {
 			victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
+			victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
+			return this.getSpecialDamage();
 		}
+		return projectileDamage;
 	}
 
 	public boolean doArrowShoot(Arrow arrow, double force) {
@@ -221,6 +226,9 @@ public class F3 extends FighterKit {
 
 	@Override
 	public int getRechargeTicks() {
+		if(rechargeTicks < 0){
+			return 0;
+		}
 		return rechargeTicks;
 	}
 
@@ -246,6 +254,9 @@ public class F3 extends FighterKit {
 
 	@Override
 	public int getCooldownTicks() {
+		if(cooldownTicks < 0){
+			return 0;
+		}
 		return cooldownTicks;
 	}
 	

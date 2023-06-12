@@ -13,13 +13,15 @@ import org.bukkit.util.Vector;
 
 public class ThrowingTNTItem extends SpecialItem {
 
-	private static int cooldown = 250;
+	private static int cooldown = 5;
 	private static Material mat = Material.COAL;
 
 	public static String displayName = ChatColor.YELLOW + "Throwing TNT";
 	private static Weapon weapon = new Weapon(mat, displayName,
 			ChatColor.WHITE + "Right Click to throw TNT",
 			ChatColor.WHITE + "Coolwdown: " + Math.floor((cooldown / 20) * 100) / 100);
+
+	public static double damage = 10;
 
 	public ThrowingTNTItem(Player player) {
 		super(player);
@@ -66,5 +68,7 @@ public class ThrowingTNTItem extends SpecialItem {
 	public int getCooldown() {
 		return cooldown;
 	}
+
+	public static double getDamage() { return damage; }
 
 }

@@ -40,15 +40,23 @@ public class F5 extends FighterKit {
 	private int secondaryCooldownTicks;
 	private Material secondaryMaterial;
 	private EnchantmentPair secondaryEnchantment;
-
 	@Override
 	public void setUpPrivateKitVariables() {
-		this.durationTicks = 200;
-		this.rechargeTicks = 50;
-		this.meleeDamage = 5;
-		this.projectileDamage = 4;
-		this.specialDamage = 4;
-		this.cooldownTicks = 180;
+		if(this.pFight != null){
+			this.meleeDamage = 5 + this.pFight.getKitUpgradesConvertedDamage(5, 0);;
+			this.projectileDamage = 4 + this.pFight.getKitUpgradesConvertedDamage(5, 1);;
+			this.specialDamage = 10 + this.pFight.getKitUpgradesConvertedDamage(5, 2);
+			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(5, 3);
+			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(5, 4);
+			this.cooldownTicks = 180 - this.pFight.getKitUpgradesConvertedTicks(5, 5);
+		}else{
+			this.meleeDamage = 5;
+			this.projectileDamage = 4;
+			this.specialDamage = 10;
+			this.durationTicks = 200;
+			this.rechargeTicks = 50;
+			this.cooldownTicks = 180;
+		}
 		this.material = Material.BLAZE_ROD;
 		this.primaryEnchantment = new EnchantmentPair(Enchantment.KNOCKBACK, 3);
 		this.sceondaryMeleeDamage = 0;
@@ -100,12 +108,12 @@ public class F5 extends FighterKit {
 		super.deActivateSpecial();
 	}
 
-	public static void doJump(Player player, Fighter pFight) {
+	public void doJump(Player player, Fighter pFight) {
 		player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
 		launchPlayer(player, 1.4, pFight);
 	}
 
-	public static void launchPlayer(Player player, Double power, Fighter pFight) {
+	public void launchPlayer(Player player, Double power, Fighter pFight) {
 		Location local = player.getLocation();
 		local.setPitch(-60);
 		Vector currentDirection = local.getDirection().normalize();
@@ -119,7 +127,7 @@ public class F5 extends FighterKit {
 		}, 5);
 	}
 
-	public static void listenForFall(Player player, Fighter pFight) {
+	public void listenForFall(Player player, Fighter pFight) {
 		pFight.setGroundPoundTask(new BukkitRunnable() {
 			@SuppressWarnings("deprecation")
 			@Override
@@ -162,8 +170,8 @@ public class F5 extends FighterKit {
 	}
 
 	// make this freeze players also
-	public static void doGroundHit(Player shooter, Location location, double power) {
-		CreateExplosion.doAnExplosion(shooter, location, 0.7, 6.5, true);
+	public void doGroundHit(Player shooter, Location location, double power) {
+		CreateExplosion.doAnExplosion(shooter, location, 0.7, this.getSpecialDamage(), true);
 	}
 
 	@Override
@@ -262,6 +270,9 @@ public class F5 extends FighterKit {
 
 	@Override
 	public int getRechargeTicks() {
+		if(rechargeTicks < 0){
+			return 0;
+		}
 		return rechargeTicks;
 	}
 
@@ -287,6 +298,9 @@ public class F5 extends FighterKit {
 
 	@Override
 	public int getCooldownTicks() {
+		if(cooldownTicks < 0){
+			return 0;
+		}
 		return cooldownTicks;
 	}
 

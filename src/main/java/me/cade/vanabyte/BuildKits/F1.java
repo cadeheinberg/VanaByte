@@ -41,12 +41,21 @@ public class F1 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		this.durationTicks = 200;
-		this.rechargeTicks = 50;
-		this.meleeDamage = 6;
-		this.projectileDamage = 0;
-		this.specialDamage = 0;
-		this.cooldownTicks = 140;
+		if(this.pFight != null){
+			this.meleeDamage = 6 + this.pFight.getKitUpgradesConvertedDamage(1, 0);;
+			this.projectileDamage = 0 + this.pFight.getKitUpgradesConvertedDamage(1, 1);;
+			this.specialDamage = 0 + this.pFight.getKitUpgradesConvertedDamage(1, 2);
+			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(1, 3);
+			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(1, 4);
+			this.cooldownTicks = 140 - this.pFight.getKitUpgradesConvertedTicks(1, 5);
+		}else{
+			this.meleeDamage = 6;
+			this.projectileDamage = 0;
+			this.specialDamage = 0;
+			this.durationTicks = 200;
+			this.rechargeTicks = 50;
+			this.cooldownTicks = 140;
+		}
 		this.material = Material.IRON_AXE;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
@@ -159,6 +168,9 @@ public class F1 extends FighterKit {
 
 	@Override
 	public int getRechargeTicks() {
+		if(rechargeTicks < 0){
+			return 0;
+		}
 		return rechargeTicks;
 	}
 
@@ -184,6 +196,9 @@ public class F1 extends FighterKit {
 
 	@Override
 	public int getCooldownTicks() {
+		if(cooldownTicks < 0){
+			return 0;
+		}
 		return cooldownTicks;
 	}
 	

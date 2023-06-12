@@ -9,6 +9,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -28,7 +29,7 @@ public class SpecialItemsListener implements Listener {
 
 	@EventHandler
 	public void onExplode(EntityExplodeEvent e) {
-		if (e.getEntityType() != EntityType.PRIMED_TNT && e.getEntityType() != EntityType.FIREBALL) {
+		if (e.getEntity() instanceof TNTPrimed) {
 			// If its a creeper or something natural ignore it
 			return;
 		}
@@ -36,8 +37,6 @@ public class SpecialItemsListener implements Listener {
 			// If its a normal TNT and not Fighter produced ignore it
 			return;
 		}
-
-		//If the Explosion is from a Throwing TNT or fireball do the following
 		e.setCancelled(true);
 		for (Block b : e.blockList()) {
 			if (b.getType() == Material.PACKED_ICE) {
@@ -45,22 +44,23 @@ public class SpecialItemsListener implements Listener {
 			}
 		}
 		e.blockList().clear();
-		if (SafeZone.safeZone(e.getLocation())) {
-			return;
-		}
-		// Create the explosion
-		Player killer = (Player) Bukkit.getPlayer(e.getEntity().getMetadata("thrower").get(0).asString());
-		if (killer == null) {
-			return;
-		}
-		Location location = e.getLocation();
-		CreateExplosion.doAnExplosion(killer, location, 1.6, 6.5, false);
-		return;
 	}
 	
 	@EventHandler
 	public void onExplodePrime(ExplosionPrimeEvent e) {
-		
+		if(!(e.getEntity() instanceof TNTPrimed)){
+			return;
+		}
+		if(!e.getEntity().hasMetadata("thrower")){
+			// If its a normal TNT and not Fighter produced ignore it
+			return;
+		}
+		e.setCancelled(true);
+		// Create the explosion
+		Player killer = (Player) Bukkit.getPlayer(e.getEntity().getMetadata("thrower").get(0).asString());
+		if (killer != null) {
+			CreateExplosion.doAnExplosion(killer, e.getEntity().getLocation(), 1.6, ThrowingTNTItem.getDamage(), false);;
+		}
 	}
 
 }
