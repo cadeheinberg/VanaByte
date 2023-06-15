@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 
 public class CombatTracker extends SpecialItem {
 
-	public static Material mat = Material.NETHER_PORTAL;
+	public static Material mat = Material.DRAGON_HEAD;
 	private static Weapon weapon = new Weapon(mat, ChatColor.LIGHT_PURPLE + "Spawn Teleporter",
 			ChatColor.WHITE + "Right Click to go to /spawn",
 			ChatColor.WHITE + "Don't leave game while PvP cooldown is on!");

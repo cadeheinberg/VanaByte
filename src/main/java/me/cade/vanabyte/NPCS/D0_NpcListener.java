@@ -1,5 +1,6 @@
 package me.cade.vanabyte.NPCS;
 
+import me.cade.vanabyte.BuildKits.FighterKit;
 import me.cade.vanabyte.Fighter;
 import me.cade.vanabyte.SafeZone;
 import me.cade.vanabyte.VanaByte;
@@ -13,12 +14,24 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractAtEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 public class D0_NpcListener implements Listener {
 
 	@EventHandler
-	public void onClick(PlayerInteractAtEntityEvent e) {
+	public void onClick(PlayerInteractEntityEvent e) {
+		if(e.getRightClicked().getType() == EntityType.ITEM_FRAME || e.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME || e.getRightClicked().getType() == EntityType.ITEM_DISPLAY){
+			if(e.getPlayer().getInventory().getItemInMainHand() != null && e.getPlayer().getInventory().getItemInMainHand().hasItemMeta() && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName())){
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
+				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && e.getPlayer().getInventory().getItemInOffHand().hasItemMeta() && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInOffHand().getItemMeta().getDisplayName())){
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
+				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+			}
+		}
 		if (e.getHand() == EquipmentSlot.OFF_HAND) {
 			return; // off hand packet, ignore.
 		}
@@ -44,7 +57,6 @@ public class D0_NpcListener implements Listener {
 				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4) + 1);
 				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5) + 1);
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
-				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 				Fighter.get(e.getPlayer()).giveKit();
 				return;
 			}
@@ -54,7 +66,6 @@ public class D0_NpcListener implements Listener {
 	    	Fighter.getFighterFKit(e.getPlayer()).doPickUp((LivingEntity) e.getRightClicked());
 	    	return;
 	    }
-		return;
 	}
 	
 	public static void handleKitSelection(Player player, int x){
@@ -76,7 +87,22 @@ public class D0_NpcListener implements Listener {
 		if (e.getPlayer().getGameMode() == GameMode.CREATIVE) {
 			return;
 		}
-		e.setCancelled(true);
+		if (SafeZone.inHub(e.getPlayer().getWorld())) {
+			e.setCancelled(true);
+			if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
+				handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
+			}
+		} else{
+			if(e.getPlayer().getInventory().getItemInMainHand() != null && e.getPlayer().getInventory().getItemInMainHand().hasItemMeta() && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInMainHand().getItemMeta().getDisplayName())){
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
+				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && e.getPlayer().getInventory().getItemInOffHand().hasItemMeta() && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInOffHand().getItemMeta().getDisplayName())){
+				e.setCancelled(true);
+				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
+				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+			}
+		}
 	}
 
 }

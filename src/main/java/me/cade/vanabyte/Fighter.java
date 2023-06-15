@@ -8,6 +8,8 @@ import me.cade.vanabyte.NPCS.D_ProtocolStand;
 import me.cade.vanabyte.ScoreBoard.ScoreBoardObject;
 import me.cade.vanabyte.SpecialItems.JetPackItem;
 import me.cade.vanabyte.SpecialItems.ParachuteItem;
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -131,8 +133,6 @@ public class Fighter {
 	public void resetSpecialAbility() {
 		setAbilityActive(false);
 		setAbilityRecharged(true);
-		player.setExp(1);
-		player.setLevel(0);
 	}
 
 	public void adjustJoinModifiers() {
@@ -154,7 +154,7 @@ public class Fighter {
 
 			// only if the ability was already active
 			if (this.abilityActive) {
-				player.setCooldown(Material.BIRCH_FENCE, 0);
+				player.setCooldown(Material.BARRIER, 0);
 				cancelCooldownTask();
 				fKit.deActivateSpecial();
 			}
@@ -170,7 +170,7 @@ public class Fighter {
 
 			// only if the ability was already not recharged
 			if (!this.abilityRecharged) {
-				player.setCooldown(Material.JUNGLE_FENCE, 0);
+				player.setCooldown(Material.BARRIER, 0);
 				cancelRechargeTask();
 			}
 		}
@@ -529,8 +529,6 @@ public class Fighter {
 		this.plugin = VanaByte.getPlugin(VanaByte.class);
 		this.abilityActive = false;
 		this.abilityRecharged = true;
-		this.player.setExp(0);
-		this.player.setLevel(0);
 		this.player.setInvisible(false);
 		this.player.setWalkSpeed(getWalkSpeed());
 		// Glowing.setGlowingOffForAll(this.player);
@@ -654,11 +652,20 @@ public class Fighter {
 		this.doubleJumpTask = doubleJumpTask;
 	}
 
-	public boolean isInHub() {
-		return inHub;
-	}
-
-	public void setInHub(boolean inHub) {
-		this.inHub = inHub;
+	public void setActionBarToFloat(float setter){
+		String text = "";
+		if(setter != 0){
+			for(int i = 0; i < (55 * setter); i++){
+				text = text.concat("|");
+			}
+		}
+		TextComponent message = new TextComponent(text);
+		if(setter == 1){
+			message.setColor(net.md_5.bungee.api.ChatColor.GREEN);
+		}else{
+			message.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+		}
+		message.setBold(true);
+		this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);
 	}
 }

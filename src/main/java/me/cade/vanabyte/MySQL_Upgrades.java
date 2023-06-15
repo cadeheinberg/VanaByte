@@ -101,6 +101,8 @@ public class MySQL_Upgrades {
             Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL_Upgrades: Error creating table");
         }
 
+        this.refreshConnection();
+
     }
 
     public void closeConnection() {
@@ -215,10 +217,10 @@ public class MySQL_Upgrades {
         new BukkitRunnable(){
             @Override
             public void run() {
-                Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL: REFRESHING CONNECTION");
+                Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL_Upgrades: REFRESHING CONNECTION");
                 try {
                     connection.isValid(0);
-                    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: REFRESHED");
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL_Upgrades: REFRESHED");
                 } catch (SQLException e) {
                     e.printStackTrace();
                 }

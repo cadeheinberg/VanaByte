@@ -37,19 +37,6 @@ public class EntityDamage implements Listener {
 				return;
 			}
 			e.setCancelled(true);
-
-			if (e instanceof EntityDamageByEntityEvent) {
-				Entity attacker = ((EntityDamageByEntityEvent) e).getDamager();
-				if (!(attacker instanceof Player)) {
-					return;
-				}
-				if (e.getEntity().getType() != EntityType.ARMOR_STAND) {
-					return;
-				}
-				int x = e.getEntity().getLocation().getBlockX();
-				D0_NpcListener.handleKitSelection((Player) attacker, x);
-			}
-			return;
 		}
 		if (e.getEntity().getType() == EntityType.CHICKEN) {
 			if(e.getEntity().hasMetadata("parachute")){
@@ -68,6 +55,13 @@ public class EntityDamage implements Listener {
 				return;
 			}
 			e.setCancelled(true);
+			if (e.getDamager() instanceof Player) {
+				if (e.getEntity().getType() != EntityType.ARMOR_STAND) {
+					return;
+				}
+				int x = e.getEntity().getLocation().getBlockX();
+				D0_NpcListener.handleKitSelection((Player) e.getDamager(), x);
+			}
 			return;
 		}
 		Player killer = null;
@@ -177,7 +171,7 @@ public class EntityDamage implements Listener {
 			fVictim.dropFighterKitSoul();
 		}
 
-		if (victim.getCooldown(Material.BRICK) < 1) {
+		if (victim.getCooldown(CombatTracker.mat) < 1) {
 			// After 10 seconds don't count the kill for the killer
 			return;
 		}

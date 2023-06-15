@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 public class ParachuteItem extends SpecialItem {
 
-	private static int cooldown = 250;
+	private static int cooldown = 5;
 	public static Material mat = Material.PHANTOM_MEMBRANE;
 
 	public static String displayName = ChatColor.YELLOW + "Parachute";
@@ -33,6 +33,15 @@ public class ParachuteItem extends SpecialItem {
 	@Override
 	public boolean doRightClick() {
 		if (player.isOnGround()) {
+			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+			return false;
+		}
+		if (this.getItemTask() != -1) {
+			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+			return false;
+		}
+		if(this.chicken != null){
+			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 			return false;
 		}
 		if(super.doRightClick()) {
@@ -49,12 +58,6 @@ public class ParachuteItem extends SpecialItem {
 
 	@SuppressWarnings("deprecation")
 	private void doParachute(Player player) {
-		if (player.isOnGround()) {
-			return;
-		}
-		if (this.getItemTask() != -1) {
-			return;
-		}
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 8, 1);
 		Chicken chicken = (Chicken) player.getWorld().spawnEntity(player.getLocation(), EntityType.CHICKEN);
 		chicken.addPassenger(player);

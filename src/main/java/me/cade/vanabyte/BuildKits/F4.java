@@ -128,7 +128,7 @@ public class F4 extends FighterKit {
 
 	public void doTridentHitGround(Location location, Trident trident) {
 		if (trident.getFireTicks() > 0) {
-			CreateExplosion.doAnExplosion(super.player, location, 0.7, 6.5, true);
+			CreateExplosion.doAnExplosion(super.player, location, 0.7, this.specialDamage, true);
 		}
 		trident.remove();
 	}

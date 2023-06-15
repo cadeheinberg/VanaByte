@@ -5,6 +5,10 @@ import com.comphenix.protocol.ProtocolManager;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import me.cade.vanabyte.BuildKits.*;
 import me.cade.vanabyte.Damaging.*;
+import me.cade.vanabyte.Holograms.Abstraction.HologramFactory;
+import me.cade.vanabyte.Holograms.Abstraction.HologramListener;
+import me.cade.vanabyte.Holograms.Abstraction.HologramManager;
+import me.cade.vanabyte.Holograms.ProtocolLib.PlibHologramFactory;
 import me.cade.vanabyte.Money.A_CakeManager;
 import me.cade.vanabyte.NPCS.*;
 import me.cade.vanabyte.Permissions.BasicPermissions;
@@ -48,7 +52,11 @@ public class VanaByte extends JavaPlugin {
 	private static ProtocolManager protocolManager;
 	private static PlayerParticlesAPI ppAPI;
 	
-	private static NumberFormat myFormat = NumberFormat.getInstance(); 
+	private static NumberFormat myFormat = NumberFormat.getInstance();
+
+	private static HologramFactory plibFactory = new PlibHologramFactory();
+
+	private static HologramManager hologramManager = new HologramManager(plibFactory);
 
 	@Override
 	public void onEnable() {
@@ -68,9 +76,13 @@ public class VanaByte extends JavaPlugin {
 		Borders.startCheckingBorders();
 		Experience.makeExpNeeded();
 		A_CakeManager.startCakePackage();
-		getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
+		//getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		// do last
 		addPlayersToFighters();
+	}
+
+	public static HologramManager getHologramManager(){
+		return hologramManager;
 	}
 
 	private static void startMySQL() {
@@ -89,6 +101,10 @@ public class VanaByte extends JavaPlugin {
 		pm.registerEvents(new PlayerChat(), this);
 		pm.registerEvents(new PickingUp(), this);
 		pm.registerEvents(new SpecialItemsListener(), this);
+		this.plibFactory = new PlibHologramFactory();
+		this.hologramManager = new HologramManager(plibFactory);
+		HologramListener hologramListener = new HologramListener(hologramManager);
+		Bukkit.getPluginManager().registerEvents(hologramListener, this);
 		//pm.registerEvents(new DoubleJumpListener(), this);
 	}
 

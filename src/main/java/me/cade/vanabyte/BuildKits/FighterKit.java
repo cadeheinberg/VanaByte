@@ -16,6 +16,7 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class FighterKit {
 
@@ -46,24 +47,27 @@ public class FighterKit {
 		this.giveKit();
 	}
 
-	public static boolean isFighterWeaponOrSpecialItem(ItemStack item){
-		if(F0.weaponName.equals(item.getItemMeta().getDisplayName())){
+	public static boolean isFighterWeaponOrSpecialItem(String displayName){
+		if(displayName == null){
+			return false;
+		}
+		if(F0.weaponName.equals(displayName)){
 			return true;
-		} else if (F1.weaponName.equals(item.getItemMeta().getDisplayName())){
+		} else if (F1.weaponName.equals(displayName)){
 			return true;
-		}else if (F2.weaponName.equals(item.getItemMeta().getDisplayName())){
+		}else if (F2.weaponName.equals(displayName)){
 			return true;
-		}else if (F3.weaponName.equals(item.getItemMeta().getDisplayName())){
+		}else if (F3.weaponName.equals(displayName) || F3.secondaryWeaponName.equals(displayName) || F3.arrowName.equals(displayName)){
 			return true;
-		}else if (F4.weaponName.equals(item.getItemMeta().getDisplayName())){
+		}else if (F4.weaponName.equals(displayName)){
 			return true;
-		}else if (F5.weaponName.equals(item.getItemMeta().getDisplayName())){
+		}else if (F5.weaponName.equals(displayName)){
 			return true;
-		}else if (F6.weaponName.equals(item.getItemMeta().getDisplayName())){
+		}else if (F6.weaponName.equals(displayName)){
 			return true;
-		}else if (ParachuteItem.displayName.equals(item.getItemMeta().getDisplayName())){
+		}else if (ParachuteItem.displayName.equals(displayName)){
 			return true;
-		}else if (ThrowingTNTItem.displayName.equals(item.getItemMeta().getDisplayName())){
+		}else if (ThrowingTNTItem.displayName.equals(displayName)){
 			return true;
 		}
 		return false;
@@ -80,7 +84,7 @@ public class FighterKit {
 	}
 
 	public void giveKit() {
-		this.player.getInventory().clear();
+		this.clearFighterKitItems();
 		this.loadPrimaryWeapon();
 		this.loadSecondaryWeapon();
 		for (Weapon weapon : weapons) {
@@ -90,12 +94,41 @@ public class FighterKit {
 			this.player.getInventory().addItem(weapon.getWeaponItem());
 		}
 		if (this instanceof F3) {
-			this.getPlayer().getInventory().setItem(9, new ItemStack(Material.ARROW, 1));
+			((F3) this).goblinArrow = new Weapon(Material.ARROW, F3.arrowName, "Arrow of infinity");
+			this.getPlayer().getInventory().setItem(9, ((F3) this).goblinArrow.getWeaponItem());
 		}
 		this.addSpecialWeapons();
 		this.giveArmor();
 		player.closeInventory();
 		player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 8, 1);
+	}
+
+	private void clearFighterKitItems(){
+		for (ItemStack item : player.getInventory()){
+			if (item == null || !item.hasItemMeta()){
+				continue;
+			}
+			if(FighterKit.isFighterWeaponOrSpecialItem(item.getItemMeta().getDisplayName())){
+				player.getInventory().remove(item);
+			}
+		}
+		ItemStack helmet = this.player.getEquipment().getHelmet();
+		ItemStack chest = this.player.getEquipment().getChestplate();
+		ItemStack leggings = this.player.getEquipment().getLeggings();
+		ItemStack boots = this.player.getEquipment().getBoots();
+
+		if(helmet != null){
+			this.player.getInventory().remove(this.player.getPlayer().getEquipment().getHelmet());
+		}
+		if(chest != null){
+			this.player.getInventory().remove(this.player.getPlayer().getEquipment().getChestplate());
+		}
+		if(leggings != null){
+			this.player.getInventory().remove(this.player.getPlayer().getEquipment().getLeggings());
+		}
+		if(boots != null){
+			this.player.getInventory().remove(this.player.getPlayer().getEquipment().getBoots());
+		}
 	}
 
 	private void loadPrimaryWeapon() {
@@ -144,6 +177,7 @@ public class FighterKit {
 		if (this.getMaterial() == material) {
 			if(this.getCooldownTicks() > 0) {
 				if (player.getCooldown(this.getMaterial()) > 0) {
+					this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 					return false;
 				}
 				player.setCooldown(this.getMaterial(), this.getCooldownTicks());
@@ -164,9 +198,8 @@ public class FighterKit {
 			//The dropped item matches the material of their Fighter Kit
 			//The dropped item matches the weapon name of their Fighter Kit
 			//The player who dropped the item has the correct kitID for this FighterKit
-			if (this.player.getCooldown(Material.BIRCH_FENCE) > 0
-					|| this.player.getCooldown(Material.JUNGLE_FENCE) > 0) {
-				this.player.sendMessage(ChatColor.RED + "Wait for Special Ability to recharge");
+			if (this.player.getCooldown(Material.BARRIER) > 0
+					|| this.player.getCooldown(Material.BARRIER) > 0) {
 				this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 				return true;
 			}
@@ -184,7 +217,6 @@ public class FighterKit {
 
 	void activateSpecial() {
 		this.startAbilityDuration();
-		this.player.sendMessage(ChatColor.AQUA + "Special Ability Activated");
 	}
 
 	public void deActivateSpecial() {
@@ -276,7 +308,7 @@ public class FighterKit {
 		this.pFight.setAbilityActive(true);
 		this.pFight.setAbilityRecharged(false);
 		int durationTicks = this.getDurationTicks();
-		player.setCooldown(Material.BIRCH_FENCE, durationTicks);
+		player.setCooldown(Material.BARRIER, durationTicks);
 		int cooldownTask = new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -285,15 +317,15 @@ public class FighterKit {
 					if (!player.isOnline()) {
 						return;
 					}
-					if (player.getCooldown(Material.BIRCH_FENCE) < 1) {
+					if (player.getCooldown(Material.BARRIER) < 1) {
 						cancel();
 						Fighter.get(player).setAbilityActive(false);
-						player.setExp(0);
+						Fighter.get(player).setActionBarToFloat(0);
 						player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 8, 1);
 						startAbilityRecharge();
 						return;
 					}
-					player.setExp(((float) player.getCooldown(Material.BIRCH_FENCE)) / durationTicks);
+					Fighter.get(player).setActionBarToFloat(((float) player.getCooldown(Material.BARRIER)) / durationTicks);
 				}
 			}
 		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId();
@@ -302,7 +334,7 @@ public class FighterKit {
 
 	private void startAbilityRecharge() {
 		int rechargeTicks = this.getRechargeTicks();
-		player.setCooldown(Material.JUNGLE_FENCE, rechargeTicks);
+		player.setCooldown(Material.BARRIER, rechargeTicks);
 		int rechargeTask = new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -311,16 +343,15 @@ public class FighterKit {
 					if (!player.isOnline()) {
 						return;
 					}
-					if (player.getCooldown(Material.JUNGLE_FENCE) < 1) {
+					if (player.getCooldown(Material.BARRIER) < 1) {
 						cancel();
 						Fighter.get(player).setAbilityRecharged(true);
-						player.setExp(1);
-						player.sendMessage(ChatColor.GREEN + "Special Ability Recharged");
+						Fighter.get(player).setActionBarToFloat(1);
 						player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 						return;
 					}
-					player.setExp(
-							((float) (rechargeTicks - player.getCooldown(Material.JUNGLE_FENCE))) / rechargeTicks);
+					Fighter.get(player).setActionBarToFloat(
+							((float) (rechargeTicks - player.getCooldown(Material.BARRIER))) / rechargeTicks);
 				}
 			}
 		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId();

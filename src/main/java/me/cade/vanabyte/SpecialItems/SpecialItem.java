@@ -3,6 +3,7 @@ package me.cade.vanabyte.SpecialItems;
 import me.cade.vanabyte.Weapon;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 
 public class SpecialItem {
@@ -19,7 +20,7 @@ public class SpecialItem {
 	
 	public boolean checkAndSetCooldown() {
 		if (player.getCooldown(this.getMaterial()) > 0) {
-			player.sendMessage(ChatColor.RED + "Item needs to recharge");
+			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 			return false;
 		}
 		player.setCooldown(getMaterial(), this.getCooldown());

@@ -26,6 +26,10 @@ public class F3 extends FighterKit {
 	private int rechargeTicks;
 	private double specialDamage;
 
+	static String arrowName = ChatColor.GREEN + "Goblin Arrow";
+
+	static Weapon goblinArrow = null;
+
 	// Primary
 	static final String weaponName = kitChatColor + "Goblin Bow";
 	private double meleeDamage;

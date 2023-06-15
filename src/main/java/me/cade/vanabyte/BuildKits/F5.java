@@ -57,7 +57,7 @@ public class F5 extends FighterKit {
 			this.rechargeTicks = 50;
 			this.cooldownTicks = 180;
 		}
-		this.material = Material.BLAZE_ROD;
+		this.material = Material.STICK;
 		this.primaryEnchantment = new EnchantmentPair(Enchantment.KNOCKBACK, 3);
 		this.sceondaryMeleeDamage = 0;
 		this.secondaryProjectileDamage = 0;
@@ -187,7 +187,13 @@ public class F5 extends FighterKit {
 				return;
 			}
 		}
-		if(player.getInventory().getItemInMainHand().getType() != this.material) {
+		if(player.getInventory().getItemInMainHand() == null){
+			return;
+		}
+		if(!player.getInventory().getItemInMainHand().hasItemMeta()){
+			return;
+		}
+		if(!player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.getWeaponName())) {
 			return;
 		}
 		if (this.getCooldownTicks() > 0) {
