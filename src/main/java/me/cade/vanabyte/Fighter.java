@@ -5,15 +5,14 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.BuildKits.*;
 import me.cade.vanabyte.NPCS.D_ProtocolStand;
+import me.cade.vanabyte.NPCS.ProtocolHolograms.PHologram;
+import me.cade.vanabyte.NPCS.ProtocolHolograms.PSingleLineOfHologram;
 import me.cade.vanabyte.ScoreBoard.ScoreBoardObject;
 import me.cade.vanabyte.SpecialItems.JetPackItem;
 import me.cade.vanabyte.SpecialItems.ParachuteItem;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
@@ -73,6 +72,7 @@ public class Fighter {
 	private static final int numberOfKits = 7;
 	private static FighterKit[] fKits = { new F0(), new F1(), new F2(), new F3(), new F4(), new F5(), new F6() };
 
+	private static PSingleLineOfHologram[] kitHolograms = new PSingleLineOfHologram[7];
 	public Fighter(Player player) {
 		this.player = player;
 		this.uuid = player.getUniqueId();
@@ -92,6 +92,8 @@ public class Fighter {
 		this.resetSpecialAbility();
 		this.adjustJoinModifiers();
 		this.fKit.resetSpecialItemCooldowns();
+		this.spawnWelcomeHologram();
+		this.spawnKitHolograms();
 	}
 
 	public void fighterRespawn() {
@@ -118,6 +120,21 @@ public class Fighter {
 	}
 
 	public void dropFighterKitSoul(){
+
+	}
+
+	public void spawnWelcomeHologram(){
+		if(PHologram.getHologramMap().containsKey("welcome_" + player.getUniqueId())){
+			PHologram.getHologramMap().get("welcome_" + player.getUniqueId()).showHologramToPlayer(player);
+		}else{
+			PHologram pHolo = new PHologram("welcome_" + player.getUniqueId(), VanaByte.hubSpawn.clone().add(0 , 1.5, 0), ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome " + player.getName());
+			pHolo.addLine("You have " + this.getKills() + " kills!!!");
+			pHolo.addLine("You have " + this.getDeaths() + " deaths :(");
+			pHolo.showHologramToPlayer(player);
+		}
+	}
+
+	public void spawnKitHolograms(){
 
 	}
 
@@ -442,6 +459,10 @@ public class Fighter {
 		scoreBoardObject.updateDeaths();
 		scoreBoardObject.updateRatio();
 		scoreBoardObject.updateKillstreak();
+		if(PHologram.getHologramMap().containsKey("welcome_" + player.getUniqueId())){
+			PHologram.getHologramMap().get("welcome_" + player.getUniqueId()).setLine(1, "You have " + this.getKills() + " kills!!!");
+			PHologram.getHologramMap().get("welcome_" + player.getUniqueId()).setLine(2,"You have " + this.getDeaths() + " deaths :(");
+		}
 	}
 
 	public void doDeathChecks() {

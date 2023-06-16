@@ -15,8 +15,8 @@ public class SpawnShowdownSelector {
     private static Location joinlocation =
             new Location(VanaByte.hub, -1052.5, 193.45, -112.5, 180, 0);
 
-    private static String name = ChatColor.AQUA + "" + ChatColor.BOLD + "Vana's Battle Royale";
-    private static String join = ChatColor.GREEN + "" + ChatColor.BOLD + "Click to Join";
+    private static String name = ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Vana's Battle Royale";
+    private static String join = ChatColor.YELLOW+ "" + ChatColor.BOLD + "Click to Join";
 
     private static D1_LivingEntity battleroyale = null;
 
