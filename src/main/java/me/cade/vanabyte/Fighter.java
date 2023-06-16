@@ -5,8 +5,8 @@ import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.BuildKits.*;
 import me.cade.vanabyte.NPCS.D_ProtocolStand;
+import me.cade.vanabyte.NPCS.D_SpawnKitSelectors;
 import me.cade.vanabyte.NPCS.ProtocolHolograms.PHologram;
-import me.cade.vanabyte.NPCS.ProtocolHolograms.PSingleLineOfHologram;
 import me.cade.vanabyte.ScoreBoard.ScoreBoardObject;
 import me.cade.vanabyte.SpecialItems.JetPackItem;
 import me.cade.vanabyte.SpecialItems.ParachuteItem;
@@ -72,7 +72,9 @@ public class Fighter {
 	private static final int numberOfKits = 7;
 	private static FighterKit[] fKits = { new F0(), new F1(), new F2(), new F3(), new F4(), new F5(), new F6() };
 
-	private static PSingleLineOfHologram[] kitHolograms = new PSingleLineOfHologram[7];
+	private PHologram[] kitHolograms = {null, null, null, null, null, null, null};
+
+	private PHologram welcomeHologram = null;
 	public Fighter(Player player) {
 		this.player = player;
 		this.uuid = player.getUniqueId();
@@ -85,15 +87,14 @@ public class Fighter {
 		this.downloadDatabase();
 		this.downloadDatabaseUpgrades();
 		//chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + ChatColor.BOLD + player.getDisplayName() + "'s Spawn", VanaByte.hubSpawn, player);
-		this.grantUnlocked();
+		//this.grantUnlocked();
 		this.scoreBoardObject = new ScoreBoardObject(player);
 		this.giveKit();
 		VanaByte.getPpAPI().resetActivePlayerParticles(player);
 		this.resetSpecialAbility();
 		this.adjustJoinModifiers();
 		this.fKit.resetSpecialItemCooldowns();
-		this.spawnWelcomeHologram();
-		this.spawnKitHolograms();
+		this.spawnHolograms();
 	}
 
 	public void fighterRespawn() {
@@ -123,18 +124,57 @@ public class Fighter {
 
 	}
 
-	public void spawnWelcomeHologram(){
-		if(PHologram.getHologramMap().containsKey("welcome_" + player.getUniqueId())){
-			PHologram.getHologramMap().get("welcome_" + player.getUniqueId()).showHologramToPlayer(player);
-		}else{
-			PHologram pHolo = new PHologram("welcome_" + player.getUniqueId(), VanaByte.hubSpawn.clone().add(0 , 1.5, 0), ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome " + player.getName());
-			pHolo.addLine("You have " + this.getKills() + " kills!!!");
-			pHolo.addLine("You have " + this.getDeaths() + " deaths :(");
-			pHolo.showHologramToPlayer(player);
+	public void spawnHolograms(){
+		this.findExistingHologramsForPlayer();
+		this.refreshWelcomeHologram();
+		for (int i = 0; i < kitHolograms.length; i++) {
+			this.refreshKitHolograms(i);
 		}
 	}
 
-	public void spawnKitHolograms(){
+	private void findExistingHologramsForPlayer(){
+		if(PHologram.getHologramMap().containsKey("welcome_" + player.getUniqueId())){
+			welcomeHologram = PHologram.getHologramMap().get("welcome_" + player.getUniqueId());
+		}
+		for (int i = 0; i < numberOfKits; i++){
+			if(PHologram.getHologramMap().containsKey("kit0" + i + "_" + player.getUniqueId())){
+				kitHolograms[i] = PHologram.getHologramMap().get("kit0" + i + "_" + player.getUniqueId());
+			}
+		}
+	}
+
+	public void refreshWelcomeHologram(){
+		if(welcomeHologram != null){
+			welcomeHologram.setLine(1, "You have " + this.getKills() + " kills!!!");
+			welcomeHologram.setLine(2,"You have " + this.getDeaths() + " deaths :(");
+			welcomeHologram.showHologramToPlayer(player);
+		}else{
+			welcomeHologram = new PHologram("welcome_" + player.getUniqueId(), VanaByte.hubSpawn.clone().add(0 , 1.5, 0), ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome " + player.getName());
+			welcomeHologram.addLine("You have " + this.getKills() + " kills!!!");
+			welcomeHologram.addLine("You have " + this.getDeaths() + " deaths :(");
+			welcomeHologram.showHologramToPlayer(player);
+		}
+	}
+
+	public void refreshKitHolograms(int kitID) {
+			String locked = ChatColor.RED + "1 Kit Key Needed";
+			if (this.getUnlockedKit(kitID) > 0) {
+				locked = ChatColor.GREEN + "Unlocked";
+			}
+			String q_special = "  Drop-Item: " + fKits[kitID].getKitDrop() + "  ";
+			String rc_special = "  Right-Click: " + fKits[kitID].getKitRightClick() + "  ";
+
+			if (kitHolograms[kitID] != null) {
+				kitHolograms[kitID].setLine(0, locked);
+				kitHolograms[kitID].setLine(1, q_special);
+				kitHolograms[kitID].setLine(2, rc_special);
+				kitHolograms[kitID].showHologramToPlayer(this.player);
+			}else{
+				kitHolograms[kitID] = new PHologram("kit0" + kitID + "_" + player.getUniqueId(), D_SpawnKitSelectors.getLocationOfSelector(kitID).clone().add(0, 2.50, 0), locked);
+				kitHolograms[kitID].addLine(q_special);
+				kitHolograms[kitID].addLine(rc_special);
+				kitHolograms[kitID].showHologramToPlayer(this.player);
+			}
 
 	}
 
@@ -431,6 +471,7 @@ public class Fighter {
 		scoreBoardObject.updateKills();
 		scoreBoardObject.updateRatio();
 		scoreBoardObject.updateKillstreak();
+		this.refreshWelcomeHologram();
 	}
 
 	public int getKillStreak() {
@@ -459,10 +500,7 @@ public class Fighter {
 		scoreBoardObject.updateDeaths();
 		scoreBoardObject.updateRatio();
 		scoreBoardObject.updateKillstreak();
-		if(PHologram.getHologramMap().containsKey("welcome_" + player.getUniqueId())){
-			PHologram.getHologramMap().get("welcome_" + player.getUniqueId()).setLine(1, "You have " + this.getKills() + " kills!!!");
-			PHologram.getHologramMap().get("welcome_" + player.getUniqueId()).setLine(2,"You have " + this.getDeaths() + " deaths :(");
-		}
+		this.refreshWelcomeHologram();
 	}
 
 	public void doDeathChecks() {
@@ -563,8 +601,8 @@ public class Fighter {
 		this.cakes = 0;
 		this.killStreak = 0;
 		this.exp = 0;
-		this.unlockedKits[0] = 0;
-		this.unlockedKits[1] = 0;
+		this.unlockedKits[0] = 1;
+		this.unlockedKits[1] = 1;
 		this.unlockedKits[2] = 0;
 		this.unlockedKits[3] = 0;
 		this.unlockedKits[4] = 0;
@@ -578,11 +616,11 @@ public class Fighter {
 	public void grantUnlocked() {
 		this.unlockedKits[0] = 1;
 		this.unlockedKits[1] = 1;
-		this.unlockedKits[2] = 1;
-		this.unlockedKits[3] = 1;
-		this.unlockedKits[4] = 1;
-		this.unlockedKits[5] = 1;
-		this.unlockedKits[6] = 1;
+		this.unlockedKits[2] = 0;
+		this.unlockedKits[3] = 0;
+		this.unlockedKits[4] = 0;
+		this.unlockedKits[5] = 0;
+		this.unlockedKits[6] = 0;
 	}
 
 	public int getGroundPoundTask() {
@@ -688,5 +726,9 @@ public class Fighter {
 		}
 		message.setBold(true);
 		this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);
+	}
+
+	public PHologram getKitHolograms(int i){
+		return kitHolograms[i];
 	}
 }

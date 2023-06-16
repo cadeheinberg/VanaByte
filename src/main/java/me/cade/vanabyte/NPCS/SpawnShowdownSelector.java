@@ -10,10 +10,10 @@ import org.bukkit.entity.EntityType;
 public class SpawnShowdownSelector {
 
     private static Location location =
-            new Location(VanaByte.hub, -1052.5, 195, -112.5, 180, 0);
+            new Location(VanaByte.hub, -1052.5, 195.1, -112.5, 180, 0);
 
     private static Location joinlocation =
-            new Location(VanaByte.hub, -1052.5, 193.45, -112.5, 180, 0);
+            new Location(VanaByte.hub, -1052.5, 193.55, -112.5, 180, 0);
 
     private static String name = ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Vana's Battle Royale";
     private static String join = ChatColor.YELLOW+ "" + ChatColor.BOLD + "Click to Join";

@@ -13,7 +13,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
-import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
@@ -77,6 +76,8 @@ public class D0_NpcListener implements Listener {
 				} else {
 					player.sendMessage(ChatColor.RED + "You do not own this kit");
 					player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+					fighter.setUnlockedKit(i, 1);
+					fighter.refreshKitHolograms(i);
 				}
 			}
 		}

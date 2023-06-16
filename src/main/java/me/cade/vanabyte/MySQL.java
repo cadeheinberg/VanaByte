@@ -136,8 +136,8 @@ public class MySQL {
       //KITS
       statement.setInt(11, 1);
       statement.setInt(12, 1);
-      statement.setInt(13, 1);
-      statement.setInt(14, 1);
+      statement.setInt(13, 0);
+      statement.setInt(14, 0);
       statement.setInt(15, 0);
       statement.setInt(16, 0);
       statement.setInt(17, 0);

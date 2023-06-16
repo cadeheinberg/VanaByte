@@ -46,7 +46,6 @@ public class PHologram {
             toUpdate = toUpdate.getNextLine();
         }
         toUpdate.setLineDisplayText(displayText);
-        toUpdate.refreshDisplayText(this.player);
         return true;
     }
 

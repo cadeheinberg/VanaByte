@@ -6,6 +6,7 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
@@ -31,6 +32,13 @@ public class PlayerJoinListener implements Listener {
   public void onRespawn(PlayerRespawnEvent e) {
     e.setRespawnLocation(VanaByte.hubSpawn);
     Fighter.get(e.getPlayer()).fighterRespawn();
+  }
+
+  @EventHandler
+  public void onWorldChange(PlayerChangedWorldEvent e){
+    if(SafeZone.inHub(e.getPlayer().getWorld())){
+      Fighter.get(e.getPlayer()).spawnHolograms();
+    }
   }
   
 }

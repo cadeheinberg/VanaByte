@@ -49,7 +49,12 @@ public class PSingleLineOfHologram {
     }
 
     public void refreshDisplayText(Player player){
-        ProtocolLibrary.getProtocolManager().sendServerPacket(player, createDataPacket());
+        ProtocolManager protocolManager = ProtocolLibrary.getProtocolManager();
+        try {
+            protocolManager.sendServerPacket(player, createDataPacket());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     //Spawn the Armor Stand in. Does not make invisible, or set displayText.

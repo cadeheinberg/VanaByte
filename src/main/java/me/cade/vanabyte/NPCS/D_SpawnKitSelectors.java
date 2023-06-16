@@ -35,44 +35,44 @@ public class D_SpawnKitSelectors {
 			kits[i].equipColoredArmor(fKits[i].getArmorColor());
 			kits[i].getStand().setItemInHand(fKits[i].getWeapons()[0].getWeaponItem());
 		}
-		spawnKitSelectorStats();
+//		spawnKitSelectorStats();
 	}
 
-	public static void spawnKitSelectorStats() {
-		ChatColor y = ChatColor.AQUA;
-		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-			locations[i].setY(locations[i].getY() + .50);
-			new D1_ArmorStand(y + "  Drop-Item: " + fKits[i].getKitDrop() + ""
-			+ "  ", locations[i], 180, false, false, false);
-		}
-
-		for (int i = 0; i < 7; i++) {
-			locations[i].setY(locations[i].getY() - .25);
-			new D1_ArmorStand(y + "  Right-Click: " + fKits[i].getKitRightClick() + "  ", locations[i], 180, false, false, false);
-		}
-		spawnKitSelectorPrices();
-	}
-
-	public static void spawnKitSelectorPrices() {
-		NumberFormat myFormat = NumberFormat.getInstance(); 
-		myFormat.setGroupingUsed(true);
-		String[] kitPrice = new String[Fighter.getNumberOfKits()];
-		ChatColor y = ChatColor.GREEN;
-		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-//			if(F_Stats.getPrice(i) == 0) {
-//				kitPrice[i] = y + "  Free  ";
-//			}else {
-//				kitPrice[i] = y + "  Price: $" + myFormat.format(F_Stats.getPrice(i)) + "  ";
-//			}
-			kitPrice[i] = y + "  Unlocked  ";
-		}
-
-		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-			locations[i].setY(locations[i].getY() + .50);
-			new D1_ArmorStand(kitPrice[i], locations[i], 180, false, false, false);
-		}
-
-	}
+//	public static void spawnKitSelectorStats() {
+//		ChatColor y = ChatColor.AQUA;
+//		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+//			locations[i].setY(locations[i].getY() + .50);
+//			new D1_ArmorStand(y + "  Drop-Item: " + fKits[i].getKitDrop() + ""
+//			+ "  ", locations[i], 180, false, false, false);
+//		}
+//
+//		for (int i = 0; i < 7; i++) {
+//			locations[i].setY(locations[i].getY() - .25);
+//			new D1_ArmorStand(y + "  Right-Click: " + fKits[i].getKitRightClick() + "  ", locations[i], 180, false, false, false);
+//		}
+//		spawnKitSelectorPrices();
+//	}
+//
+//	public static void spawnKitSelectorPrices() {
+//		NumberFormat myFormat = NumberFormat.getInstance();
+//		myFormat.setGroupingUsed(true);
+//		String[] kitPrice = new String[Fighter.getNumberOfKits()];
+//		ChatColor y = ChatColor.GREEN;
+//		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+////			if(F_Stats.getPrice(i) == 0) {
+////				kitPrice[i] = y + "  Free  ";
+////			}else {
+////				kitPrice[i] = y + "  Price: $" + myFormat.format(F_Stats.getPrice(i)) + "  ";
+////			}
+//			kitPrice[i] = y + "  Unlocked  ";
+//		}
+//
+//		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+//			locations[i].setY(locations[i].getY() + .50);
+//			new D1_ArmorStand(kitPrice[i], locations[i], 180, false, false, false);
+//		}
+//
+//	}
 	
 	public static Location getLocationOfSelector(int kitID) {
 		return locations[kitID];
