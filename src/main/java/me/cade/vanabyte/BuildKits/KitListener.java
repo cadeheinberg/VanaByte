@@ -34,7 +34,7 @@ public class KitListener implements Listener {
 			return;
 		}
 		Player player = e.getPlayer();
-		Fighter.getFighterFKit(player).doRightClick(e.getMaterial());
+		Fighter.getFighterFKit(player).doRightClick(e.getItem());
 	}
 
 	@EventHandler
@@ -46,7 +46,7 @@ public class KitListener implements Listener {
 		if(SafeZone.safeZone(e.getPlayer().getLocation())){
 			return;
 		}
-		if (!Fighter.get(e.getPlayer()).getFKit().doDrop(e.getItemDrop().getItemStack().getType(), e.getItemDrop().getItemStack().getItemMeta().getDisplayName(), Fighter.get(e.getPlayer()).getKitID())){
+		if (!Fighter.get(e.getPlayer()).getFKit().doDrop(e.getItemDrop().getItemStack())){
 			//The item is not a Fighter Kit item or Special Item. Normal Item
 			if(!SafeZone.inHub(e.getPlayer().getWorld())){
 				//The player is trying to drop the item in the survival world
@@ -103,7 +103,7 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
-		if(fKit.getKitID() == 4 && fKit instanceof F4 && fKit.getPlayer().getItemInUse().getItemMeta().getDisplayName().equals(F4.weaponName)) {
+		if(fKit.getKitID() == 4 && fKit instanceof F4 && fKit.getPlayer().getItemInUse().isSimilar(fKit.getWeapons()[0].getWeaponItem())) {
 			if (!((F4) fKit).doThrowTrident((Trident) e.getEntity())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
@@ -121,7 +121,7 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
-		if (fKit.getKitID() == 3 && fKit instanceof F3 && fKit.getPlayer().getItemInUse().getItemMeta().getDisplayName().equals(F3.weaponName)) {
+		if (fKit.getKitID() == 3 && fKit instanceof F3 && fKit.getPlayer().getItemInUse().isSimilar(fKit.getWeapons()[0].getWeaponItem())) {
 			if (!((F3) fKit).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);

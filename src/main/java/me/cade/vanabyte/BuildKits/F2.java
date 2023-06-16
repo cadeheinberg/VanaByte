@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Snowball;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
 public class F2 extends FighterKit {
@@ -75,21 +76,20 @@ public class F2 extends FighterKit {
 		// pass
 	}
 
-
 	@Override
-	public boolean doRightClick(Material material) {
-		if (super.doRightClick(material)) {
-			shootSnowballs(player);
-			launchPlayer(player, -0.6);
+	public boolean doRightClick(ItemStack item) {
+		if (super.doRightClick(item)) {
+			this.shootSnowballs();
+			this.launchPlayer(-0.6);
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean doDrop(Material material, String displayName, int kitID) {
+	public boolean doDrop(ItemStack item) {
 		// do special conditions before (right here)
-		return super.doDrop(material, displayName, kitID);
+		return super.doDrop(item);
 	}
 
 	@Override
@@ -119,46 +119,46 @@ public class F2 extends FighterKit {
 		}
 	}
 
-	public static void launchPlayer(Player player, Double power) {
-		Vector currentDirection = player.getLocation().getDirection().normalize();
+	public void launchPlayer(Double power) {
+		Vector currentDirection = this.player.getLocation().getDirection().normalize();
 		currentDirection = currentDirection.multiply(new Vector(power, power, power));
-		player.setVelocity(currentDirection);
+		this.player.setVelocity(currentDirection);
 	}
 
-	public static void shootSnowballs(Player player) {
-		player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 8, 1);
+	public void shootSnowballs() {
+		this.player.playSound(this.player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 8, 1);
 		
-		Snowball ball = player.launchProjectile(Snowball.class);
+		Snowball ball = this.player.launchProjectile(Snowball.class);
 		ball.setVelocity(ball.getVelocity().add(new Vector(0, 0.25, 0)));
 		FighterProjectile.addMetadataToProjectile(ball);
-		ball.setShooter(player);
+		ball.setShooter(this.player);
 
-		Snowball ball2 = player.launchProjectile(Snowball.class);
+		Snowball ball2 = this.player.launchProjectile(Snowball.class);
 		ball2.setVelocity(ball2.getVelocity().add(new Vector(0, -0.25, 0)));
 		FighterProjectile.addMetadataToProjectile(ball2);
-		ball2.setShooter(player);
+		ball2.setShooter(this.player);
 
-		Snowball ball3 = player.launchProjectile(Snowball.class);
+		Snowball ball3 = this.player.launchProjectile(Snowball.class);
 		ball3.setVelocity(ball3.getVelocity().add(new Vector(0.25, 0, 0)));
 		FighterProjectile.addMetadataToProjectile(ball3);
-		ball3.setShooter(player);
+		ball3.setShooter(this.player);
 
-		Snowball ball4 = player.launchProjectile(Snowball.class);
+		Snowball ball4 = this.player.launchProjectile(Snowball.class);
 		ball4.setVelocity(ball4.getVelocity().add(new Vector(-0.25, 0, 0)));
 		FighterProjectile.addMetadataToProjectile(ball4);
-		ball4.setShooter(player);
+		ball4.setShooter(this.player);
 
-		Snowball ball5 = player.launchProjectile(Snowball.class);
+		Snowball ball5 = this.player.launchProjectile(Snowball.class);
 		ball5.setVelocity(ball5.getVelocity().add(new Vector(0, 0, 0.25)));
 		FighterProjectile.addMetadataToProjectile(ball5);
-		ball5.setShooter(player);
+		ball5.setShooter(this.player);
 
-		Snowball ball6 = player.launchProjectile(Snowball.class);
+		Snowball ball6 = this.player.launchProjectile(Snowball.class);
 		ball6.setVelocity(ball6.getVelocity().add(new Vector(0, 0, -0.25)));
 		FighterProjectile.addMetadataToProjectile(ball6);
-		ball6.setShooter(player);
+		ball6.setShooter(this.player);
 		
-	    if (Fighter.fighters.get(player.getUniqueId()).isAbilityActive()) {
+	    if (Fighter.get(this.player).isAbilityActive()) {
 			ball.setFireTicks(1000);
 			ball2.setFireTicks(1000);
 			ball3.setFireTicks(1000);

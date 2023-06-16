@@ -15,11 +15,11 @@ public class DoubleJumpListener implements Listener {
 			return;
 		}
 		e.setCancelled(true);
-		e.getPlayer().setFlying(false);
-		JetPackItem jPack = Fighter.getFighterFKit(e.getPlayer()).getJetPackItem();
-		if(jPack != null) {
-			jPack.doDoubleJump();
-		}
+//		e.getPlayer().setFlying(false);
+//		JetPackItem jPack = Fighter.getFighterFKit(e.getPlayer()).getJetPackItem();
+//		if(jPack != null) {
+//			jPack.doDoubleJump();
+//		}
 	}
 
 

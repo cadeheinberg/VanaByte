@@ -16,7 +16,6 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class FighterKit {
 
@@ -28,8 +27,9 @@ public class FighterKit {
 
 	SpecialItem[] specialItems = new SpecialItem[2];
 
-	private SpecialItem combatTracker;
-	private SpecialItem jetPackItem;
+	ParachuteItem parachuteItem = null;
+
+	private Material cooldownMaterial = Material.BARRIER;
 
 	public FighterKit() {
 //		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Creating FighterKit without player");
@@ -140,73 +140,68 @@ public class FighterKit {
 	private void addSpecialWeapons() {
 		if (true) {
 			this.specialItems[0] = (new ParachuteItem(this.player));
+			parachuteItem = (ParachuteItem) this.specialItems[0];
 		}
 		if (true) {
 			this.specialItems[1] = (new ThrowingTNTItem(this.player));
 		}
-//		if (true) {
-//			this.specialItems[2] = (new IceCageItem(this.player));
-//		}
-//		if (true) {
-//			this.combatTracker = (new CombatTracker(this.player));
-//			this.specialItems[3] = this.combatTracker;
-//		}
-//		if (true) {
-//			this.jetPackItem = (new JetPackItem(this.player));
-//			this.specialItems[4] = this.jetPackItem;
-//		}
 	}
 
-	public void doSpecialItemRightClick(Material material) {
-		if(this.getSpecialItem(material) == null) {
+	//Finds the matching special item (if there is one)
+	// and does the respective RIGHT CLICK for it
+	public void doSpecialItemRightClick(ItemStack item) {
+		SpecialItem sItem = this.getSpecialItem(item);
+		if(sItem == null) {
 			return;
 		}
-		this.getSpecialItem(material).doRightClick();
-	}
-	
-	public boolean doSpecialItemDrop(Material material) {
-		SpecialItem sItem = this.getSpecialItem(material);
-		if(sItem != null) {
-			sItem.doDrop();
-			return true;
-		}
-		return  false;
+		sItem.doRightClick();
 	}
 
-	public boolean doRightClick(Material material) {
-		if (this.getMaterial() == material) {
-			if(this.getCooldownTicks() > 0) {
-				if (player.getCooldown(this.getMaterial()) > 0) {
-					this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-					return false;
-				}
-				player.setCooldown(this.getMaterial(), this.getCooldownTicks());
-				return true;
-			}
-		}else {
-			this.doSpecialItemRightClick(material);
+	//Finds the matching special item (if there is one)
+	// and does the respective DROP for it
+	public boolean doSpecialItemDrop(ItemStack item) {
+		SpecialItem sItem = this.getSpecialItem(item);
+		if(sItem == null) {
+			return false;
 		}
-		return false;
+		sItem.doDrop();
+		return true;
+	}
+
+	//Return False - when not primary weapon and when cooldown is on primary weapon
+	//Return True  - when it is primary weapon and cooldown successfully set
+	public boolean doRightClick(ItemStack item) {
+		//Check if it is the primary weapon
+		if (!(this.getWeapons()[0].getWeaponItem().isSimilar(item))) {
+			this.doSpecialItemRightClick(item);
+			return false;
+		}
+		if (player.getCooldown(this.getMaterial()) > 0) {
+			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+			return false;
+		}
+		player.setCooldown(this.getMaterial(), this.getCooldownTicks());
+		return true;
 	}
 
 	//Returns True if there is no cooldown and ability for either
 	// the Fighter Kit or special item can be activated
 	//
 	//Returns False if there is a cooldown or not a Fighter Kits item
-	public boolean doDrop(Material material, String displayName, int kitID) {
-		if ((this.getMaterial() == material) && (this.getWeaponName().equals(displayName)) && (this.getKitID() == kitID) || this.getSecondaryMaterial() == material) {
+	public boolean doDrop(ItemStack item) {
+		if (this.getWeapons()[0].getWeaponItem().isSimilar(item) || (this.getWeapons()[1] != null && this.getWeapons()[1].getWeaponItem().isSimilar(item))) {
 			//The dropped item matches the material of their Fighter Kit
 			//The dropped item matches the weapon name of their Fighter Kit
 			//The player who dropped the item has the correct kitID for this FighterKit
-			if (this.player.getCooldown(Material.BARRIER) > 0
-					|| this.player.getCooldown(Material.BARRIER) > 0) {
+			if (this.player.getCooldown(this.cooldownMaterial) > 0
+					|| this.player.getCooldown(this.cooldownMaterial) > 0) {
 				this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 				return true;
 			}
 			this.activateSpecial();
 			return true;
 		}else {
-			return this.doSpecialItemDrop(material);
+			return this.doSpecialItemDrop(item);
 		}
 	}
 
@@ -463,21 +458,13 @@ public class FighterKit {
 		return null;
 	}
 
-	public CombatTracker getCombatTracker() {
-		return (CombatTracker) combatTracker;
-	}
-	
-	public JetPackItem getJetPackItem() {
-		return (JetPackItem) jetPackItem;
-	}
-
 	public SpecialItem[] getSpecialItems() {
 		return specialItems;
 	}
 
-	public SpecialItem getSpecialItem(Material material) {
-		for(SpecialItem sItem : Fighter.getFighterFKit(player).getSpecialItems()) {
-			if(sItem.getMaterial() == material) {
+	public SpecialItem getSpecialItem(ItemStack item) {
+		for(SpecialItem sItem : this.getSpecialItems()) {
+			if(sItem.getWeapon().getWeaponItem().isSimilar(item)) {
 				return sItem;
 			}
 		}
@@ -485,7 +472,7 @@ public class FighterKit {
 	}
 
 	public void resetSpecialItemCooldowns() {
-		for(SpecialItem sItem : Fighter.getFighterFKit(player).getSpecialItems()) {
+		for(SpecialItem sItem : this.getSpecialItems()) {
 			sItem.resetCooldown();
 		}
 	}
@@ -504,6 +491,10 @@ public class FighterKit {
 	public void doStealHealth(Player victim) {
 		// pass
 		
+	}
+
+	public ParachuteItem getParachuteItem(){
+		return this.parachuteItem;
 	}
 
 }

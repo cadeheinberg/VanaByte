@@ -9,6 +9,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 public class F6 extends FighterKit {
 
@@ -79,14 +80,13 @@ public class F6 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick(Material material) {
-		return super.doRightClick(material);
+	public boolean doRightClick(ItemStack item) {
+		return super.doRightClick(item);
 	}
 
 	@Override
-	public boolean doDrop(Material material, String displayName, int kitID) {
-		// do special conditions before (right here)
-		return super.doDrop(material, displayName, kitID);
+	public boolean doDrop(ItemStack item) {
+		return super.doDrop(item);
 	}
 
 	@Override

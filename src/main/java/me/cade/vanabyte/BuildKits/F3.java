@@ -10,6 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -90,14 +91,14 @@ public class F3 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick(Material material) {
-		return super.doRightClick(material);
+	public boolean doRightClick(ItemStack item) {
+		return super.doRightClick(item);
 	}
 
 	@Override
-	public boolean doDrop(Material material, String displayName, int kitID) {
+	public boolean doDrop(ItemStack item) {
 		// do special conditions before (right here)
-		return super.doDrop(material, displayName, kitID);
+		return super.doDrop(item);
 	}
 
 	@Override

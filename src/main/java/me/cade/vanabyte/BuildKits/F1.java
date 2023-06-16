@@ -6,6 +6,7 @@ import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -79,18 +80,18 @@ public class F1 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick(Material material) {
-		if (super.doRightClick(material)) {
-			doBoosterJump(player);
+	public boolean doRightClick(ItemStack item) {
+		if (super.doRightClick(item)) {
+			this.doBoosterJump();
 			return true;
 		}
 		return false;
 	}
 
 	@Override
-	public boolean doDrop(Material material, String displayName, int kitID) {
+	public boolean doDrop(ItemStack item) {
 		// do special conditions before (right here)
-		return super.doDrop(material, displayName, kitID);
+		return super.doDrop(item);
 	}
 
 	@Override
@@ -108,11 +109,11 @@ public class F1 extends FighterKit {
 		super.deActivateSpecial();
 	}
 
-	private static void doBoosterJump(Player player) {
-		player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
-		Vector currentDirection = player.getLocation().getDirection().normalize();
+	private void doBoosterJump() {
+		this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
+		Vector currentDirection = this.player.getLocation().getDirection().normalize();
 		currentDirection = currentDirection.multiply(new Vector(1.7, 1.7, 1.7));
-		player.setVelocity(currentDirection);
+		this.player.setVelocity(currentDirection);
 	}
 
 	/*

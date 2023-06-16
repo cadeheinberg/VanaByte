@@ -179,11 +179,11 @@ public class Fighter {
 	}
 
 	public void fighterDismountParachute() {
-		if (((ParachuteItem) this.fKit.getSpecialItem(ParachuteItem.mat)) == null) {
+		if ((this.fKit.getParachuteItem() == null)) {
 			return;
 		}
-		if(((ParachuteItem) this.fKit.getSpecialItem(ParachuteItem.mat)).getItemTask() != -1){
-			((ParachuteItem) this.fKit.getSpecialItem(ParachuteItem.mat)).getOff();
+		if(this.fKit.getParachuteItem().getItemTask() != -1){
+			this.fKit.getParachuteItem().getOff();
 		}
 	}
 
@@ -194,13 +194,10 @@ public class Fighter {
 
 	public void adjustJoinModifiers() {
 		player.setWalkSpeed(getWalkSpeed());
-		if(this.fKit.getJetPackItem() != null) {
-			JetPackItem.changeFlightStatus(player, true);
-		}
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run() {
-				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 999999, 0, true, false));
+				player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 9999999, 0, true, false));
 			}
 		}, 1);
 	}

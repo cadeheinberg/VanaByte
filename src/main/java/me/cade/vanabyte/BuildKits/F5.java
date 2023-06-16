@@ -7,6 +7,7 @@ import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -80,18 +81,13 @@ public class F5 extends FighterKit {
 	}
 
 	@Override
-	public boolean doRightClick(Material material) {
-		if (material == this.material) {
-			// see pickUp method, we don't do this normally
-			return true;
-		}
-		return super.doRightClick(material);
+	public boolean doRightClick(ItemStack item) {
+		return super.doRightClick(item);
 	}
 
 	@Override
-	public boolean doDrop(Material material, String displayName, int kitID) {
-		// do special conditions before (right here)
-		return super.doDrop(material, displayName, kitID);
+	public boolean doDrop(ItemStack item) {
+		return super.doDrop(item);
 	}
 
 	@Override
