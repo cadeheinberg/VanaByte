@@ -47,10 +47,16 @@ public class FighterKit {
 		this.giveKit();
 	}
 
-	public static boolean isFighterWeaponOrSpecialItem(String displayName){
-		if(displayName == null){
+	public static boolean isFighterWeaponOrSpecialItem(ItemStack item){
+		if(item == null){
 			return false;
 		}
+		if(!item.hasItemMeta()){
+			return false;
+		}if(item.getItemMeta().getDisplayName() == null){
+			return false;
+		}
+		String displayName = item.getItemMeta().getDisplayName();
 		if(F0.weaponName.equals(displayName)){
 			return true;
 		} else if (F1.weaponName.equals(displayName)){
@@ -108,7 +114,7 @@ public class FighterKit {
 			if (item == null || !item.hasItemMeta()){
 				continue;
 			}
-			if(FighterKit.isFighterWeaponOrSpecialItem(item.getItemMeta().getDisplayName())){
+			if(FighterKit.isFighterWeaponOrSpecialItem(item)){
 				player.getInventory().remove(item);
 			}
 		}
@@ -471,8 +477,17 @@ public class FighterKit {
 		return null;
 	}
 
-	public void resetSpecialItemCooldowns() {
+	public void resetAllFighterItemCooldowns() {
+		for(Weapon weapon : this.getWeapons()) {
+			if(weapon == null){
+				continue;
+			}
+			weapon.resetCooldown(this.player);
+		}
 		for(SpecialItem sItem : this.getSpecialItems()) {
+			if(sItem == null){
+				continue;
+			}
 			sItem.resetCooldown();
 		}
 	}

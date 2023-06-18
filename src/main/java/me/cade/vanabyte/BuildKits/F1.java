@@ -98,14 +98,13 @@ public class F1 extends FighterKit {
 	void activateSpecial() {
 		super.activateSpecial();
 		super.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, durationTicks, 0));
+		super.player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, durationTicks, 3));
 		super.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, durationTicks, 0));
-		super.player.setWalkSpeed(Fighter.getWalkSpeedBoosted());
 		super.player.playSound(super.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
 	}
 
 	@Override
 	public void deActivateSpecial() {
-		super.player.setWalkSpeed(Fighter.getWalkSpeed());
 		super.deActivateSpecial();
 	}
 

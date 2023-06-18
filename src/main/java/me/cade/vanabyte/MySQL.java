@@ -148,7 +148,7 @@ public class MySQL {
   }
   
   public int getStat(Player player, String stat) {
-    int getter = 0;
+    int getter = -1;
     PreparedStatement statement;
     try {
       statement = connection

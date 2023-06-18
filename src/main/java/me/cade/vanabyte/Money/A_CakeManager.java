@@ -9,7 +9,7 @@ public class A_CakeManager {
   
   public static final Material cakeMaterial = Material.CAKE;
   
-  public static final int cakeMoneyWorth = 5;
+  public static final int cakeMoneyWorth = 1;
   public static final int cakeExpWorth = 5;
   public static final int cakeRechargeMultiplier = 1;
   

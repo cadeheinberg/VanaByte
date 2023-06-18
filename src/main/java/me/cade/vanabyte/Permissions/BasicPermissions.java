@@ -32,6 +32,20 @@ public class BasicPermissions implements Listener {
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
 	}
 
+	@EventHandler
+	public static void onPlayerLevelChange(PlayerLevelChangeEvent e){
+		if(e.getNewLevel() - e.getOldLevel() > 0){
+			Fighter.get(e.getPlayer()).incPlayerLevel(e.getNewLevel() - e.getOldLevel());
+		}else{
+			Fighter.get(e.getPlayer()).decPlayerLevel(Math.abs((e.getNewLevel() - e.getOldLevel())));
+		}
+	}
+
+	@EventHandler
+	public static void onPlayerLevelChange(PlayerExpChangeEvent e){
+		Fighter.get(e.getPlayer()).getScoreBoardObjext().updateExp();
+	}
+
 	//Triggered when a hanging entity is created in the world, ie item frame
 	@EventHandler
 	public void onHangingPlace(HangingPlaceEvent e){
@@ -87,14 +101,14 @@ public class BasicPermissions implements Listener {
 		}
 		if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY || e.getAction() == InventoryAction.PICKUP_ALL || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PICKUP_HALF || e.getAction() == InventoryAction.PICKUP_ONE || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PLACE_ALL || e.getAction() == InventoryAction.PLACE_ONE){
 			if (e.getCursor() != null && e.getCursor().hasItemMeta()) {
-				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCursor().getItemMeta().getDisplayName())) {
+				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCursor())) {
 					e.setCancelled(true);
 					e.getWhoClicked().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 					((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
 				}
 			}
 			if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()) {
-				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCurrentItem().getItemMeta().getDisplayName())) {
+				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCurrentItem())) {
 					e.setCancelled(true);
 					e.getWhoClicked().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 					((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);

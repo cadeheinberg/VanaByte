@@ -246,4 +246,9 @@ public class Weapon {
   public ItemStack getWeaponItem() {
     return weaponItem;
   }
+
+    public void resetCooldown(Player player) {
+        player.setCooldown(this.weaponMaterial, 0);
+    }
+
 }

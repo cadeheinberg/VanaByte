@@ -10,26 +10,20 @@ import me.cade.vanabyte.NPCS.*;
 import me.cade.vanabyte.Permissions.BasicPermissions;
 import me.cade.vanabyte.Permissions.PickingUp;
 import me.cade.vanabyte.PlayerJoin.*;
-import me.cade.vanabyte.ScoreBoard.Experience;
 import me.cade.vanabyte.SpecialItems.SpecialItemsListener;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 
 public class VanaByte extends JavaPlugin {
 
@@ -66,7 +60,6 @@ public class VanaByte extends JavaPlugin {
 		D_SpawnAllNPCS.spawnNPCS();
 		registerListeners();
 		Borders.startCheckingBorders();
-		Experience.makeExpNeeded();
 		A_CakeManager.startCakePackage();
 		//getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		// do last

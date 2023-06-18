@@ -41,9 +41,9 @@ public class ScoreBoardObject {
     Score b = objective.getScore("");
     b.setScore(10);
 
-    cookies = board.registerNewTeam(A_CakeManager.currencyNameSingular);
-    cookies.setPrefix(ChatColor.AQUA + A_CakeManager.currencyNameSingular + ": ");
-    cookies.setSuffix(ChatColor.WHITE + "$" + fighter.getCakes());
+    cookies = board.registerNewTeam(A_CakeManager.currencyNamePlural);
+    cookies.setPrefix(ChatColor.AQUA + A_CakeManager.currencyNamePlural + ": ");
+    cookies.setSuffix(ChatColor.WHITE + "" + fighter.getCakes());
     cookies.addEntry(ChatColor.AQUA + "");
     objective.getScore(ChatColor.AQUA + "").setScore(9);    
 
@@ -79,8 +79,7 @@ public class ScoreBoardObject {
 
     exp = board.registerNewTeam("Exp");
     exp.setPrefix(ChatColor.YELLOW + "Exp: ");
-    exp.setSuffix(ChatColor.WHITE + "" + fighter.getExp() + "/"
-      + Experience.getExpNeeded(fighter.getPlayerLevel()));
+    exp.setSuffix(ChatColor.WHITE + "" + player.getTotalExperience());
     exp.addEntry(ChatColor.DARK_GREEN + "");
     objective.getScore(ChatColor.DARK_GREEN + "").setScore(2);
 
@@ -102,7 +101,7 @@ public class ScoreBoardObject {
   }
 
   public void updateCookies() {
-    cookies.setSuffix(ChatColor.WHITE + "$" + fighter.getCakes());
+    cookies.setSuffix(ChatColor.WHITE + "" + fighter.getCakes());
   }
 
   public void updateKills() {
@@ -126,8 +125,7 @@ public class ScoreBoardObject {
   }
 
   public void updateExp() {
-    exp.setSuffix(ChatColor.WHITE + "" + fighter.getExp() + "/"
-      + Experience.getExpNeeded(fighter.getPlayerLevel()));
+    exp.setSuffix(ChatColor.WHITE + "" + player.getTotalExperience());
   }
   
   public void reApplyBoard() {

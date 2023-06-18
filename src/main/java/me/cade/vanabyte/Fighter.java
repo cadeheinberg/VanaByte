@@ -4,12 +4,9 @@ import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.BuildKits.*;
-import me.cade.vanabyte.NPCS.D_ProtocolStand;
 import me.cade.vanabyte.NPCS.D_SpawnKitSelectors;
 import me.cade.vanabyte.NPCS.ProtocolHolograms.PHologram;
 import me.cade.vanabyte.ScoreBoard.ScoreBoardObject;
-import me.cade.vanabyte.SpecialItems.JetPackItem;
-import me.cade.vanabyte.SpecialItems.ParachuteItem;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.*;
@@ -17,7 +14,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.UUID;
 
@@ -26,75 +25,46 @@ import static me.cade.vanabyte.AbilityEnchantment.removeEnchanted;
 
 public class Fighter {
 
-	// your error for the unlocked might be in the way you are uploading it as a
-	// boolean array
-	private Plugin plugin;
+	private Plugin plugin = VanaByte.getPlugin(VanaByte.class);
 	public static HashMap<UUID, Fighter> fighters = new HashMap<UUID, Fighter>();
-	private Player player;
-	private UUID uuid;
-
-	private boolean abilityActive;
-	private boolean abilityRecharged;
-
-	// changes alot during the game
-	private UUID lastToDamage;
-	private UUID lastDamagedBy;
-	private int cooldownTask;
-	private int rechargeTask;
-
-	private int kitID;
-	private int kitIndex;
-	private int playerLevel;
-	private int kills;
-	private int killStreak;
-	private int deaths;
-	private int cakes;
-	private int exp;
-	private int[] unlockedKits = new int[7];
-
-	private int[] kitUpgrades = new int[42];
-	private ScoreBoardObject scoreBoardObject;
-
-	private static float walkSpeed = (float) 0.275;
-	private static float walkSpeedBoosted = (float) 0.3;
-
-	private int groundPoundTask;
-	private int doubleJumpTask;
-
-	private D_ProtocolStand[] personalStands = new D_ProtocolStand[7];
-
-	private D_ProtocolStand chargedStand = null;
-
+	private ScoreBoardObject scoreBoardObject = null;
 	private FighterKit fKit = null;
-
-	private boolean inHub = true;
-
+	private Player player = null;
+	private UUID uuid,lastToDamage,lastDamagedBy = null;
+	private boolean abilityActive = false;
+	private boolean abilityRecharged = true;
 	private static final int numberOfKits = 7;
+	private int kitID,kitIndex,playerLevel,kills,killStreak,deaths,cakes = -1;
+	private int groundPoundTask,cooldownTask,rechargeTask, refreshMySQLUploadTaskID = -1;
 	private static FighterKit[] fKits = { new F0(), new F1(), new F2(), new F3(), new F4(), new F5(), new F6() };
-
 	private PHologram[] kitHolograms = {null, null, null, null, null, null, null};
-
 	private PHologram welcomeHologram = null;
+	private int[] unlockedKits = new int[7];
+	private int[] kitUpgrades = new int[42];
+
 	public Fighter(Player player) {
 		this.player = player;
 		this.uuid = player.getUniqueId();
 		this.addToFightersHashMap();
 		this.fighterJoin();
 	}
-
 	private void fighterJoin() {
-		this.initializeFighterVars();
-		this.downloadDatabase();
-		this.downloadDatabaseUpgrades();
-		//chargedStand = new D_ProtocolStand(ChatColor.GREEN + "" + ChatColor.BOLD + player.getDisplayName() + "'s Spawn", VanaByte.hubSpawn, player);
-		//this.grantUnlocked();
+		for (int i = 0; i < unlockedKits.length; i++){
+			unlockedKits[i] = -1;
+		}
+		for (int i = 0; i < kitUpgrades.length; i++){
+			kitUpgrades[i] = -1;
+		}
+		this.initiateMySQLDownloads();
 		this.scoreBoardObject = new ScoreBoardObject(player);
 		this.giveKit();
 		VanaByte.getPpAPI().resetActivePlayerParticles(player);
 		this.resetSpecialAbility();
-		this.adjustJoinModifiers();
-		this.fKit.resetSpecialItemCooldowns();
+		this.applyNightVision();
+		this.fKit.resetAllFighterItemCooldowns();
 		this.spawnHolograms();
+		this.player.setInvisible(false);
+		this.refreshMySQLUpload();
 	}
 
 	public void fighterRespawn() {
@@ -102,20 +72,26 @@ public class Fighter {
 		this.setLastToDamage(null);
 		this.giveKit();
 		VanaByte.getPpAPI().resetActivePlayerParticles(player);
-		this.adjustJoinModifiers();
+		this.applyNightVision();
 		this.resetSpecialAbility();
-		this.fKit.resetSpecialItemCooldowns();
+		this.fKit.resetAllFighterItemCooldowns();
 	}
 
 	public void fighterLeftServer() {
 		this.uploadFighter();
-		this.uploadKitUpgrades();
 		this.fighterDismountParachute();
-		this.resetSpecialAbility();
+		Bukkit.getScheduler().cancelTask(this.refreshMySQLUploadTaskID);
+		this.refreshMySQLUploadTaskID = -1;
+		Bukkit.getScheduler().cancelTask(this.cooldownTask);
+		this.cooldownTask = -1;
+		Bukkit.getScheduler().cancelTask(this.groundPoundTask);
+		this.groundPoundTask = -1;
+		Bukkit.getScheduler().cancelTask(this.rechargeTask);
+		this.rechargeTask = -1;
+
 	}
 
 	public void fighterDeath() {
-		this.resetSpecialAbility();
 		this.fighterDismountParachute();
 		this.incDeaths();
 	}
@@ -192,8 +168,7 @@ public class Fighter {
 		setAbilityRecharged(true);
 	}
 
-	public void adjustJoinModifiers() {
-		player.setWalkSpeed(getWalkSpeed());
+	public void applyNightVision() {
 		Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
 			@Override
 			public void run() {
@@ -205,7 +180,6 @@ public class Fighter {
 	public void setAbilityActive(boolean fighterAbility) {
 		if (!fighterAbility) {
 			// turning ability active off
-
 			// only if the ability was already active
 			if (this.abilityActive) {
 				player.setCooldown(Material.BARRIER, 0);
@@ -221,7 +195,6 @@ public class Fighter {
 	public void setAbilityRecharged(boolean fighterRecharged) {
 		if (fighterRecharged) {
 			// turning ability charged fully on
-
 			// only if the ability was already not recharged
 			if (!this.abilityRecharged) {
 				player.setCooldown(Material.BARRIER, 0);
@@ -286,24 +259,32 @@ public class Fighter {
 		fighters.put(this.uuid, this);
 	}
 
-	private void downloadDatabase() {
-		if (VanaByte.mysql.playerExists(player)) {
-			downloadFighter();
-		} else {
+	private void addPlayerToDatabases(){
+		if (!VanaByte.mysql.playerExists(player)) {
 			VanaByte.mysql.addScore(player);
-			downloadDatabase();
+		}
+		if (!VanaByte.mySQL_upgrades.playerExists(player)) {
+			VanaByte.mySQL_upgrades.addScore(player);
+		}
+		initiateMySQLDownloads();
+	}
+	private void initiateMySQLDownloads() {
+		if (VanaByte.mysql.playerExists(player)) {
+			this.downloadFighter();
+			this.updateName();
+		} else {
+			//error has occurred, player should have been added
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL");
+			Bukkit.getServer().shutdown();
 			return;
 		}
-
-		updateName();
-	}
-
-	private void downloadDatabaseUpgrades(){
 		if (VanaByte.mySQL_upgrades.playerExists(player)) {
-			downloadFighterUpgrades();
+			this.downloadFighterUpgrades();
 		} else {
-			VanaByte.mySQL_upgrades.addScore(player);
-			downloadDatabaseUpgrades();
+			//error has occurred, player should have been added
+			Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL");
+			Bukkit.getServer().shutdown();
+			return;
 		}
 	}
 
@@ -323,9 +304,9 @@ public class Fighter {
 		} else if (kitID == fKits[6].getKitID()) {
 			fKit = new F6(player);
 		}
-		this.adjustJoinModifiers();
+		this.applyNightVision();
 		this.resetSpecialAbility();
-		this.fKit.resetSpecialItemCooldowns();
+		this.fKit.resetAllFighterItemCooldowns();
 		this.changeAbilityRechargedParticleEffect();
 	}
 
@@ -390,6 +371,7 @@ public class Fighter {
 		this.lastDamagedBy = lastDamagedBy.getUniqueId();
 	}
 
+	//Downloads negative -1s if it couldnt get the stat
 	public void downloadFighter() {
 		this.setKitID(VanaByte.mysql.getStat(player, VanaByte.mysql.column[2]));
 		this.setKitIndex(VanaByte.mysql.getStat(player, VanaByte.mysql.column[3]));
@@ -398,7 +380,7 @@ public class Fighter {
 		this.setKillStreak(VanaByte.mysql.getStat(player, VanaByte.mysql.column[6]));
 		this.setDeaths(VanaByte.mysql.getStat(player, VanaByte.mysql.column[7]));
 		this.setCakes(VanaByte.mysql.getStat(player, VanaByte.mysql.column[8]));
-		this.setExp(VanaByte.mysql.getStat(player, VanaByte.mysql.column[9]));
+//		this.setExp(VanaByte.mysql.getStat(player, VanaByte.mysql.column[9]));
 		this.setUnlockedKit(0, VanaByte.mysql.getStat(player, VanaByte.mysql.column[10]));
 		this.setUnlockedKit(1, VanaByte.mysql.getStat(player, VanaByte.mysql.column[11]));
 		this.setUnlockedKit(2, VanaByte.mysql.getStat(player, VanaByte.mysql.column[12]));
@@ -408,32 +390,47 @@ public class Fighter {
 		this.setUnlockedKit(6, VanaByte.mysql.getStat(player, VanaByte.mysql.column[16]));
 	}
 
+	//Downloads negative -1s if it couldnt get the stat
 	private void downloadFighterUpgrades(){
 		for(int i = 1; i <= kitUpgrades.length; i++){
 			this.setKitUpgradesRaw(i-1, VanaByte.mySQL_upgrades.getStat(player, VanaByte.mySQL_upgrades.column[i]));
 		}
 	}
 
+	//If the stat is a -1 it wont upload anything
 	public void uploadFighter() {
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[2], this.getKitID());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[3], this.getKitIndex());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[4], this.getPlayerLevel());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[5], this.getKills());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[6], this.getKillStreak());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[7], this.getDeaths());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[8], this.getCakes());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[9], this.getExp());
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[10], this.getUnlockedKit(0));
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[11], this.getUnlockedKit(1));
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[12], this.getUnlockedKit(2));
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[13], this.getUnlockedKit(3));
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[14], this.getUnlockedKit(4));
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[15], this.getUnlockedKit(5));
-		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[16], this.getUnlockedKit(6));
-	}
-
-	private void uploadKitUpgrades(){
+		if(this.getKitID() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[2], this.getKitID());
+		}
+		if(this.getKitIndex() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[3], this.getKitIndex());
+		}
+		if(this.getPlayerLevel() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[4], this.getPlayerLevel());
+		}
+		if(this.getKills() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[5], this.getKills());
+		}
+		if(this.getKillStreak() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[6], this.getKillStreak());
+		}
+		if(this.getDeaths() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[7], this.getDeaths());
+		}
+		if(this.getCakes() != -1){
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[8], this.getCakes());
+		}
+//		VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[9], this.getExp());
+		for(int i = 0; i < unlockedKits.length; i++){
+			if(this.getUnlockedKit(0 + i) == -1){
+				continue;
+			}
+			VanaByte.mysql.setStat(player.getUniqueId().toString(), VanaByte.mysql.column[10 + i], this.getUnlockedKit(0 + i));
+		}
 		for(int i = 1; i <= kitUpgrades.length; i++){
+			if(this.getKitUpgradesRaw(i-1) == -1){
+				continue;
+			}
 			VanaByte.mySQL_upgrades.setStat(player.getUniqueId().toString(), VanaByte.mySQL_upgrades.column[i], this.getKitUpgradesRaw(i-1));
 		}
 	}
@@ -442,14 +439,22 @@ public class Fighter {
 		return playerLevel;
 	}
 
-	public void setPlayerLevel(int playerLevel) {
+	private void setPlayerLevel(int playerLevel) {
+		// DO NOT USE OUTSIDE OF CLASS
 		this.playerLevel = playerLevel;
 	}
 
-	public void incPlayerLevel() {
-		this.playerLevel++;
+	public void incPlayerLevel(int amount) {
+		this.playerLevel = this.playerLevel + amount;
 		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
 		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled up to level " + playerLevel + "!");
+		scoreBoardObject.updateLevel();
+	}
+
+	public void decPlayerLevel(int amount) {
+		this.playerLevel = this.playerLevel - amount;
+		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
+		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled down to level " + playerLevel + "!");
 		scoreBoardObject.updateLevel();
 	}
 
@@ -463,8 +468,7 @@ public class Fighter {
 
 	public void incKills() {
 		this.kills++;
-		this.killStreak++;
-		incExpByAmount(30);
+		this.incKillStreak();
 		scoreBoardObject.updateKills();
 		scoreBoardObject.updateRatio();
 		scoreBoardObject.updateKillstreak();
@@ -497,16 +501,16 @@ public class Fighter {
 		scoreBoardObject.updateDeaths();
 		scoreBoardObject.updateRatio();
 		scoreBoardObject.updateKillstreak();
+		this.doDeathChecks();
 		this.refreshWelcomeHologram();
 	}
 
-	public void doDeathChecks() {
+	private void doDeathChecks() {
 		if (kitID == fKits[5].getKitID()) {
 			if (groundPoundTask != -1) {
 				F5.stopListening(this);
 			}
 		}
-		return;
 	}
 
 	public int getCakes() {
@@ -525,19 +529,6 @@ public class Fighter {
 	public void decCakes(int inc) {
 		this.cakes = this.cakes - inc;
 		scoreBoardObject.updateCookies();
-	}
-
-	public int getExp() {
-		return exp;
-	}
-
-	public void setExp(int exp) {
-		this.exp = exp;
-	}
-
-	public void incExpByAmount(int exp) {
-		this.exp = this.exp + exp;
-		scoreBoardObject.updateExp();
 	}
 
 	public void setUnlockedKit(int kitID, int index) {
@@ -579,45 +570,6 @@ public class Fighter {
 
 	private void updateName() {
 		VanaByte.mysql.updateName(player, VanaByte.mysql.column[1], player.getName());
-	}
-
-	public void initializeFighterVars() {
-		this.plugin = VanaByte.getPlugin(VanaByte.class);
-		this.abilityActive = false;
-		this.abilityRecharged = true;
-		this.player.setInvisible(false);
-		this.player.setWalkSpeed(getWalkSpeed());
-		// Glowing.setGlowingOffForAll(this.player);
-		this.lastToDamage = null;
-		this.lastDamagedBy = null;
-		this.kitID = 0;
-		this.kitIndex = 0;
-		this.playerLevel = 0;
-		this.kills = 0;
-		this.deaths = 0;
-		this.cakes = 0;
-		this.killStreak = 0;
-		this.exp = 0;
-		this.unlockedKits[0] = 1;
-		this.unlockedKits[1] = 1;
-		this.unlockedKits[2] = 0;
-		this.unlockedKits[3] = 0;
-		this.unlockedKits[4] = 0;
-		this.unlockedKits[5] = 0;
-		this.unlockedKits[6] = 0;
-		this.setDoubleJumpTask(-1);
-		this.setGroundPoundTask(-1);
-		this.setCooldownTask(-1);
-	}
-
-	public void grantUnlocked() {
-		this.unlockedKits[0] = 1;
-		this.unlockedKits[1] = 1;
-		this.unlockedKits[2] = 0;
-		this.unlockedKits[3] = 0;
-		this.unlockedKits[4] = 0;
-		this.unlockedKits[5] = 0;
-		this.unlockedKits[6] = 0;
 	}
 
 	public int getGroundPoundTask() {
@@ -664,14 +616,6 @@ public class Fighter {
 		this.scoreBoardObject = scoreBoardObject;
 	}
 
-	public D_ProtocolStand[] getPersonalStands() {
-		return personalStands;
-	}
-
-	public D_ProtocolStand getChargedStand() {
-		return chargedStand;
-	}
-
 	public FighterKit getFKit() {
 		return fKit;
 	}
@@ -688,38 +632,27 @@ public class Fighter {
 		return fKits;
 	}
 
-	public static float getWalkSpeed() {
-		return walkSpeed;
-	}
-
-	public static float getWalkSpeedBoosted() {
-		return walkSpeedBoosted;
-	}
-
 	public static int getNumberOfKits() {
 		return numberOfKits;
-	}
-
-	public int getDoubleJumpTask() {
-		return doubleJumpTask;
-	}
-
-	public void setDoubleJumpTask(int doubleJumpTask) {
-		this.doubleJumpTask = doubleJumpTask;
 	}
 
 	public void setActionBarToFloat(float setter){
 		String text = "";
 		if(setter != 0){
-			for(int i = 0; i < (55 * setter); i++){
-				text = text.concat("|");
+			for(int i = 0; i < 40; i++){
+				if(i < (40 * setter)){
+					text = text.concat("|");
+				}else{
+					text = text.concat(":");
+				}
+
 			}
 		}
 		TextComponent message = new TextComponent(text);
 		if(setter == 1){
-			message.setColor(net.md_5.bungee.api.ChatColor.GREEN);
+			message.setColor(net.md_5.bungee.api.ChatColor.of(Color.GREEN));
 		}else{
-			message.setColor(net.md_5.bungee.api.ChatColor.AQUA);
+			message.setColor(net.md_5.bungee.api.ChatColor.of("#FF99CC"));
 		}
 		message.setBold(true);
 		this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);
@@ -727,5 +660,20 @@ public class Fighter {
 
 	public PHologram getKitHolograms(int i){
 		return kitHolograms[i];
+	}
+
+	public void refreshMySQLUpload() {
+		UUID uuid_p = this.getUuid();
+		this.refreshMySQLUploadTaskID = new BukkitRunnable(){
+			@Override
+			public void run() {
+				if (!Bukkit.getOfflinePlayer(uuid_p).isOnline()) {
+					this.cancel();
+					return;
+				}
+				Fighter.get((Player) Bukkit.getOfflinePlayer(uuid_p)).uploadFighter();
+				((Player) Bukkit.getOfflinePlayer(uuid_p)).sendMessage("Uploading your stats!");
+			}
+		}.runTaskTimer(plugin, 20*60*3, 20*60*3).getTaskId();
 	}
 }

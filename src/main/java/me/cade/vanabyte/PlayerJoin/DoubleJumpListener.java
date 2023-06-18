@@ -1,7 +1,5 @@
 package me.cade.vanabyte.PlayerJoin;
 
-import me.cade.vanabyte.Fighter;
-import me.cade.vanabyte.SpecialItems.JetPackItem;
 import org.bukkit.GameMode;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
