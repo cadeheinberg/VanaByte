@@ -1,16 +1,16 @@
 package me.cade.vanabyte.Damaging;
 
-import me.cade.vanabyte.Fighters.F2;
-import me.cade.vanabyte.Fighters.F3;
-import me.cade.vanabyte.Fighters.F4;
-import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKits.F2;
+import me.cade.vanabyte.Fighters.FighterKits.F3;
+import me.cade.vanabyte.Fighters.FighterKits.F4;
+import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.NPCS.D0_NpcListener;
-import me.cade.vanabyte.PlayerChat;
-import me.cade.vanabyte.SafeZone;
+import me.cade.vanabyte.Permissions.PlayerChat;
+import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.SpecialItems.CombatTracker;
 import me.cade.vanabyte.SpecialItems.SpecialItem;
-import me.cade.vanabyte.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.*;

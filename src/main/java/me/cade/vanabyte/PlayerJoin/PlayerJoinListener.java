@@ -2,6 +2,7 @@ package me.cade.vanabyte.PlayerJoin;
 
 import me.cade.vanabyte.*;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

@@ -2,7 +2,6 @@ package me.cade.vanabyte.Permissions;
 
 import me.cade.vanabyte.Money.A_CakeManager;
 import me.cade.vanabyte.Money.CakePickUp;
-import me.cade.vanabyte.SafeZone;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -6,9 +6,12 @@ import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Damaging.*;
 import me.cade.vanabyte.Money.A_CakeManager;
+import me.cade.vanabyte.MySQL.MySQL;
+import me.cade.vanabyte.MySQL.MySQL_Upgrades;
 import me.cade.vanabyte.NPCS.*;
 import me.cade.vanabyte.Permissions.BasicPermissions;
 import me.cade.vanabyte.Permissions.PickingUp;
+import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.PlayerJoin.*;
 import me.cade.vanabyte.SpecialItems.SpecialItemsListener;
 import org.bukkit.*;
@@ -82,7 +85,6 @@ public class VanaByte extends JavaPlugin {
 		pm.registerEvents(new PlayerChat(), this);
 		pm.registerEvents(new PickingUp(), this);
 		pm.registerEvents(new SpecialItemsListener(), this);
-		//pm.registerEvents(new DoubleJumpListener(), this);
 	}
 
 	@Override

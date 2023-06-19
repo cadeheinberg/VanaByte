@@ -1,6 +1,6 @@
 package me.cade.vanabyte.Damaging;
 
-import me.cade.vanabyte.SafeZone;
+import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

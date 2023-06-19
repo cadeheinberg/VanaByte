@@ -1,12 +1,10 @@
 package me.cade.vanabyte.Damaging;
 
-import me.cade.vanabyte.SafeZone;
+import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;

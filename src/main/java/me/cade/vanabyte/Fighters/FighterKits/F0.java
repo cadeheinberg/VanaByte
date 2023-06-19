@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.FighterKits;
 
 import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;

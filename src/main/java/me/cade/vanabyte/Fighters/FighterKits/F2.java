@@ -1,5 +1,7 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.FighterKits;
 
+import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterProjectile;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

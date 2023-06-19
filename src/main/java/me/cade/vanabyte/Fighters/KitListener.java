@@ -1,6 +1,10 @@
 package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.*;
+import me.cade.vanabyte.Fighters.FighterKits.F2;
+import me.cade.vanabyte.Fighters.FighterKits.F3;
+import me.cade.vanabyte.Fighters.FighterKits.F4;
+import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
+import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.*;

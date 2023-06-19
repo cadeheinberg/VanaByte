@@ -1,6 +1,8 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.FighterKits;
 
-import me.cade.vanabyte.Weapon;
+import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterProjectile;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;

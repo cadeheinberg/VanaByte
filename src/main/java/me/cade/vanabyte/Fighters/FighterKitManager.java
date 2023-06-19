@@ -1,7 +1,8 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.Fighters.FighterKits.*;
 import me.cade.vanabyte.SpecialItems.SpecialItem;
-import me.cade.vanabyte.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.entity.Player;
 
 public class FighterKitManager {

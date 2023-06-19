@@ -1,7 +1,9 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.FighterKits;
 
+import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.SpecialItems.*;
-import me.cade.vanabyte.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -41,6 +43,10 @@ public abstract class FighterKit {
 		this.setUpPrivateKitVariables();
 		this.checkIfHasPerkEnchantments();
 		this.giveKit();
+	}
+
+	public addWeapon(){
+		
 	}
 
 	public static boolean isFighterWeaponOrSpecialItem(ItemStack item){

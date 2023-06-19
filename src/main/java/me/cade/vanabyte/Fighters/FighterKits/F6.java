@@ -1,30 +1,31 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.FighterKits;
 
+import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.styles.ParticleStyle;
+import me.cade.vanabyte.SpecialItems.SetInvisible;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-public class F1 extends FighterKit {
-	
-	//general kit stuff
-	static final int kitID = 1;
-	static final String kitName = "Beserker";
-	static final String kitDrop = "Speed/Jump Boost";
-	static final String kitRightClick = "Super Leap";
-	static final ChatColor kitChatColor = ChatColor.LIGHT_PURPLE;
-	static final Color armorColor = Color.fromRGB(150, 0, 255);
+public class F6 extends FighterKit {
+
+	// General Kit Stuff
+	static final int kitID = 6;
+	static final String kitName = "Grief";
+	static final String kitDrop = "Invisibility & Health Steal";
+	static final String kitRightClick = "Use Shield";
+	static final ChatColor kitChatColor = ChatColor.AQUA;
+	static final Color armorColor = Color.fromRGB(0, 0, 0);
 	private int durationTicks;
 	private int rechargeTicks;
 	private double specialDamage;
 
 	// Primary
-	static final String weaponName = kitChatColor + "Beserker Axe";
+	static final String weaponName = kitChatColor + "Grief Sword";
 	private double meleeDamage;
 	private double projectileDamage;
 	private int cooldownTicks;
@@ -42,21 +43,21 @@ public class F1 extends FighterKit {
 	@Override
 	public void setUpPrivateKitVariables() {
 		if(this.fighterKitManager != null){
-			this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(1, 0);;
-			this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(1, 1);;
-			this.specialDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(1, 2);
-			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(1, 3);
-			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(1, 4);
-			this.cooldownTicks = 140 - this.fighterKitManager.getKitUpgradesConvertedTicks(1, 5);
+			this.meleeDamage = 8 + this.fighterKitManager.getKitUpgradesConvertedDamage(6, 0);;
+			this.projectileDamage = 4 + this.fighterKitManager.getKitUpgradesConvertedDamage(6, 1);;
+			this.specialDamage = 4 + this.fighterKitManager.getKitUpgradesConvertedDamage(6, 2);
+			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(6, 3);
+			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(6, 4);
+			this.cooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(6, 5);
 		}else{
-			this.meleeDamage = 6;
-			this.projectileDamage = 0;
-			this.specialDamage = 0;
+			this.meleeDamage = 8;
+			this.projectileDamage = 4;
+			this.specialDamage = 4;
 			this.durationTicks = 200;
 			this.rechargeTicks = 50;
-			this.cooldownTicks = 140;
+			this.cooldownTicks = 0;
 		}
-		this.material = Material.IRON_AXE;
+		this.material = Material.NETHERITE_SWORD;
 		this.primaryEnchantment = null;
 		this.sceondaryMeleeDamage = 0;
 		this.secondaryProjectileDamage = 0;
@@ -64,54 +65,57 @@ public class F1 extends FighterKit {
 		this.secondaryMaterial = null;
 		secondaryEnchantment = null;
 	}
-
-	public F1() {
+	
+	public F6() {
 		super();
 	}
 	
-	public F1(Player player) {
+	public F6(Player player) {
 		super(player);
 	}
-
+	
 	@Override
 	public void loadSecondaryWeapon() {
-		// pass
+		//pass
 	}
 
 	@Override
 	public boolean doRightClick(ItemStack item) {
-		if (super.doRightClick(item)) {
-			this.doBoosterJump();
-			return true;
-		}
-		return false;
+		return super.doRightClick(item);
 	}
 
 	@Override
 	public boolean doDrop(ItemStack item) {
-		// do special conditions before (right here)
 		return super.doDrop(item);
 	}
 
 	@Override
 	void activateSpecial() {
-		super.activateSpecial();
-		super.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, durationTicks, 0));
-		super.player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, durationTicks, 3));
-		super.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, durationTicks, 0));
+		super.player.setInvisible(true);
+		SetInvisible.makeInvisible(super.player);
 		super.player.playSound(super.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+		VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.HEART, ParticleStyle.fromName("swords"));
+		super.activateSpecial();
 	}
 
 	@Override
 	public void deActivateSpecial() {
+		super.player.setInvisible(false);
+		SetInvisible.makeVisible(super.player);
+		VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
 		super.deActivateSpecial();
 	}
 
-	private void doBoosterJump() {
-		this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
-		Vector currentDirection = this.player.getLocation().getDirection().normalize();
-		currentDirection = currentDirection.multiply(new Vector(1.7, 1.7, 1.7));
-		this.player.setVelocity(currentDirection);
+	public void doStealHealth(Player victim) {
+		if (super.fighter.isAbilityActive()) {
+			double combined = super.player.getHealth() + 1.5;
+			if (combined > 20) {
+				super.player.setHealth(20);
+			} else {
+				super.player.setHealth(combined);
+			}
+			super.player.playSound(super.player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 16, 1);
+		}
 	}
 
 	/*

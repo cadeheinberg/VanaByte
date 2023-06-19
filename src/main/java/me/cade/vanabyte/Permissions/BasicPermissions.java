@@ -1,8 +1,7 @@
 package me.cade.vanabyte.Permissions;
 
-import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.SafeZone;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;

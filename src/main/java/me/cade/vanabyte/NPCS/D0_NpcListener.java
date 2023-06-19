@@ -1,8 +1,8 @@
 package me.cade.vanabyte.NPCS;
 
-import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.SafeZone;
+import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;

@@ -1,7 +1,7 @@
 package me.cade.vanabyte.SpecialItems;
 
 import me.cade.vanabyte.VanaByte;
-import me.cade.vanabyte.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.*;
 import org.bukkit.entity.Chicken;
 import org.bukkit.entity.EntityType;

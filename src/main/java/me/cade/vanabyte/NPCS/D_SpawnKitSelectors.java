@@ -1,7 +1,7 @@
 package me.cade.vanabyte.NPCS;
 
-import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

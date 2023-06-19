@@ -1,6 +1,7 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;

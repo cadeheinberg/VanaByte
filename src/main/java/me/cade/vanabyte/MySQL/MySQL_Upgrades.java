@@ -1,6 +1,7 @@
-package me.cade.vanabyte;
+package me.cade.vanabyte.MySQL;
 
-import me.cade.vanabyte.HiddenPersonal.DatabaseAccess;
+import me.cade.vanabyte.MySQL.HiddenPersonal.DatabaseAccess;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;

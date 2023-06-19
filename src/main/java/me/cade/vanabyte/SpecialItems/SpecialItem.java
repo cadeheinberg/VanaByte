@@ -1,7 +1,6 @@
 package me.cade.vanabyte.SpecialItems;
 
-import me.cade.vanabyte.Weapon;
-import org.bukkit.ChatColor;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

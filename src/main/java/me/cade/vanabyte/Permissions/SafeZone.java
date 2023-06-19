@@ -1,5 +1,6 @@
-package me.cade.vanabyte;
+package me.cade.vanabyte.Permissions;
 
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.Location;
 import org.bukkit.World;
 

@@ -1,4 +1,4 @@
-package me.cade.vanabyte;
+package me.cade.vanabyte.Permissions;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;
