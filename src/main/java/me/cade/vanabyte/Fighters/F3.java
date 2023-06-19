@@ -1,6 +1,5 @@
-package me.cade.vanabyte.BuildKits;
+package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Fighter;
 import me.cade.vanabyte.Weapon;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
@@ -49,13 +48,13 @@ public class F3 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		if(this.pFight != null){
-			this.meleeDamage = 5 + this.pFight.getKitUpgradesConvertedDamage(3, 0);;
-			this.projectileDamage = 15 + this.pFight.getKitUpgradesConvertedDamage(3, 1);;
-			this.specialDamage = 12 + this.pFight.getKitUpgradesConvertedDamage(3, 2);
-			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(3, 3);
-			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(3, 4);
-			this.cooldownTicks = 5 - this.pFight.getKitUpgradesConvertedTicks(3, 5);
+		if(this.fighterKitManager != null){
+			this.meleeDamage = 5 + this.fighterKitManager.getKitUpgradesConvertedDamage(3, 0);;
+			this.projectileDamage = 15 + this.fighterKitManager.getKitUpgradesConvertedDamage(3, 1);;
+			this.specialDamage = 12 + this.fighterKitManager.getKitUpgradesConvertedDamage(3, 2);
+			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(3, 3);
+			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(3, 4);
+			this.cooldownTicks = 5 - this.fighterKitManager.getKitUpgradesConvertedTicks(3, 5);
 		}else{
 			this.meleeDamage = 5;
 			this.projectileDamage = 15;
@@ -112,7 +111,7 @@ public class F3 extends FighterKit {
 		super.deActivateSpecial();
 	}
 
-	public double doArrorwHitEntity(LivingEntity victim, Arrow arrow) {
+	public double doArrowHitEntity(LivingEntity victim, Arrow arrow) {
 		// create your own form of knockback
 		if (victim instanceof Player) {
 			Fighter.get(player).fighterDismountParachute();
@@ -264,7 +263,7 @@ public class F3 extends FighterKit {
 		}
 		return cooldownTicks;
 	}
-	
+
 	public String getSecondaryWeaponName() {
 		return secondaryWeaponName;
 	}

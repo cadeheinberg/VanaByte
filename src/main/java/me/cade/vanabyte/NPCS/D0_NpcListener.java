@@ -1,7 +1,7 @@
 package me.cade.vanabyte.NPCS;
 
-import me.cade.vanabyte.BuildKits.FighterKit;
-import me.cade.vanabyte.Fighter;
+import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
@@ -49,12 +49,12 @@ public class D0_NpcListener implements Listener {
 				e.getPlayer().teleport(VanaByte.secondWorldSpawn);
 				return;
 			} else if (e.getRightClicked().getType() == EntityType.SNOWMAN) {
-				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0) + 10);
-				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1) + 10);
-				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2) + 10);
-				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3) + 40);
-				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4) + 1);
-				Fighter.get(e.getPlayer()).setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5, Fighter.get(e.getPlayer()).getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5) + 1);
+				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0) + 10);
+				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1) + 10);
+				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2) + 10);
+				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3) + 40);
+				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4) + 1);
+				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5) + 1);
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 				Fighter.get(e.getPlayer()).giveKit();
 				return;
@@ -71,13 +71,13 @@ public class D0_NpcListener implements Listener {
 		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
 			if (D_SpawnKitSelectors.getLocationOfSelector(i).getBlockX() == x) {
 				Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-				if (fighter.getUnlockedKit(i) > 0) {
-					fighter.giveKitWithID(i);
+				if (fighter.getFighterKitManager().getUnlockedKit(i) > 0) {
+					fighter.getFighterKitManager().giveKitWithID(i);
 				} else {
 					player.sendMessage(ChatColor.RED + "You do not own this kit");
 					player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-					fighter.setUnlockedKit(i, 1);
-					fighter.refreshKitHolograms(i);
+					fighter.getFighterKitManager().setUnlockedKit(i, 1);
+					fighter.getFighterHologramManager().refreshKitHolograms(i);
 				}
 			}
 		}

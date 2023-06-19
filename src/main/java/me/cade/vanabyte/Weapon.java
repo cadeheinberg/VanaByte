@@ -1,6 +1,6 @@
 package me.cade.vanabyte;
 
-import me.cade.vanabyte.BuildKits.FighterKit.EnchantmentPair;
+import me.cade.vanabyte.Fighters.FighterKit.EnchantmentPair;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;

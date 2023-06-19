@@ -1,7 +1,6 @@
-package me.cade.vanabyte.BuildKits;
+package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
-import me.cade.vanabyte.Fighter;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -39,13 +38,13 @@ public class F4 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		if(this.pFight != null){
-			this.meleeDamage = 6 + this.pFight.getKitUpgradesConvertedDamage(4, 0);;
-			this.projectileDamage = 10 + this.pFight.getKitUpgradesConvertedDamage(4, 1);;
-			this.specialDamage = 8 + this.pFight.getKitUpgradesConvertedDamage(4, 2);
-			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(4, 3);
-			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(4, 4);
-			this.cooldownTicks = 5 - this.pFight.getKitUpgradesConvertedTicks(4, 5);
+		if(this.fighterKitManager != null){
+			this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(4, 0);;
+			this.projectileDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(4, 1);;
+			this.specialDamage = 8 + this.fighterKitManager.getKitUpgradesConvertedDamage(4, 2);
+			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(4, 3);
+			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(4, 4);
+			this.cooldownTicks = 5 - this.fighterKitManager.getKitUpgradesConvertedTicks(4, 5);
 		}else{
 			this.meleeDamage = 6;
 			this.projectileDamage = 10;

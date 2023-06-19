@@ -1,4 +1,4 @@
-package me.cade.vanabyte.BuildKits;
+package me.cade.vanabyte.Fighters;
 
 import org.bukkit.*;
 import org.bukkit.Particle.DustOptions;
@@ -13,7 +13,6 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 
 public class F0 extends FighterKit {
-
 	static final int kitID = 0;
 	static final String kitName = "Airbender";
 	static final String kitDrop = "Gust of Wind";
@@ -45,13 +44,13 @@ public class F0 extends FighterKit {
 		// for when you add enhancements, make sure you check if the player is null or
 		// not
 		// because the kit armor stands use this
-		if(this.pFight != null){
-			this.meleeDamage = 6 + this.pFight.getKitUpgradesConvertedDamage(0, 0);;
-			this.projectileDamage = 0 + this.pFight.getKitUpgradesConvertedDamage(0, 1);;
-			this.specialDamage = 7 + this.pFight.getKitUpgradesConvertedDamage(0, 2);
-			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(0, 3);
-			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(0, 4);
-			this.cooldownTicks = 0 - this.pFight.getKitUpgradesConvertedTicks(0, 5);
+		if(this.fighterKitManager != null){
+			this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
+			this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
+			this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
+			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
+			this.cooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
 		}else{
 			this.durationTicks = 200;
 			this.rechargeTicks = 50;

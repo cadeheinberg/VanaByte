@@ -1,6 +1,6 @@
 package me.cade.vanabyte.Money;
 
-import me.cade.vanabyte.Fighter;
+import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;

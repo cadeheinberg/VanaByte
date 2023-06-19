@@ -1,18 +1,16 @@
 package me.cade.vanabyte.NPCS;
 
-import me.cade.vanabyte.BuildKits.*;
-import me.cade.vanabyte.Fighter;
+import me.cade.vanabyte.Fighters.*;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-
-import java.text.NumberFormat;
 
 public class D_SpawnKitSelectors {
 
 	private static D1_ArmorStand[] kits;
 	
-	private static FighterKit[] fKits = Fighter.getFKits();
+	private static FighterKit[] fKits = Fighter.getFkitsNoPlayer();
 
 	private static Location[] locations = {
 			new Location(VanaByte.hub, -1043.5, 195.3, -111.5, 135, 0),

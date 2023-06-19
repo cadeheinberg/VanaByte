@@ -1,6 +1,7 @@
 package me.cade.vanabyte.PlayerJoin;
 
 import me.cade.vanabyte.*;
+import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;

@@ -1,4 +1,4 @@
-package me.cade.vanabyte.BuildKits;
+package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.*;
 import org.bukkit.GameMode;

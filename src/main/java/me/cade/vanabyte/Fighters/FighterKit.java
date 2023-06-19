@@ -1,8 +1,6 @@
-package me.cade.vanabyte.BuildKits;
+package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Fighter;
 import me.cade.vanabyte.SpecialItems.*;
-import me.cade.vanabyte.VanaByte;
 import me.cade.vanabyte.Weapon;
 import org.bukkit.*;
 import org.bukkit.attribute.Attribute;
@@ -13,21 +11,18 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 
-public class FighterKit {
+public abstract class FighterKit {
 
 	Player player = null;
-	Fighter pFight;
+	Fighter fighter = null;
 	Weapon[] weapons = new Weapon[2];
-
 	EnchantmentPair perkEnchantment1;
-
 	SpecialItem[] specialItems = new SpecialItem[2];
-
 	ParachuteItem parachuteItem = null;
+	FighterKitManager fighterKitManager = null;
 
 	private Material cooldownMaterial = Material.BARRIER;
 
@@ -41,7 +36,8 @@ public class FighterKit {
 //		Bukkit.getConsoleSender()
 //				.sendMessage(ChatColor.GREEN + "Creating FighterKit with player + " + player.getDisplayName());
 		this.player = player;
-		this.pFight = Fighter.get(player);
+		this.fighter = Fighter.get(player);
+		this.fighterKitManager = this.fighter.getFighterKitManager();
 		this.setUpPrivateKitVariables();
 		this.checkIfHasPerkEnchantments();
 		this.giveKit();
@@ -217,7 +213,7 @@ public class FighterKit {
 	}
 
 	void activateSpecial() {
-		this.startAbilityDuration();
+		this.fighter.startAbilityDuration();
 	}
 
 	public void deActivateSpecial() {
@@ -305,60 +301,6 @@ public class FighterKit {
 		return -1;
 	}
 
-	private void startAbilityDuration() {
-		this.pFight.setAbilityActive(true);
-		this.pFight.setAbilityRecharged(false);
-		int durationTicks = this.getDurationTicks();
-		player.setCooldown(Material.BARRIER, durationTicks);
-		int cooldownTask = new BukkitRunnable() {
-			@Override
-			public void run() {
-				//Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Cooldown Task Running");
-				if (player != null) {
-					if (!player.isOnline()) {
-						return;
-					}
-					if (player.getCooldown(Material.BARRIER) < 1) {
-						cancel();
-						Fighter.get(player).setAbilityActive(false);
-						Fighter.get(player).setActionBarToFloat(0);
-						player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 8, 1);
-						startAbilityRecharge();
-						return;
-					}
-					Fighter.get(player).setActionBarToFloat(((float) player.getCooldown(Material.BARRIER)) / durationTicks);
-				}
-			}
-		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId();
-		Fighter.get(player).setCooldownTask(cooldownTask);
-	}
-
-	private void startAbilityRecharge() {
-		int rechargeTicks = this.getRechargeTicks();
-		player.setCooldown(Material.BARRIER, rechargeTicks);
-		int rechargeTask = new BukkitRunnable() {
-			@Override
-			public void run() {
-				//Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Recharge Task Running");
-				if (player != null) {
-					if (!player.isOnline()) {
-						return;
-					}
-					if (player.getCooldown(Material.BARRIER) < 1) {
-						cancel();
-						Fighter.get(player).setAbilityRecharged(true);
-						Fighter.get(player).setActionBarToFloat(1);
-						player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
-						return;
-					}
-					Fighter.get(player).setActionBarToFloat(
-							((float) (rechargeTicks - player.getCooldown(Material.BARRIER))) / rechargeTicks);
-				}
-			}
-		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId();
-		Fighter.get(player).setRechargeTask(rechargeTask);
-	}
-
 	private void giveArmor() {
 
 		ItemStack lhelmet = new ItemStack(Material.LEATHER_HELMET, 1);
@@ -426,7 +368,6 @@ public class FighterKit {
 		player.getEquipment().setBoots(lboots);
 
 	}
-
 	public class EnchantmentPair {
 		private Enchantment enchantment;
 		private int level;
@@ -476,22 +417,6 @@ public class FighterKit {
 		}
 		return null;
 	}
-
-	public void resetAllFighterItemCooldowns() {
-		for(Weapon weapon : this.getWeapons()) {
-			if(weapon == null){
-				continue;
-			}
-			weapon.resetCooldown(this.player);
-		}
-		for(SpecialItem sItem : this.getSpecialItems()) {
-			if(sItem == null){
-				continue;
-			}
-			sItem.resetCooldown();
-		}
-	}
-
 	//override in class where pickup is used
 	public void doPickUp(LivingEntity rightClicked) {
 		//pass

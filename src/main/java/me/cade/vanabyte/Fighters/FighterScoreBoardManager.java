@@ -1,6 +1,6 @@
-package me.cade.vanabyte.ScoreBoard;
+package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Fighter;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Money.A_CakeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.*;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
-public class ScoreBoardObject {
+public class FighterScoreBoardManager {
 
   private Player player;
   private Fighter fighter;
@@ -26,7 +26,7 @@ public class ScoreBoardObject {
   private Team footer;
   
   @SuppressWarnings("deprecation")
-  public ScoreBoardObject(Player player) {
+  public FighterScoreBoardManager(Player player) {
     this.player = player;
     this.fighter = Fighter.get(player);
 

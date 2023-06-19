@@ -1,10 +1,10 @@
 package me.cade.vanabyte.Damaging;
 
-import me.cade.vanabyte.BuildKits.F2;
-import me.cade.vanabyte.BuildKits.F3;
-import me.cade.vanabyte.BuildKits.F4;
-import me.cade.vanabyte.BuildKits.FighterKit;
-import me.cade.vanabyte.Fighter;
+import me.cade.vanabyte.Fighters.F2;
+import me.cade.vanabyte.Fighters.F3;
+import me.cade.vanabyte.Fighters.F4;
+import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.NPCS.D0_NpcListener;
 import me.cade.vanabyte.PlayerChat;
 import me.cade.vanabyte.SafeZone;
@@ -13,15 +13,12 @@ import me.cade.vanabyte.SpecialItems.SpecialItem;
 import me.cade.vanabyte.Weapon;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -81,7 +78,7 @@ public class EntityDamage implements Listener {
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
 					} else if (e.getDamager() instanceof Arrow && fighter.getKitID() == 3 && fkit instanceof F3) {
-						damage_amount = ((F3) fkit).doArrorwHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
+						damage_amount = ((F3) fkit).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
 					} else if (e.getDamager() instanceof Trident && fighter.getKitID() == 4 && fkit instanceof F4) {

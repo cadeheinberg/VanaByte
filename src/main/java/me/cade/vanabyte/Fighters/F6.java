@@ -1,4 +1,4 @@
-package me.cade.vanabyte.BuildKits;
+package me.cade.vanabyte.Fighters;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.ParticleStyle;
@@ -42,13 +42,13 @@ public class F6 extends FighterKit {
 
 	@Override
 	public void setUpPrivateKitVariables() {
-		if(this.pFight != null){
-			this.meleeDamage = 8 + this.pFight.getKitUpgradesConvertedDamage(6, 0);;
-			this.projectileDamage = 4 + this.pFight.getKitUpgradesConvertedDamage(6, 1);;
-			this.specialDamage = 4 + this.pFight.getKitUpgradesConvertedDamage(6, 2);
-			this.durationTicks = 200 + this.pFight.getKitUpgradesConvertedTicks(6, 3);
-			this.rechargeTicks = 50 - this.pFight.getKitUpgradesConvertedTicks(6, 4);
-			this.cooldownTicks = 0 - this.pFight.getKitUpgradesConvertedTicks(6, 5);
+		if(this.fighterKitManager != null){
+			this.meleeDamage = 8 + this.fighterKitManager.getKitUpgradesConvertedDamage(6, 0);;
+			this.projectileDamage = 4 + this.fighterKitManager.getKitUpgradesConvertedDamage(6, 1);;
+			this.specialDamage = 4 + this.fighterKitManager.getKitUpgradesConvertedDamage(6, 2);
+			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(6, 3);
+			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(6, 4);
+			this.cooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(6, 5);
 		}else{
 			this.meleeDamage = 8;
 			this.projectileDamage = 4;
@@ -107,7 +107,7 @@ public class F6 extends FighterKit {
 	}
 
 	public void doStealHealth(Player victim) {
-		if (super.pFight.isAbilityActive()) {
+		if (super.fighter.isAbilityActive()) {
 			double combined = super.player.getHealth() + 1.5;
 			if (combined > 20) {
 				super.player.setHealth(20);

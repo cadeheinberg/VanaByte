@@ -1,5 +1,6 @@
 package me.cade.vanabyte;
 
+import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;

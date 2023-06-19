@@ -3,7 +3,7 @@ package me.cade.vanabyte;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
-import me.cade.vanabyte.BuildKits.*;
+import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Damaging.*;
 import me.cade.vanabyte.Money.A_CakeManager;
 import me.cade.vanabyte.NPCS.*;
@@ -143,14 +143,14 @@ public class VanaByte extends JavaPlugin {
 						+ " operator " + ChatColor.RED + "on this server");
 				return false;
 			}
-			Fighter.get(player).getScoreBoardObjext().hideScoreBoard();
+			Fighter.get(player).getFighterScoreBoardManager().hideScoreBoard();
 		} else if (label.equals("unhidescoreboard")) {
 			if (!(player.isOp())) {
 				player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD
 						+ " operator " + ChatColor.RED + "on this server");
 				return false;
 			}
-			Fighter.get(player).getScoreBoardObjext().unhideScoreBoard();
+			Fighter.get(player).getFighterScoreBoardManager().unhideScoreBoard();
 		} else if (label.equals("fly")) {
 			if (!(player.isOp())) {
 				player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD

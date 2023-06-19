@@ -1,10 +1,8 @@
 package me.cade.vanabyte.SpecialItems;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
-import me.cade.vanabyte.Fighter;
-import me.cade.vanabyte.SafeZone;
+import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;

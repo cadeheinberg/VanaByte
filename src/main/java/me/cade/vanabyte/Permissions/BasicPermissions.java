@@ -1,11 +1,8 @@
 package me.cade.vanabyte.Permissions;
 
-import me.cade.vanabyte.BuildKits.FighterKit;
-import me.cade.vanabyte.Fighter;
+import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.SafeZone;
-import me.cade.vanabyte.VanaByte;
-import net.md_5.bungee.api.ChatMessageType;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -43,7 +40,7 @@ public class BasicPermissions implements Listener {
 
 	@EventHandler
 	public static void onPlayerLevelChange(PlayerExpChangeEvent e){
-		Fighter.get(e.getPlayer()).getScoreBoardObjext().updateExp();
+		Fighter.get(e.getPlayer()).getFighterScoreBoardManager().updateExp();
 	}
 
 	//Triggered when a hanging entity is created in the world, ie item frame
