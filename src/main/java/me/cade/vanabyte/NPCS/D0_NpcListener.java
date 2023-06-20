@@ -1,7 +1,8 @@
 package me.cade.vanabyte.NPCS;
 
-import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
@@ -21,11 +22,11 @@ public class D0_NpcListener implements Listener {
 	@EventHandler
 	public void onClick(PlayerInteractEntityEvent e) {
 		if(e.getRightClicked().getType() == EntityType.ITEM_FRAME || e.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME || e.getRightClicked().getType() == EntityType.ITEM_DISPLAY){
-			if(e.getPlayer().getInventory().getItemInMainHand() != null && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInMainHand())){
+			if(e.getPlayer().getInventory().getItemInMainHand() != null && FighterKitManager.hasNameOfWeapon(e.getPlayer().getInventory().getItemInMainHand())){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInOffHand())){
+			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && FighterKitManager.hasNameOfWeapon(e.getPlayer().getInventory().getItemInOffHand())){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
@@ -94,11 +95,11 @@ public class D0_NpcListener implements Listener {
 				handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
 			}
 		} else{
-			if(e.getPlayer().getInventory().getItemInMainHand() != null && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInMainHand())){
+			if(e.getPlayer().getInventory().getItemInMainHand() != null && FighterKitManager.hasNameOfWeapon(e.getPlayer().getInventory().getItemInMainHand())){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && FighterKit.isFighterWeaponOrSpecialItem(e.getPlayer().getInventory().getItemInOffHand())){
+			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && FighterKitManager.hasNameOfWeapon(e.getPlayer().getInventory().getItemInOffHand())){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);

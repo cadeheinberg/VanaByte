@@ -1,15 +1,15 @@
 package me.cade.vanabyte.Damaging;
 
+import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.FighterKits.F2;
 import me.cade.vanabyte.Fighters.FighterKits.F3;
 import me.cade.vanabyte.Fighters.FighterKits.F4;
-import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
-import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.GoblinBow;
+import me.cade.vanabyte.Fighters.Weapons.IgorsTrident;
+import me.cade.vanabyte.Fighters.Weapons.ShottyShotgun;
 import me.cade.vanabyte.NPCS.D0_NpcListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
-import me.cade.vanabyte.SpecialItems.CombatTracker;
-import me.cade.vanabyte.SpecialItems.SpecialItem;
 import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -69,20 +69,25 @@ public class EntityDamage implements Listener {
 			double damage_amount = 0;
 			if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 				Projectile p = (Projectile) e.getDamager();
+				if(!FighterProjectile.projectileHasMetadata(e.getEntity())){
+					//If the projectile is not from a player using a Fighter kit
+					//then ignore it
+					return;
+				}
 				if (p.getShooter() instanceof Player) {
 					killer = (Player) p.getShooter();
 					Fighter fighter = Fighter.get(killer);
-					FighterKit fkit = fighter.getFKit();
-					if (e.getDamager() instanceof Snowball && fighter.getKitID() == 2 && fkit instanceof F2) {
-						damage_amount = ((F2) fkit).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
+					FighterKit fKit = fighter.getFKit();
+					if (e.getDamager() instanceof Snowball && fKit.getSpecificWeaponHolderIfItExists(ShottyShotgun.class) != null) {
+						damage_amount = ((ShottyShotgun) fKit.getSpecificWeaponHolderIfItExists(ShottyShotgun.class)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-					} else if (e.getDamager() instanceof Arrow && fighter.getKitID() == 3 && fkit instanceof F3) {
-						damage_amount = ((F3) fkit).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
+					} else if (e.getDamager() instanceof Arrow && fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class) != null) {
+						damage_amount = ((GoblinBow) fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-					} else if (e.getDamager() instanceof Trident && fighter.getKitID() == 4 && fkit instanceof F4) {
-						damage_amount = ((F4) fkit).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
+					} else if (e.getDamager() instanceof Trident && fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class) != null) {
+						damage_amount = ((IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
 					}
@@ -111,15 +116,10 @@ public class EntityDamage implements Listener {
 				fKiller.getFKit().doStealHealth(victim);
 				fVictim.setLastDamagedBy(killer);
 				fKiller.setLastToDamage(victim);
-				killer.setCooldown(CombatTracker.mat, 200);
-				victim.setCooldown(CombatTracker.mat, 200);
+				killer.setCooldown(FighterKitManager.getCombatTrackerMaterial(), 200);
+				victim.setCooldown(FighterKitManager.getCombatTrackerMaterial(), 200);
 			}
 		}
-
-
-
-
-
 	}
 
 	@EventHandler
@@ -136,17 +136,10 @@ public class EntityDamage implements Listener {
 
 		if(!SafeZone.inHub(victim.getLocation().getWorld())){
 			List<ItemStack> drops = e.getDrops();
-			for (Weapon weapon : fVictim.getFKit().getWeapons()){
-				if (weapon == null) {
-					break;
+			for (ItemStack drop : drops){
+				if (FighterKitManager.hasNameOfWeapon(drop)) {
+					drops.remove(drop);
 				}
-				drops.remove(weapon.getWeaponItem());
-			}
-			for (SpecialItem specialItem : fVictim.getFKit().getSpecialItems()){
-				if (specialItem == null) {
-					break;
-				}
-				drops.remove(specialItem.getWeapon().getWeaponItem());
 			}
 			ItemStack helmet = victim.getEquipment().getHelmet();
 			ItemStack chest = victim.getEquipment().getChestplate();
@@ -168,7 +161,7 @@ public class EntityDamage implements Listener {
 			fVictim.dropFighterKitSoul();
 		}
 
-		if (victim.getCooldown(CombatTracker.mat) < 1) {
+		if (victim.getCooldown(FighterKitManager.getCombatTrackerMaterial()) < 1) {
 			// After 10 seconds don't count the kill for the killer
 			return;
 		}

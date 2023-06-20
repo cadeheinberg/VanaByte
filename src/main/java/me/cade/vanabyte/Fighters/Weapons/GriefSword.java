@@ -1,22 +1,28 @@
 package me.cade.vanabyte.Fighters.Weapons;
 
+import dev.esophose.playerparticles.particles.ParticleEffect;
+import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class AirbenderSword extends WeaponHolder {
-    final String weaponDrop = "Gust of Wind";
+public class GriefSword extends WeaponHolder {
+
+    final String weaponDrop = "Invisibility & Health Steal";
     final String weaponRightClick = "Use Shield";
-    final ChatColor weaponNameColor = ChatColor.WHITE;
-    final String weaponName = weaponNameColor + "Airbender Sword";
+    final ChatColor weaponNameColor = ChatColor.AQUA;
+    final String weaponName = weaponNameColor + "Grief Sword";
     private Material material = null;
     private int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks = -1;
     private double specialDamage, meleeDamage, projectileDamage = -1;
@@ -24,7 +30,7 @@ public class AirbenderSword extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public AirbenderSword(Fighter fighter) {
+    public GriefSword(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
@@ -35,12 +41,12 @@ public class AirbenderSword extends WeaponHolder {
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
-        this.material = Material.IRON_SWORD;
+        this.material = Material.NETHERITE_SWORD;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
-    public AirbenderSword(){
+    public GriefSword(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;
@@ -48,7 +54,7 @@ public class AirbenderSword extends WeaponHolder {
         this.abilityDurationTicks = 200;
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
-        this.material = Material.IRON_SWORD;
+        this.material = Material.NETHERITE_SWORD;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
@@ -68,64 +74,44 @@ public class AirbenderSword extends WeaponHolder {
     @Override
     public void activateSpecial() {
         super.activateSpecial();
-        this.gustOfWindSpell();
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, abilityDurationTicks, 1));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityDurationTicks, 1));
-        this.player.playSound(this.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, this.abilityDurationTicks, 0));
+        this.makeInvisible(this.player);
+        this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+        VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.HEART, ParticleStyle.fromName("swords"));
     }
     @Override
     public void deActivateSpecial() {
         super.deActivateSpecial();
+        this.makeVisible(player);
+        VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
     }
-    public void gustOfWindSpell() {
-        Location playerLocation = this.player.getLocation();
-        if (playerLocation.getPitch() > 49) {
-            launchPlayer(this.player, -1.5);
-            return;
-        }
-        Location origin = this.player.getEyeLocation();
-        Vector direction = this.player.getLocation().getDirection();
-        double dX = direction.getX();
-        double dY = direction.getY();
-        double dZ = direction.getZ();
-        playerLocation.setPitch((float) -30.0);
-        int range = 13;
-        double power = 2.8;
-        ArrayList<Integer> hitList = new ArrayList<Integer>();
-        for (int j = 2; j < range; j++) {
-            origin = origin.add(dX * j, dY * j, dZ * j);
-            this.player.spawnParticle(Particle.REDSTONE, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-            ArrayList<Entity> entityList = (ArrayList<Entity>) this.player.getWorld().getNearbyEntities(origin, 2.5, 2.5,
-                    2.5);
-            for (Entity entity : entityList) {
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1 Living Entity Found");
-                if (!(entity instanceof LivingEntity)) {
-                    continue;
-                } else if (hitList.contains(((LivingEntity) entity).getEntityId())) {
-                    continue;
-                } else if (this.player.getName().equals(((LivingEntity) entity).getName())) {
-                    continue;
-                }
-                if(entity instanceof Player) {
-                    if(((Player) entity).getGameMode() == GameMode.CREATIVE) {
-                        return;
-                    }
-                }
-                ((LivingEntity) entity).damage(this.specialDamage, this.player);
-                Vector currentDirection = playerLocation.getDirection().normalize();
-                currentDirection = currentDirection.multiply(new Vector(power, power, power));
-                entity.setVelocity(currentDirection);
-                hitList.add(((LivingEntity) entity).getEntityId());
+    public void doStealHealth(Player victim) {
+        if (super.getWeaponAbility().isAbilityActive()) {
+            double combined = this.player.getHealth() + 1.5;
+            if (combined > 20) {
+                this.player.setHealth(20);
+            } else {
+                this.player.setHealth(combined);
             }
-            origin = origin.subtract(dX * j, dY * j, dZ * j);
+            this.player.playSound(this.player.getLocation(), Sound.ENTITY_ENDERMAN_HURT, 16, 1);
+        }
+    }
+    public static void makeInvisible(Player player) {
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            p.sendEquipmentChange(player, EquipmentSlot.HEAD, new ItemStack(Material.AIR));
+            p.sendEquipmentChange(player, EquipmentSlot.CHEST, new ItemStack(Material.AIR));
+            p.sendEquipmentChange(player, EquipmentSlot.LEGS, new ItemStack(Material.AIR));
+            p.sendEquipmentChange(player, EquipmentSlot.FEET, new ItemStack(Material.AIR));
         }
     }
 
-    private static void launchPlayer(Player player, Double power) {
-        player.spawnParticle(Particle.REDSTONE, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-        Vector currentDirection = player.getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(power, power, power));
-        player.setVelocity(currentDirection);
+    public static void makeVisible(Player player) {
+        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
+            p.sendEquipmentChange(player, EquipmentSlot.HEAD, player.getEquipment().getHelmet());
+            p.sendEquipmentChange(player, EquipmentSlot.CHEST, player.getEquipment().getChestplate());
+            p.sendEquipmentChange(player, EquipmentSlot.LEGS, player.getEquipment().getLeggings());
+            p.sendEquipmentChange(player, EquipmentSlot.FEET,  player.getEquipment().getBoots());
+        }
     }
 
     @Override

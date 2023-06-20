@@ -1,10 +1,11 @@
-package me.cade.vanabyte.SpecialItems;
+package me.cade.vanabyte.Fighters.Weapons.Unused;
 
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 
-public class SmokeGrenadeItem {
+public class SmokeGrenadeItem extends WeaponHolder {
 	
 	public static void doSmokeGrenade(Player player) {
 		Location location = player.getLocation();

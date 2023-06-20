@@ -1,7 +1,8 @@
 package me.cade.vanabyte.NPCS;
 
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,7 +11,7 @@ public class D_SpawnKitSelectors {
 
 	private static D1_ArmorStand[] kits;
 	
-	private static FighterKit[] fKits = Fighter.getFkitsNoPlayer();
+	private static FighterKit[] fKits = FighterKitManager.getFkitsNoPlayer();
 
 	private static Location[] locations = {
 			new Location(VanaByte.hub, -1043.5, 195.3, -111.5, 135, 0),
@@ -31,7 +32,7 @@ public class D_SpawnKitSelectors {
 		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
 			kits[i] = new D1_ArmorStand(p + fKits[i].getKitName(), locations[i], locations[i].getYaw(), false, false, true);
 			kits[i].equipColoredArmor(fKits[i].getArmorColor());
-			kits[i].getStand().setItemInHand(fKits[i].getWeapons()[0].getWeaponItem());
+			kits[i].getStand().setItemInHand(fKits[i].getWeaponHolders().get(0).getWeapon().getWeaponItem());
 		}
 //		spawnKitSelectorStats();
 	}

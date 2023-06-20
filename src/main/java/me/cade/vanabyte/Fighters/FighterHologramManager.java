@@ -17,6 +17,26 @@ public class FighterHologramManager {
         this.player = player;
         this.fighter = fighter;
     }
+
+    protected void fighterJoined(){
+        this.spawnHolograms();
+    }
+
+    protected void fighterDied(){
+
+    }
+
+    protected void fighterLeftServer(){
+
+    }
+
+    protected void fighterChangedWorld(){
+        this.spawnHolograms();
+    }
+
+    protected void fighterRespawned(){
+        //this.resetSpecialAbility();
+    }
     public void spawnHolograms(){
         this.findExistingHologramsForPlayer();
         this.refreshWelcomeHologram();
@@ -54,8 +74,8 @@ public class FighterHologramManager {
         if (fighter.fighterKitManager.getUnlockedKit(kitID) > 0) {
             locked = ChatColor.GREEN + "Unlocked";
         }
-        String q_special = "  Drop-Item: " + fighter.fighterKitManager.getFkitsNoPlayer()[kitID].getKitDrop() + "  ";
-        String rc_special = "  Right-Click: " + fighter.fighterKitManager.getFkitsNoPlayer()[kitID].getKitRightClick() + "  ";
+        String q_special = "  Drop-Item: " + fighter.fighterKitManager.getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponDrop() + "  ";
+        String rc_special = "  Right-Click: " + fighter.fighterKitManager.getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponRightClick() + "  ";
 
         if (kitHolograms[kitID] != null) {
             kitHolograms[kitID].setLine(0, locked);

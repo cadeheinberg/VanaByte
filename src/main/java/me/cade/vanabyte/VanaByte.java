@@ -12,8 +12,6 @@ import me.cade.vanabyte.NPCS.*;
 import me.cade.vanabyte.Permissions.BasicPermissions;
 import me.cade.vanabyte.Permissions.PickingUp;
 import me.cade.vanabyte.Permissions.PlayerChat;
-import me.cade.vanabyte.PlayerJoin.*;
-import me.cade.vanabyte.SpecialItems.SpecialItemsListener;
 import org.bukkit.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -84,13 +82,14 @@ public class VanaByte extends JavaPlugin {
 		pm.registerEvents(new EntityDamage(), this);
 		pm.registerEvents(new PlayerChat(), this);
 		pm.registerEvents(new PickingUp(), this);
-		pm.registerEvents(new SpecialItemsListener(), this);
 	}
 
 	@Override
 	public void onDisable() {
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			Fighter.get(player).fighterLeftServer();
+			if(Fighter.get(player) != null){
+				Fighter.get(player).fighterLeftServer();
+			}
 		}
 		mysql.closeConnection();
 		mySQL_upgrades.closeConnection();
@@ -111,9 +110,7 @@ public class VanaByte extends JavaPlugin {
 
 	private void addPlayersToFighters() {
 		for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-			// player.teleport(Main.hubSpawn);
-			Fighter fighter = new Fighter(player);
-			fighter.addToFightersHashMap();
+			new Fighter(player);
 		}
 	}
 

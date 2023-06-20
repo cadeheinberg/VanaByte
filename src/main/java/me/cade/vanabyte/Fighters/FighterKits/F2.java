@@ -1,7 +1,10 @@
 package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.FighterProjectile;
+import me.cade.vanabyte.Fighters.Weapons.AirbenderSword;
+import me.cade.vanabyte.Fighters.Weapons.ShottyShotgun;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -11,177 +14,20 @@ import org.bukkit.util.Vector;
 
 public class F2 extends FighterKit {
 
-	// General Kit Stuff
 	static final int kitID = 2;
 	static final String kitName = "Scorch";
-	static final String kitDrop = "Flaming Bullets";
-	static final String kitRightClick = "Shoot Shotgun";
 	static final ChatColor kitChatColor = ChatColor.YELLOW;
 	static final Color armorColor = Color.fromRGB(255, 255, 0);
-	private int durationTicks;
-	private int rechargeTicks;
-	private double specialDamage;
 
-	// Primary
-	static final String weaponName = kitChatColor + "Scorch Shotgun";
-	private double meleeDamage;
-	private double projectileDamage;
-	private int cooldownTicks;
-	private Material material;
-	private EnchantmentPair primaryEnchantment;
-
-	// Secondary
-	static final String secondaryWeaponName = kitChatColor + "none";
-	private double sceondaryMeleeDamage;
-	private double secondaryProjectileDamage;
-	private int secondaryCooldownTicks;
-	private Material secondaryMaterial;
-	private EnchantmentPair secondaryEnchantment;
-
-	@Override
-	public void setUpPrivateKitVariables() {
-		if(this.fighterKitManager != null){
-			this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(2, 0);;
-			this.projectileDamage = 12 + this.fighterKitManager.getKitUpgradesConvertedDamage(2, 1);;
-			this.specialDamage = 12 + this.fighterKitManager.getKitUpgradesConvertedDamage(2, 2);
-			this.durationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(2, 3);
-			this.rechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(2, 4);
-			this.cooldownTicks = 30 - this.fighterKitManager.getKitUpgradesConvertedTicks(2, 5);
-		}else{
-			this.meleeDamage = 6;
-			this.projectileDamage = 12;
-			this.specialDamage = 12;
-			this.durationTicks = 200;
-			this.rechargeTicks = 50;
-			this.cooldownTicks = 30;
-		}
-		this.material = Material.IRON_SHOVEL;
-		this.primaryEnchantment = null;
-		this.sceondaryMeleeDamage = 0;
-		this.secondaryProjectileDamage = 0;
-		this.secondaryCooldownTicks = 0;
-		this.secondaryMaterial = null;
-		secondaryEnchantment = null;
-	}
-	
 	public F2() {
 		super();
-	}
-	
-	public F2(Player player) {
-		super(player);
+		weaponHolders.add(new ShottyShotgun());
 	}
 
-	@Override
-	public void loadSecondaryWeapon() {
-		// pass
+	public F2(Fighter fighter) {
+		super(fighter);
+		weaponHolders.add(new ShottyShotgun(fighter));
 	}
-
-	@Override
-	public boolean doRightClick(ItemStack item) {
-		if (super.doRightClick(item)) {
-			this.shootSnowballs();
-			this.launchPlayer(-0.6);
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean doDrop(ItemStack item) {
-		// do special conditions before (right here)
-		return super.doDrop(item);
-	}
-
-	@Override
-	void activateSpecial() {
-		// reload weapon on usage of ability
-		super.player.setCooldown(this.getMaterial(), 0);
-		super.activateSpecial();
-		super.player.playSound(super.player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
-	}
-
-	@Override
-	public void deActivateSpecial() {
-		super.deActivateSpecial();
-	}
-
-	public double doSnowballHitEntity(LivingEntity victim, Snowball snowball) {
-		if (snowball.getFireTicks() > 0) {
-			victim.setFireTicks(50);
-			return this.getSpecialDamage();
-		}
-		return this.getProjectileDamage();
-	}
-
-	public void doSnowballHitGround(Location location, Snowball snowball) {
-		if (snowball.getFireTicks() > 0) {
-
-		}
-	}
-
-	public void launchPlayer(Double power) {
-		Vector currentDirection = this.player.getLocation().getDirection().normalize();
-		currentDirection = currentDirection.multiply(new Vector(power, power, power));
-		this.player.setVelocity(currentDirection);
-	}
-
-	public void shootSnowballs() {
-		this.player.playSound(this.player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 8, 1);
-		
-		Snowball ball = this.player.launchProjectile(Snowball.class);
-		ball.setVelocity(ball.getVelocity().add(new Vector(0, 0.25, 0)));
-		FighterProjectile.addMetadataToProjectile(ball);
-		ball.setShooter(this.player);
-
-		Snowball ball2 = this.player.launchProjectile(Snowball.class);
-		ball2.setVelocity(ball2.getVelocity().add(new Vector(0, -0.25, 0)));
-		FighterProjectile.addMetadataToProjectile(ball2);
-		ball2.setShooter(this.player);
-
-		Snowball ball3 = this.player.launchProjectile(Snowball.class);
-		ball3.setVelocity(ball3.getVelocity().add(new Vector(0.25, 0, 0)));
-		FighterProjectile.addMetadataToProjectile(ball3);
-		ball3.setShooter(this.player);
-
-		Snowball ball4 = this.player.launchProjectile(Snowball.class);
-		ball4.setVelocity(ball4.getVelocity().add(new Vector(-0.25, 0, 0)));
-		FighterProjectile.addMetadataToProjectile(ball4);
-		ball4.setShooter(this.player);
-
-		Snowball ball5 = this.player.launchProjectile(Snowball.class);
-		ball5.setVelocity(ball5.getVelocity().add(new Vector(0, 0, 0.25)));
-		FighterProjectile.addMetadataToProjectile(ball5);
-		ball5.setShooter(this.player);
-
-		Snowball ball6 = this.player.launchProjectile(Snowball.class);
-		ball6.setVelocity(ball6.getVelocity().add(new Vector(0, 0, -0.25)));
-		FighterProjectile.addMetadataToProjectile(ball6);
-		ball6.setShooter(this.player);
-		
-	    if (Fighter.get(this.player).isAbilityActive()) {
-			ball.setFireTicks(1000);
-			ball2.setFireTicks(1000);
-			ball3.setFireTicks(1000);
-			ball4.setFireTicks(1000);
-			ball5.setFireTicks(1000);
-			ball6.setFireTicks(1000);
-	      }
-	    
-		return;
-	}
-
-	/*
-	 * Get Methods Get Methods Get Methods Get Methods Get Methods Get Methods Get
-	 * Methods Get Methods Get Methods Get Methods Get Methods Get Methods Get
-	 * Methods Get Methods Get Methods
-	 */
-
-	@Override
-	public Material getMaterial() {
-		return material;
-	}
-
 	@Override
 	public int getKitID() {
 		return kitID;
@@ -202,83 +48,4 @@ public class F2 extends FighterKit {
 		return kitName;
 	}
 
-	@Override
-	public String getKitDrop() {
-		return kitDrop;
-	}
-
-	@Override
-	public String getKitRightClick() {
-		return kitRightClick;
-	}
-
-	@Override
-	public String getWeaponName() {
-		return weaponName;
-	}
-
-	@Override
-	public int getDurationTicks() {
-		return durationTicks;
-	}
-
-	@Override
-	public int getRechargeTicks() {
-		if(rechargeTicks < 0){
-			return 0;
-		}
-		return rechargeTicks;
-	}
-
-	@Override
-	public double getProjectileDamage() {
-		return projectileDamage;
-	}
-
-	@Override
-	public double getMeleeDamage() {
-		return meleeDamage;
-	}
-
-	@Override
-	public double getSpecialDamage() {
-		return specialDamage;
-	}
-
-	@Override
-	public EnchantmentPair getPrimaryEnchantment() {
-		return primaryEnchantment;
-	}
-
-	@Override
-	public int getCooldownTicks() {
-		if(cooldownTicks < 0){
-			return 0;
-		}
-		return cooldownTicks;
-	}
-	
-	public String getSecondaryWeaponName() {
-		return secondaryWeaponName;
-	}
-
-	public double getSceondaryMeleeDamage() {
-		return sceondaryMeleeDamage;
-	}
-
-	public double getSecondaryProjectileDamage() {
-		return secondaryProjectileDamage;
-	}
-
-	public int getSecondaryCooldownTicks() {
-		return secondaryCooldownTicks;
-	}
-
-	public EnchantmentPair getSecondaryEnchantment() {
-		return secondaryEnchantment;
-	}
-
-	public Material getSecondaryMaterial() {
-		return secondaryMaterial;
-	}
 }

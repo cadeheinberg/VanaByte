@@ -1,22 +1,25 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.Fighters.FighterKits.F2;
 import me.cade.vanabyte.Fighters.FighterKits.F3;
 import me.cade.vanabyte.Fighters.FighterKits.F4;
-import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
+import me.cade.vanabyte.Fighters.Weapons.*;
 import me.cade.vanabyte.Permissions.SafeZone;
+import me.cade.vanabyte.VanaByte;
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityShootBowEvent;
-import org.bukkit.event.entity.ProjectileHitEvent;
-import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 public class KitListener implements Listener {
 
@@ -37,8 +40,10 @@ public class KitListener implements Listener {
 		if(e.getMaterial() == Material.BOW || e.getMaterial() == Material.TRIDENT) {
 			return;
 		}
-		Player player = e.getPlayer();
-		Fighter.getFighterFKit(player).doRightClick(e.getItem());
+		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getSimilarWeaponHolderFighterHas(e.getItem());
+		if(weaponHolder != null){
+			weaponHolder.doRightClick();
+		}
 	}
 
 	@EventHandler
@@ -50,14 +55,15 @@ public class KitListener implements Listener {
 		if(SafeZone.safeZone(e.getPlayer().getLocation())){
 			return;
 		}
-		if (!Fighter.get(e.getPlayer()).getFKit().doDrop(e.getItemDrop().getItemStack())){
-			//The item is not a Fighter Kit item or Special Item. Normal Item
-			if(!SafeZone.inHub(e.getPlayer().getWorld())){
+		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getSimilarWeaponHolderFighterHas(e.getItemDrop().getItemStack());
+		if(weaponHolder != null){
+			weaponHolder.doDrop();
+			return;
+		}
+		if(!SafeZone.inHub(e.getPlayer().getWorld())){
 				//The player is trying to drop the item in the survival world
 				e.setCancelled(false);
-			}
 		}
-
 	}
 
 	@EventHandler
@@ -77,14 +83,13 @@ public class KitListener implements Listener {
 				return;
 			}
 			FighterKit fKit = Fighter.get(shooter).getFKit();
-			if (e.getEntity() instanceof Snowball && fKit.getKitID() == 2 && fKit instanceof F2) {
-				((F2) Fighter.get(shooter).getFKit()).doSnowballHitGround(e.getHitBlock().getLocation(),
+			if (e.getEntity() instanceof Snowball && fKit.getSpecificWeaponHolderIfItExists(ShottyShotgun.class) != null) {
+				((ShottyShotgun) fKit.getSpecificWeaponHolderIfItExists(ShottyShotgun.class)).doSnowballHitGround(e.getHitBlock().getLocation(),
 						(Snowball) e.getEntity());
-			} else if (e.getEntity() instanceof Arrow && fKit.getKitID() == 3 && fKit instanceof F3) {
+			} else if (e.getEntity() instanceof Arrow && fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class) != null) {
 				e.getEntity().remove();
-			}
-			if (e.getEntity() instanceof Trident && fKit.getKitID() == 4 && fKit instanceof F4) {
-				((F4) Fighter.get(shooter).getFKit()).doTridentHitGround(e.getHitBlock().getLocation(),
+			} else if (e.getEntity() instanceof Trident && fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class) != null) {
+				((IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class)).doTridentHitGround(e.getHitBlock().getLocation(),
 						(Trident) e.getEntity());
 			}
 		}
@@ -107,8 +112,8 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
-		if(fKit.getKitID() == 4 && fKit instanceof F4 && fKit.getPlayer().getItemInUse().isSimilar(fKit.getWeapons()[0].getWeaponItem())) {
-			if (!((F4) fKit).doThrowTrident((Trident) e.getEntity())) {
+		if(fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class) != null && Fighter.get((Player) e.getEntity().getShooter()).getFighterKitManager().getSimilarWeaponHolderFighterHas(((Player) e.getEntity().getShooter()).getItemInUse()) != null) {
+			if (!((IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class)).doThrowTrident((Trident) e.getEntity())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
 			}
@@ -125,12 +130,59 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
-		if (fKit.getKitID() == 3 && fKit instanceof F3 && fKit.getPlayer().getItemInUse().isSimilar(fKit.getWeapons()[0].getWeaponItem())) {
-			if (!((F3) fKit).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
+		if (fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class) != null && Fighter.get((Player) e.getEntity()).getFighterKitManager().getSimilarWeaponHolderFighterHas(e.getBow()) != null) {
+			if (!((GoblinBow) fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class)).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
 			}
 		}
+	}
+	@EventHandler
+	public void onDismount(EntityDismountEvent e) {
+		if (e.getEntity() instanceof Player) {
+			if (e.getDismounted().getType() == EntityType.CHICKEN) {
+				Fighter.get((Player) e.getEntity()).fighterDismountParachute();
+			}
+		}
+	}
 
+	@EventHandler
+	public void onExplode(EntityExplodeEvent e) {
+		if (e.getEntity() instanceof TNTPrimed) {
+			// If its a creeper or something natural ignore it
+			return;
+		}
+		if(!e.getEntity().hasMetadata("thrower")){
+			// If its a normal TNT and not Fighter produced ignore it
+			return;
+		}
+		e.setCancelled(true);
+		for (Block b : e.blockList()) {
+			if (b.getType() == Material.PACKED_ICE) {
+				b.breakNaturally();
+			}
+		}
+		e.blockList().clear();
+	}
+
+	@EventHandler
+	public void onExplodePrime(ExplosionPrimeEvent e) {
+		if(!(e.getEntity() instanceof TNTPrimed)){
+			return;
+		}
+		if(!e.getEntity().hasMetadata("thrower")){
+			// If its a normal TNT and not Fighter produced ignore it
+			return;
+		}
+		e.setCancelled(true);
+		// Create the explosion
+		Player killer = (Player) Bukkit.getPlayer(e.getEntity().getMetadata("thrower").get(0).asString());
+		if (killer != null) {
+			if(Fighter.get(killer).getFKit().getSpecificWeaponHolderIfItExists(ThrowingTNTItem.class) != null){
+				ThrowingTNTItem tntItem = (ThrowingTNTItem) (Fighter.get(killer).getFKit().getSpecificWeaponHolderIfItExists(ThrowingTNTItem.class));
+				CreateExplosion.doAnExplosion(killer, e.getEntity().getLocation(), 1.6, tntItem.getProjectileDamage(), false);
+			}
+
+		}
 	}
 }

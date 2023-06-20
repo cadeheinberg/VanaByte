@@ -15,6 +15,27 @@ public class FighterMYSQLManager {
         this.fighter = fighter;
     }
 
+    protected void fighterJoined(){
+        this.addPlayerToDatabases();
+        this.initiateMySQLDownloads();
+    }
+
+    protected void fighterDied(){
+
+    }
+
+    protected void fighterLeftServer(){
+        this.uploadFighter();
+    }
+
+    protected void fighterChangedWorld(){
+
+    }
+
+    protected void fighterRespawned(){
+        //this.resetSpecialAbility();
+    }
+
     protected void addPlayerToDatabases(){
         if (!VanaByte.mysql.playerExists(player)) {
             VanaByte.mysql.addScore(player);

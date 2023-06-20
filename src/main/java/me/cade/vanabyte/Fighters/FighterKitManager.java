@@ -1,24 +1,80 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Fighters.FighterKits.*;
-import me.cade.vanabyte.SpecialItems.SpecialItem;
-import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.*;
+import me.cade.vanabyte.Permissions.SafeZone;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
 
 public class FighterKitManager {
 
     private Player player = null;
     private Fighter fighter = null;
     private static FighterKit[] fKits = { new F0(), new F1(), new F2(), new F3(), new F4(), new F5(), new F6() };
+
+    private static WeaponHolder[] wHolders = { new AirbenderSword(), new BeserkerAxe(), new ShottyShotgun(), new GoblinBow(), new GoblinSword(), new GoblinArrow(), new IgorsTrident(), new SumoStick(), new GriefSword(), new ParachuteItem(), new ThrowingTNTItem() };
     private int[] unlockedKits = new int[7];
     private int[] kitUpgrades = new int[42];
     private FighterKit fKit = null;
     private int kitID,kitIndex = -1;
 
+    public static Material cooldownMaterial = Material.BARRIER;
+
+    public static Material combatTrackerMaterial = Material.DRAGON_HEAD;
+
     protected FighterKitManager(Player player, Fighter fighter){
         this.player = player;
         this.fighter = fighter;
     }
+    protected void fighterJoined(){
+        this.setNegatives();
+        //remove all potions
+        this.applyNightVision();
+    }
+
+    protected void fighterDied(){
+        this.fighterDismountParachute();
+    }
+
+    protected void fighterLeftServer(){
+        this.fighterDismountParachute();
+    }
+
+    protected void fighterChangedWorld(){
+        this.fighterDismountParachute();
+        this.resetAllFighterItemCooldowns();
+        if(SafeZone.inHub(player.getWorld())){
+            this.applyNightVision();
+        }
+    }
+
+    protected void fighterRespawned(){
+        this.giveKit();
+        //remove all potions
+        this.applyNightVision();
+    }
+
+    public void applyNightVision() {
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(fighter.getPlugin(), new Runnable() {
+            @Override
+            public void run() {
+                player.addPotionEffect(new PotionEffect(PotionEffectType.NIGHT_VISION, 99999999, 0, true, false));
+            }
+        }, 1);
+    }
+
     protected void setNegatives(){
         for (int i = 0; i < unlockedKits.length; i++){
             unlockedKits[i] = -1;
@@ -28,21 +84,158 @@ public class FighterKitManager {
         }
     }
     public void giveKit() {
-        if (kitID == fKits[0].getKitID()) {
-            fKit = new F0(player);
-        } else if (kitID == fKits[1].getKitID()) {
-            fKit = new F1(player);
-        } else if (kitID == fKits[2].getKitID()) {
-            fKit = new F2(player);
-        } else if (kitID == fKits[3].getKitID()) {
-            fKit = new F3(player);
-        } else if (kitID == fKits[4].getKitID()) {
-            fKit = new F4(player);
-        } else if (kitID == fKits[5].getKitID()) {
-            fKit = new F5(player);
-        } else if (kitID == fKits[6].getKitID()) {
-            fKit = new F6(player);
+        this.clearFighterKitItems();
+        if(fKit != null){
+            fKit.getWeaponHolders().clear();
         }
+        if (kitID == fKits[0].getKitID()) {
+            fKit = new F0(fighter);
+        } else if (kitID == fKits[1].getKitID()) {
+            fKit = new F1(fighter);
+        } else if (kitID == fKits[2].getKitID()) {
+            fKit = new F2(fighter);
+        } else if (kitID == fKits[3].getKitID()) {
+            fKit = new F3(fighter);
+        } else if (kitID == fKits[4].getKitID()) {
+            fKit = new F4(fighter);
+        } else if (kitID == fKits[5].getKitID()) {
+            fKit = new F5(fighter);
+        } else if (kitID == fKits[6].getKitID()) {
+            fKit = new F6(fighter);
+        }
+        for (WeaponHolder weaponHolder : fKit.getWeaponHolders()) {
+            if (weaponHolder == null) {
+                break;
+            }if (weaponHolder.getWeapon() == null) {
+                break;
+            }
+            this.player.getInventory().addItem(weaponHolder.getWeapon().getWeaponItem());
+        }
+        this.giveArmor();
+        player.closeInventory();
+        player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 8, 1);
+        this.resetAllFighterItemCooldowns();
+        this.applyNightVision();
+        fighter.weaponAbilityManager.fighterGotNewKit();
+    }
+
+    private void clearFighterKitItems(){
+        for (ItemStack item : player.getInventory()){
+            if (item == null){
+                continue;
+            }
+            if(this.hasNameOfWeapon(item)){
+                player.getInventory().remove(item);
+            }
+        }
+        ItemStack helmet = this.player.getEquipment().getHelmet();
+        ItemStack chest = this.player.getEquipment().getChestplate();
+        ItemStack leggings = this.player.getEquipment().getLeggings();
+        ItemStack boots = this.player.getEquipment().getBoots();
+
+        if(helmet != null){
+            this.player.getInventory().remove(this.player.getPlayer().getEquipment().getHelmet());
+        }
+        if(chest != null){
+            this.player.getInventory().remove(this.player.getPlayer().getEquipment().getChestplate());
+        }
+        if(leggings != null){
+            this.player.getInventory().remove(this.player.getPlayer().getEquipment().getLeggings());
+        }
+        if(boots != null){
+            this.player.getInventory().remove(this.player.getPlayer().getEquipment().getBoots());
+        }
+    }
+
+    public static boolean hasNameOfWeapon(ItemStack item){
+        if(item == null || !item.hasItemMeta() || item.getItemMeta().getDisplayName() == null){
+            return false;
+        }
+        String displayName = item.getItemMeta().getDisplayName();
+        for (WeaponHolder weaponHolder : wHolders){
+            if(weaponHolder == null || weaponHolder.getWeaponName() == null){
+                continue;
+            }
+            if(weaponHolder.getWeaponName().equals(displayName)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public WeaponHolder getSimilarWeaponHolderFighterHas(ItemStack item){
+        if(item == null || !item.hasItemMeta() || item.getItemMeta().getDisplayName() == null){
+            return null;
+        }
+        for (WeaponHolder weaponHolder : this.fKit.weaponHolders){
+            if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
+                continue;
+            }
+            if(weaponHolder.getWeapon().getWeaponItem().isSimilar(item)){
+                return weaponHolder;
+            }
+        }
+        return null;
+    }
+
+    private void giveArmor() {
+
+        ItemStack lhelmet = new ItemStack(Material.LEATHER_HELMET, 1);
+        LeatherArmorMeta lhe = (LeatherArmorMeta) lhelmet.getItemMeta();
+        lhe.setUnbreakable(true);
+
+        ItemStack lchest = new ItemStack(Material.LEATHER_CHESTPLATE, 1);
+        LeatherArmorMeta lch = (LeatherArmorMeta) lchest.getItemMeta();
+        lch.setUnbreakable(true);
+
+        ItemStack lleggs = new ItemStack(Material.LEATHER_LEGGINGS, 1);
+        LeatherArmorMeta lle = (LeatherArmorMeta) lleggs.getItemMeta();
+        lle.setUnbreakable(true);
+
+        ItemStack lboots = new ItemStack(Material.LEATHER_BOOTS, 1);
+        LeatherArmorMeta lbo = (LeatherArmorMeta) lboots.getItemMeta();
+        lbo.setUnbreakable(true);
+
+        lhe.setColor(fKit.getArmorColor());
+        lch.setColor(fKit.getArmorColor());
+        lle.setColor(fKit.getArmorColor());
+        lbo.setColor(fKit.getArmorColor());
+
+        lhe.addAttributeModifier(Attribute.GENERIC_ARMOR,
+                new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+        lch.addAttributeModifier(Attribute.GENERIC_ARMOR,
+                new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+        lle.addAttributeModifier(Attribute.GENERIC_ARMOR,
+                new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+        lbo.addAttributeModifier(Attribute.GENERIC_ARMOR,
+                new AttributeModifier("GENERIC_ARMOR", 5, AttributeModifier.Operation.ADD_NUMBER));
+
+        lhe.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        lch.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        lle.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+        lbo.addEnchant(Enchantment.BINDING_CURSE, 1, true);
+
+        ArrayList<String> itemLore = new ArrayList<String>();
+        itemLore.add(3 + " armor protection");
+        lhe.setLore(itemLore);
+        lch.setLore(itemLore);
+        lle.setLore(itemLore);
+        lbo.setLore(itemLore);
+
+        lhe.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        lch.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        lle.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        lbo.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+        lhelmet.setItemMeta(lhe);
+        lchest.setItemMeta(lch);
+        lleggs.setItemMeta(lle);
+        lboots.setItemMeta(lbo);
+
+        player.getEquipment().setHelmet(lhelmet);
+        player.getEquipment().setChestplate(lchest);
+        player.getEquipment().setLeggings(lleggs);
+        player.getEquipment().setBoots(lboots);
+
     }
 
     public void giveKitWithID(int kitID) {
@@ -67,17 +260,13 @@ public class FighterKitManager {
     }
 
     public void resetAllFighterItemCooldowns() {
-        for(Weapon weapon : fighter.getFKit().getWeapons()) {
-            if(weapon == null){
-                continue;
+        for(WeaponHolder weaponHolder : fKit.getWeaponHolders()) {
+            if(weaponHolder == null){
+                break;
+            }if(weaponHolder.getWeapon() == null){
+                break;
             }
-            weapon.resetCooldown(this.player);
-        }
-        for(SpecialItem sItem : fighter.getFKit().getSpecialItems()) {
-            if(sItem == null){
-                continue;
-            }
-            sItem.resetCooldown();
+            weaponHolder.getWeapon().resetCooldown(this.player);
         }
     }
 
@@ -123,11 +312,8 @@ public class FighterKitManager {
     }
 
     public void fighterDismountParachute() {
-        if ((fKit.getParachuteItem() == null)) {
-            return;
-        }
-        if(fKit.getParachuteItem().getItemTask() != -1){
-            fKit.getParachuteItem().getOff();
+        if(fKit.getSpecificWeaponHolderIfItExists(ParachuteItem.class) != null){
+            ((ParachuteItem) fKit.getSpecificWeaponHolderIfItExists(ParachuteItem.class)).getOff();
         }
     }
 
@@ -135,4 +321,11 @@ public class FighterKitManager {
         return fKit;
     }
 
+    public Fighter getFighter() {
+        return fighter;
+    }
+
+    public static Material getCombatTrackerMaterial() {
+        return combatTrackerMaterial;
+    }
 }

@@ -2,7 +2,10 @@ package me.cade.vanabyte.Fighters.Weapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.Fighters.FighterProjectile;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,11 +15,12 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class AirbenderSword extends WeaponHolder {
-    final String weaponDrop = "Gust of Wind";
-    final String weaponRightClick = "Use Shield";
-    final ChatColor weaponNameColor = ChatColor.WHITE;
-    final String weaponName = weaponNameColor + "Airbender Sword";
+public class GoblinBow extends WeaponHolder{
+
+    final String weaponDrop = "Barrage of Poison";
+    final String weaponRightClick = "Shoot Bow";
+    final ChatColor weaponNameColor = ChatColor.GREEN;
+    final String weaponName = weaponNameColor + "Goblin Bow";
     private Material material = null;
     private int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks = -1;
     private double specialDamage, meleeDamage, projectileDamage = -1;
@@ -24,7 +28,7 @@ public class AirbenderSword extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public AirbenderSword(Fighter fighter) {
+    public GoblinBow(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
@@ -35,12 +39,13 @@ public class AirbenderSword extends WeaponHolder {
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
-        this.material = Material.IRON_SWORD;
+        this.material = Material.BOW;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
+        this.weapon.applyWeaponEnchantment(Enchantment.ARROW_INFINITE, 1);
     }
-    public AirbenderSword(){
+    public GoblinBow(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;
@@ -48,10 +53,11 @@ public class AirbenderSword extends WeaponHolder {
         this.abilityDurationTicks = 200;
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
-        this.material = Material.IRON_SWORD;
+        this.material = Material.BOW;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
+        this.weapon.applyWeaponEnchantment(Enchantment.ARROW_INFINITE, 1);
     }
     @Override
     public boolean doRightClick() {
@@ -68,64 +74,77 @@ public class AirbenderSword extends WeaponHolder {
     @Override
     public void activateSpecial() {
         super.activateSpecial();
-        this.gustOfWindSpell();
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, abilityDurationTicks, 1));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityDurationTicks, 1));
-        this.player.playSound(this.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
+        this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
     }
     @Override
     public void deActivateSpecial() {
         super.deActivateSpecial();
     }
-    public void gustOfWindSpell() {
-        Location playerLocation = this.player.getLocation();
-        if (playerLocation.getPitch() > 49) {
-            launchPlayer(this.player, -1.5);
-            return;
+
+    public double doArrowHitEntity(LivingEntity victim, Arrow arrow) {
+        // create your own form of knockback
+        if (victim instanceof Player) {
+            Fighter.get(player).fighterDismountParachute();
         }
-        Location origin = this.player.getEyeLocation();
-        Vector direction = this.player.getLocation().getDirection();
-        double dX = direction.getX();
-        double dY = direction.getY();
-        double dZ = direction.getZ();
-        playerLocation.setPitch((float) -30.0);
-        int range = 13;
-        double power = 2.8;
-        ArrayList<Integer> hitList = new ArrayList<Integer>();
-        for (int j = 2; j < range; j++) {
-            origin = origin.add(dX * j, dY * j, dZ * j);
-            this.player.spawnParticle(Particle.REDSTONE, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-            ArrayList<Entity> entityList = (ArrayList<Entity>) this.player.getWorld().getNearbyEntities(origin, 2.5, 2.5,
-                    2.5);
-            for (Entity entity : entityList) {
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1 Living Entity Found");
-                if (!(entity instanceof LivingEntity)) {
-                    continue;
-                } else if (hitList.contains(((LivingEntity) entity).getEntityId())) {
-                    continue;
-                } else if (this.player.getName().equals(((LivingEntity) entity).getName())) {
-                    continue;
-                }
-                if(entity instanceof Player) {
-                    if(((Player) entity).getGameMode() == GameMode.CREATIVE) {
-                        return;
-                    }
-                }
-                ((LivingEntity) entity).damage(this.specialDamage, this.player);
-                Vector currentDirection = playerLocation.getDirection().normalize();
-                currentDirection = currentDirection.multiply(new Vector(power, power, power));
-                entity.setVelocity(currentDirection);
-                hitList.add(((LivingEntity) entity).getEntityId());
-            }
-            origin = origin.subtract(dX * j, dY * j, dZ * j);
+        if (arrow.getFireTicks() > 0) {
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
+            return this.getSpecialDamage();
         }
+        return projectileDamage;
     }
 
-    private static void launchPlayer(Player player, Double power) {
-        player.spawnParticle(Particle.REDSTONE, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-        Vector currentDirection = player.getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(power, power, power));
-        player.setVelocity(currentDirection);
+    public boolean doArrowShoot(Arrow arrow, double force) {
+        if (this.player.getCooldown(this.getMaterial()) > 0) {
+            return false;
+        }
+        this.player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        if (super.getWeaponAbility().isAbilityActive()) {
+            arrow.setFireTicks(1000);
+            doArrowBarrage(this.player, arrow, force);
+        }
+        return true;
+    }
+
+    public static void doArrowBarrage(Player player, Arrow arrow, double force) {
+        if (force > 0.75) {
+            Arrow arrow1 = player.launchProjectile(Arrow.class);
+            arrow1.setVelocity(arrow.getVelocity().add(new Vector(0, 0.25, 0)));
+            arrow1.setFireTicks(2000);
+            arrow1.setShooter(player);
+            FighterProjectile.addMetadataToProjectile(arrow1);
+
+            Arrow arrow2 = player.launchProjectile(Arrow.class);
+            arrow2.setVelocity(arrow.getVelocity().add(new Vector(0, -0.25, 0)));
+            arrow2.setFireTicks(2000);
+            arrow2.setShooter(player);
+            FighterProjectile.addMetadataToProjectile(arrow2);
+
+            Arrow arrow3 = player.launchProjectile(Arrow.class);
+            arrow3.setVelocity(arrow.getVelocity().add(new Vector(0.25, 0, 0)));
+            arrow3.setFireTicks(2000);
+            arrow3.setShooter(player);
+            FighterProjectile.addMetadataToProjectile(arrow3);
+
+            Arrow arrow4 = player.launchProjectile(Arrow.class);
+            arrow4.setVelocity(arrow.getVelocity().add(new Vector(-0.25, 0, 0)));
+            arrow4.setFireTicks(2000);
+            arrow4.setShooter(player);
+            FighterProjectile.addMetadataToProjectile(arrow4);
+
+            Arrow arrow5 = player.launchProjectile(Arrow.class);
+            arrow5.setVelocity(arrow.getVelocity().add(new Vector(0, 0, 0.25)));
+            arrow5.setFireTicks(2000);
+            arrow5.setShooter(player);
+            FighterProjectile.addMetadataToProjectile(arrow5);
+
+            Arrow arrow6 = player.launchProjectile(Arrow.class);
+            arrow6.setVelocity(arrow.getVelocity().add(new Vector(0, 0, -0.25)));
+            arrow6.setFireTicks(2000);
+            arrow6.setShooter(player);
+            FighterProjectile.addMetadataToProjectile(arrow6);
+            return;
+        }
     }
 
     @Override

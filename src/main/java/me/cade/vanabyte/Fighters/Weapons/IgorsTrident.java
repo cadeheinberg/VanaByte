@@ -1,22 +1,25 @@
 package me.cade.vanabyte.Fighters.Weapons;
 
+import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.Fighters.FighterProjectile;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class AirbenderSword extends WeaponHolder {
-    final String weaponDrop = "Gust of Wind";
-    final String weaponRightClick = "Use Shield";
-    final ChatColor weaponNameColor = ChatColor.WHITE;
-    final String weaponName = weaponNameColor + "Airbender Sword";
+public class IgorsTrident extends WeaponHolder {
+    final String weaponDrop = "Explosive Tridents";
+    final String weaponRightClick = "Throw Trident";
+    final ChatColor weaponNameColor = ChatColor.RED;
+    final String weaponName = weaponNameColor + "Igors Trident";
     private Material material = null;
     private int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks = -1;
     private double specialDamage, meleeDamage, projectileDamage = -1;
@@ -24,7 +27,7 @@ public class AirbenderSword extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public AirbenderSword(Fighter fighter) {
+    public IgorsTrident(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
@@ -35,12 +38,12 @@ public class AirbenderSword extends WeaponHolder {
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
-        this.material = Material.IRON_SWORD;
+        this.material = Material.TRIDENT;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
-    public AirbenderSword(){
+    public IgorsTrident(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;
@@ -48,7 +51,7 @@ public class AirbenderSword extends WeaponHolder {
         this.abilityDurationTicks = 200;
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
-        this.material = Material.IRON_SWORD;
+        this.material = Material.TRIDENT;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
@@ -68,64 +71,47 @@ public class AirbenderSword extends WeaponHolder {
     @Override
     public void activateSpecial() {
         super.activateSpecial();
-        this.gustOfWindSpell();
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, abilityDurationTicks, 1));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityDurationTicks, 1));
-        this.player.playSound(this.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
+        this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
     }
     @Override
     public void deActivateSpecial() {
         super.deActivateSpecial();
     }
-    public void gustOfWindSpell() {
-        Location playerLocation = this.player.getLocation();
-        if (playerLocation.getPitch() > 49) {
-            launchPlayer(this.player, -1.5);
-            return;
+
+    public boolean doThrowTrident(Trident trident) {
+        if (player.getCooldown(this.getMaterial()) > 0) {
+            return false;
         }
-        Location origin = this.player.getEyeLocation();
-        Vector direction = this.player.getLocation().getDirection();
-        double dX = direction.getX();
-        double dY = direction.getY();
-        double dZ = direction.getZ();
-        playerLocation.setPitch((float) -30.0);
-        int range = 13;
-        double power = 2.8;
-        ArrayList<Integer> hitList = new ArrayList<Integer>();
-        for (int j = 2; j < range; j++) {
-            origin = origin.add(dX * j, dY * j, dZ * j);
-            this.player.spawnParticle(Particle.REDSTONE, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-            ArrayList<Entity> entityList = (ArrayList<Entity>) this.player.getWorld().getNearbyEntities(origin, 2.5, 2.5,
-                    2.5);
-            for (Entity entity : entityList) {
-                //Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1 Living Entity Found");
-                if (!(entity instanceof LivingEntity)) {
-                    continue;
-                } else if (hitList.contains(((LivingEntity) entity).getEntityId())) {
-                    continue;
-                } else if (this.player.getName().equals(((LivingEntity) entity).getName())) {
-                    continue;
-                }
-                if(entity instanceof Player) {
-                    if(((Player) entity).getGameMode() == GameMode.CREATIVE) {
-                        return;
-                    }
-                }
-                ((LivingEntity) entity).damage(this.specialDamage, this.player);
-                Vector currentDirection = playerLocation.getDirection().normalize();
-                currentDirection = currentDirection.multiply(new Vector(power, power, power));
-                entity.setVelocity(currentDirection);
-                hitList.add(((LivingEntity) entity).getEntityId());
-            }
-            origin = origin.subtract(dX * j, dY * j, dZ * j);
+        player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        if (super.getWeaponAbility().isAbilityActive()) {
+            trident.setFireTicks(1000);
+        }
+        FighterProjectile.addMetadataToProjectile(trident);
+        this.player.getInventory().remove(this.getWeapon().getWeaponItem());
+        player.getInventory().setItem(0, this.getWeapon().getWeaponItem());
+        trident.setShooter(player);
+        return true;
+    }
+
+    //Returns the amount of damage to do to the player
+    public double doTridentHitEntity(LivingEntity victim, Trident trident) {
+        if (trident.getFireTicks() > 0) {
+            Location local = victim.getLocation();
+            local.setY(local.getY() - 0.5);
+            CreateExplosion.doAnExplosion(this.player, local, 0.7, this.specialDamage, true);
+            //explosion will deal special damage ^^
+            return 0;
+        }
+        else{
+            return this.getProjectileDamage();
         }
     }
 
-    private static void launchPlayer(Player player, Double power) {
-        player.spawnParticle(Particle.REDSTONE, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-        Vector currentDirection = player.getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(power, power, power));
-        player.setVelocity(currentDirection);
+    public void doTridentHitGround(Location location, Trident trident) {
+        if (trident.getFireTicks() > 0) {
+            CreateExplosion.doAnExplosion(this.player, location, 0.7, this.specialDamage, true);
+        }
+        trident.remove();
     }
 
     @Override

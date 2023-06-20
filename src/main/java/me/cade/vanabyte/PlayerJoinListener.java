@@ -1,4 +1,4 @@
-package me.cade.vanabyte.PlayerJoin;
+package me.cade.vanabyte;
 
 import me.cade.vanabyte.*;
 import me.cade.vanabyte.Fighters.Fighter;
@@ -39,7 +39,7 @@ public class PlayerJoinListener implements Listener {
   @EventHandler
   public void onWorldChange(PlayerChangedWorldEvent e){
     if(SafeZone.inHub(e.getPlayer().getWorld())){
-      Fighter.get(e.getPlayer()).spawnHolograms();
+      Fighter.get(e.getPlayer()).fighterChangeWorld();
     }
   }
   

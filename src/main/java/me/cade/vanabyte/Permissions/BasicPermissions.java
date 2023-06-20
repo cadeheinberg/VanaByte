@@ -1,7 +1,8 @@
 package me.cade.vanabyte.Permissions;
 
-import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKitManager;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -97,14 +98,14 @@ public class BasicPermissions implements Listener {
 		}
 		if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY || e.getAction() == InventoryAction.PICKUP_ALL || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PICKUP_HALF || e.getAction() == InventoryAction.PICKUP_ONE || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PLACE_ALL || e.getAction() == InventoryAction.PLACE_ONE){
 			if (e.getCursor() != null && e.getCursor().hasItemMeta()) {
-				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCursor())) {
+				if (FighterKitManager.hasNameOfWeapon(e.getCursor())) {
 					e.setCancelled(true);
 					e.getWhoClicked().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 					((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
 				}
 			}
 			if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()) {
-				if (FighterKit.isFighterWeaponOrSpecialItem(e.getCurrentItem())) {
+				if (FighterKitManager.hasNameOfWeapon(e.getCurrentItem())) {
 					e.setCancelled(true);
 					e.getWhoClicked().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 					((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);

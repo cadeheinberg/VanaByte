@@ -1,11 +1,11 @@
 package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Fighters.FighterKits.F5;
-import me.cade.vanabyte.Fighters.FighterKits.FighterKit;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -20,62 +20,76 @@ public class Fighter {
 	private static final int numberOfKits = 7;
 	private int playerLevel,kills,killStreak,deaths,cakes = -1;
 	protected FighterHologramManager fighterHologramManager = null;
-	protected FighterAbilityManager fighterAbilityManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
 	protected FighterMYSQLManager fighterMYSQLManager = null;
 	protected FighterKitManager fighterKitManager = null;
 	protected FighterScoreBoardManager fighterScoreBoardManager = null;
+	protected WeaponAbilityManager weaponAbilityManager = null;
 
 	public Fighter(Player player) {
 		this.player = player;
 		this.uuid = player.getUniqueId();
 		this.addToFightersHashMap();
 		this.fighterHologramManager = new FighterHologramManager(this.player, this);
-		this.fighterAbilityManager = new FighterAbilityManager(this.player, this);
 		this.fighterTaskManager = new FighterTaskManager(this.player, this);
 		this.fighterKitManager = new FighterKitManager(this.player, this);
 		this.fighterMYSQLManager = new FighterMYSQLManager(this.player, this);
-		fighterKitManager.setNegatives();
+		this.weaponAbilityManager = new WeaponAbilityManager(this);
 		this.fighterScoreBoardManager = new FighterScoreBoardManager(player);
-		fighterMYSQLManager.addPlayerToDatabases();
-		fighterMYSQLManager.initiateMySQLDownloads();
+		this.fighterJoined();
+	}
+
+	public void fighterJoined(){
+		fighterKitManager.fighterJoined();
+		fighterMYSQLManager.fighterJoined();
+		fighterTaskManager.fighterJoined();
+		fighterHologramManager.fighterJoined();
+		//Need to do this after everything has been setup
 		fighterKitManager.giveKit();
-		this.player.setInvisible(false);
-		this.resetSpecialAbility();
-		fighterAbilityManager.resetPlayerParticles();
-		fighterAbilityManager.applyNightVision();
-		fighterKitManager.resetAllFighterItemCooldowns();
-		this.spawnHolograms();
-		fighterTaskManager.refreshMySQLUpload();
+		weaponAbilityManager.fighterJoined();
 	}
 
 	public void fighterRespawn() {
+		weaponAbilityManager.fighterRespawned();
+		fighterKitManager.fighterRespawned();
+		fighterTaskManager.fighterRespawned();
+		fighterHologramManager.fighterRespawned();
+		fighterMYSQLManager.fighterRespawned();
 		this.setLastDamagedBy(null);
 		this.setLastToDamage(null);
-		fighterKitManager.giveKit();
-		VanaByte.getPpAPI().resetActivePlayerParticles(player);
-		fighterAbilityManager.applyNightVision();
-		this.resetSpecialAbility();
-		fighterKitManager.resetAllFighterItemCooldowns();
 	}
 
 	public void fighterLeftServer() {
-		fighterMYSQLManager.uploadFighter();
-		fighterKitManager.fighterDismountParachute();
-		fighterTaskManager.cancelAllTasks();
+		fighterMYSQLManager.fighterLeftServer();
+		fighterTaskManager.fighterLeftServer();
+		fighterKitManager.fighterLeftServer();
+		weaponAbilityManager.fighterLeftServer();
+		fighterHologramManager.fighterLeftServer();
 	}
+
+	public void fighterDeath() {
+		this.incDeaths();
+		weaponAbilityManager.fighterDied();
+		fighterKitManager.fighterDied();
+		fighterTaskManager.fighterDied();
+		fighterHologramManager.fighterDied();
+		fighterMYSQLManager.fighterDied();
+	}
+
+	public void fighterChangeWorld(){
+		weaponAbilityManager.fighterChangedWorld();
+		fighterKitManager.fighterChangedWorld();
+		fighterTaskManager.fighterChangedWorld();
+		fighterHologramManager.fighterChangedWorld();
+		fighterMYSQLManager.fighterChangedWorld();
+	}
+
 	public void giveKit(){
 		fighterKitManager.giveKit();
-		fighterAbilityManager.applyNightVision();
-		fighterAbilityManager.resetSpecialAbility();
-		fighterKitManager.resetAllFighterItemCooldowns();
-		fighterAbilityManager.changeAbilityRechargedParticleEffect();
 	}
-	public void fighterDeath() {
-		fighterKitManager.fighterDismountParachute();
-		this.incDeaths();
-	}
+
 	public void dropFighterKitSoul(){}
+
 	public void setLastToDamage(Player lastToDamage) {
 		if (this.lastToDamage == null) {
 			this.lastToDamage = null;
@@ -141,16 +155,10 @@ public class Fighter {
 		fighterScoreBoardManager.updateDeaths();
 		fighterScoreBoardManager.updateRatio();
 		fighterScoreBoardManager.updateKillstreak();
-		this.doDeathChecks();
+		fighterTaskManager.cancelGameplayTasks();
 		fighterHologramManager.refreshWelcomeHologram();
 	}
-	private void doDeathChecks() {
-		if (fighterKitManager.getFKit() instanceof F5) {
-			if (fighterTaskManager.groundPoundTask != -1) {
-				F5.stopListening(this);
-			}
-		}
-	}
+
 	public void setCakes(int cakes) {
 		this.cakes = cakes;
 		fighterScoreBoardManager.updateCookies();
@@ -169,28 +177,17 @@ public class Fighter {
 	public int getDeaths() {return deaths;}
 	public int getKillStreak() {return killStreak;}
 	public int getKills() {return kills;}
-	public void setAbilityRecharged(boolean setter){fighterAbilityManager.setAbilityRecharged(setter);}
-	public void setAbilityActive(boolean setter){fighterAbilityManager.setAbilityActive(setter);}
-	public int getDurationTicks(){return this.getFKit().getDurationTicks();}
-	public int getRechargeTicks(){return this.getFKit().getRechargeTicks();}
-	public void startAbilityDuration(){fighterAbilityManager.startAbilityDuration();}
 	public void spawnHolograms(){
 		fighterHologramManager.spawnHolograms();
 	}
 	public void fighterDismountParachute(){
 		fighterKitManager.fighterDismountParachute();
 	}
-	public void resetSpecialAbility() {
-		fighterAbilityManager.resetSpecialAbility();
-	}
 	public void addToFightersHashMap() {fighters.put(this.uuid, this);}
 	public Player getPlayer() {return player;}
 	public static Fighter get(Player player) {return fighters.get(player.getUniqueId());}
 	public UUID getUuid() {return uuid;}
-	public boolean isAbilityActive() {return fighterAbilityManager.isAbilityActive();}
 	public UUID getLastToDamage() {return lastToDamage;}
-	public int getGroundPoundTask() {return fighterTaskManager.groundPoundTask;}
-	public void setGroundPoundTask(int groundPoundTask) {fighterTaskManager.groundPoundTask = groundPoundTask;}
 	public Plugin getPlugin() {return plugin;}
 	public void setCooldownTask(int cooldownTask) {fighterTaskManager.cooldownTask = cooldownTask;}
 	public void setRechargeTask(int rechargeTask) {fighterTaskManager.rechargeTask = rechargeTask;}
@@ -198,11 +195,15 @@ public class Fighter {
 	public FighterKit getFKit() {return fighterKitManager.getFKit();}
 	public static FighterKit getFighterFKit(Player player) {return Fighter.get(player).getFKit();}
 	public static int getNumberOfKits() {return numberOfKits;}
-	public void setActionBarToFloat(float setter){fighterAbilityManager.setActionBarToFloat(setter);}
-	public static FighterKit[] getFkitsNoPlayer(){
-		return FighterKitManager.getFkitsNoPlayer();
-	}
 	public int getKitID(){return fighterKitManager.getKitID();}
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
 	public FighterHologramManager getFighterHologramManager() {return fighterHologramManager;}
+
+	public WeaponAbilityManager getWeaponAbilityManager(){
+		return weaponAbilityManager;
+	}
+
+	public FighterTaskManager getFighterTaskManager() {
+		return fighterTaskManager;
+	}
 }
