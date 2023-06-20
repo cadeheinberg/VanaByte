@@ -159,15 +159,6 @@ public class SumoStick extends WeaponHolder {
                 return;
             }
         }
-        if(player.getInventory().getItemInMainHand() == null){
-            return;
-        }
-        if(!player.getInventory().getItemInMainHand().hasItemMeta()){
-            return;
-        }
-        if(!player.getInventory().getItemInMainHand().getItemMeta().getDisplayName().equals(this.getWeaponName())) {
-            return;
-        }
         if (this.getRightClickCooldownTicks() > 0) {
             if (player.getCooldown(this.getMaterial()) > 0) {
                 return;

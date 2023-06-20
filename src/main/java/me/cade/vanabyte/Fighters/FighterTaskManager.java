@@ -11,7 +11,7 @@ public class FighterTaskManager {
     private Player player = null;
     private Fighter fighter = null;
 
-    protected int groundPoundTask,cooldownTask,rechargeTask, parachuteTask, refreshMySQLUploadTaskID = -1;
+    protected int groundPoundTask,cooldownTask,rechargeTask, parachuteTask, refreshMySQLUploadTaskID = 0;
 
     protected void fighterJoined(){
         this.refreshMySQLUpload();
@@ -40,42 +40,42 @@ public class FighterTaskManager {
 
     public void cancelAllTasks(){
         this.cancelGameplayTasks();
-        if(this.refreshMySQLUploadTaskID != -1){
+        if(this.refreshMySQLUploadTaskID != 0){
             Bukkit.getScheduler().cancelTask(this.refreshMySQLUploadTaskID);
-            this.refreshMySQLUploadTaskID = -1;
+            this.refreshMySQLUploadTaskID = 0;
         }
     }
 
     public void cancelGameplayTasks(){
-        if(this.cooldownTask != -1){
+        if(this.cooldownTask != 0){
             Bukkit.getScheduler().cancelTask(this.cooldownTask);
-            this.cooldownTask = -1;
+            this.cooldownTask = 0;
         }
-        if(this.groundPoundTask != -1){
+        if(this.groundPoundTask != 0){
             Bukkit.getScheduler().cancelTask(this.groundPoundTask);
-            this.groundPoundTask = -1;
+            this.groundPoundTask = 0;
         }
-        if(this.rechargeTask != -1){
+        if(this.rechargeTask != 0){
             Bukkit.getScheduler().cancelTask(this.rechargeTask);
-            this.rechargeTask = -1;
+            this.rechargeTask = 0;
         }
-        if(this.parachuteTask != -1){
+        if(this.parachuteTask != 0){
             Bukkit.getScheduler().cancelTask(this.parachuteTask);
-            this.parachuteTask = -1;
+            this.parachuteTask = 0;
         }
     }
 
     public void cancelCooldownTask() {
-        if (this.cooldownTask != -1) {
+        if (this.cooldownTask != 0) {
             Bukkit.getScheduler().cancelTask(this.cooldownTask);
-            this.cooldownTask = -1;
+            this.cooldownTask = 0;
         }
     }
 
     public void cancelRechargeTask() {
-        if (this.rechargeTask != -1) {
+        if (this.rechargeTask != 0) {
             Bukkit.getScheduler().cancelTask(this.rechargeTask);
-            this.rechargeTask = -1;
+            this.rechargeTask = 0;
         }
     }
 
@@ -111,9 +111,9 @@ public class FighterTaskManager {
     }
 
     public void cancelParachuteTask() {
-        if (this.parachuteTask != -1) {
+        if (this.parachuteTask != 0) {
             Bukkit.getScheduler().cancelTask(this.parachuteTask);
-            this.parachuteTask = -1;
+            this.parachuteTask = 0;
         }
     }
 }

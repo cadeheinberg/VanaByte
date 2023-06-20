@@ -33,11 +33,11 @@ public class IgorsTrident extends WeaponHolder {
         this.player = this.fighter.getPlayer();
         this.fighterKitManager = this.fighter.getFighterKitManager();
         this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
-        this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.projectileDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
+        this.specialDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
-        this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
+        this.rightClickCooldownTicks = 5 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.TRIDENT;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
@@ -46,11 +46,11 @@ public class IgorsTrident extends WeaponHolder {
     public IgorsTrident(){
         super();
         this.meleeDamage = 6;
-        this.projectileDamage = 0;
-        this.specialDamage = 7;
+        this.projectileDamage = 10;
+        this.specialDamage = 10;
         this.abilityDurationTicks = 200;
         this.abilityRechargeTicks = 50;
-        this.rightClickCooldownTicks = 0;
+        this.rightClickCooldownTicks = 5;
         this.material = Material.TRIDENT;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
@@ -88,7 +88,7 @@ public class IgorsTrident extends WeaponHolder {
         }
         FighterProjectile.addMetadataToProjectile(trident);
         this.player.getInventory().remove(this.getWeapon().getWeaponItem());
-        player.getInventory().setItem(0, this.getWeapon().getWeaponItem());
+        player.getInventory().addItem(this.getWeapon().getWeaponItem());
         trident.setShooter(player);
         return true;
     }

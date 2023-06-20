@@ -3,8 +3,7 @@ package me.cade.vanabyte.Fighters.FighterKits;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.FighterProjectile;
-import me.cade.vanabyte.Fighters.Weapons.AirbenderSword;
-import me.cade.vanabyte.Fighters.Weapons.ShottyShotgun;
+import me.cade.vanabyte.Fighters.Weapons.*;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,11 +21,23 @@ public class F2 extends FighterKit {
 	public F2() {
 		super();
 		weaponHolders.add(new ShottyShotgun());
+		weaponHolders.add(new IgorsTrident());
+		weaponHolders.add(new AirbenderSword());
+		weaponHolders.add(new BeserkerAxe());
+		weaponHolders.add(new SumoStick());
+		weaponHolders.add(new ThrowingTNTItem());
+		weaponHolders.add(new ParachuteItem());
 	}
 
 	public F2(Fighter fighter) {
 		super(fighter);
 		weaponHolders.add(new ShottyShotgun(fighter));
+		weaponHolders.add(new IgorsTrident(fighter));
+		weaponHolders.add(new AirbenderSword(fighter));
+		weaponHolders.add(new BeserkerAxe(fighter));
+		weaponHolders.add(new SumoStick(fighter));
+		weaponHolders.add(new ThrowingTNTItem(fighter));
+		weaponHolders.add(new ParachuteItem(fighter));
 	}
 	@Override
 	public int getKitID() {

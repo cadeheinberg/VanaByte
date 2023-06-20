@@ -55,14 +55,11 @@ public class ParachuteItem extends WeaponHolder {
 	@SuppressWarnings("deprecation")
 	@Override
 	public boolean doRightClick() {
-		if(!super.doRightClick()){
-			return false;
-		}
 		if (player.isOnGround()) {
 			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 			return false;
 		}
-		if (this.fighter.getFighterTaskManager().getParachuteTask() != -1) {
+		if (this.fighter.getFighterTaskManager().getParachuteTask() != 0) {
 			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 			return false;
 		}
@@ -70,17 +67,14 @@ public class ParachuteItem extends WeaponHolder {
 			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
 			return false;
 		}
-		if(super.doRightClick()) {
-			this.doParachute(player);
-			return true;
+		if(!super.doRightClick()){
+			return false;
 		}
-		return false;
+		this.doParachute(player);
+		return true;
 	}
 	@Override
 	public boolean doDrop() {
-		if(!super.doDrop()){
-			return false;
-		}
 		return this.doRightClick();
 	}
 	@Override
@@ -181,4 +175,9 @@ public class ParachuteItem extends WeaponHolder {
 
 	@Override
 	public ChatColor getWeaponNameColor(){return weaponNameColor;}
+
+	@Override
+	public Weapon getWeapon(){
+		return weapon;
+	}
 }

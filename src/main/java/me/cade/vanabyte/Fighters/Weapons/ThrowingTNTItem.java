@@ -137,4 +137,9 @@ public class ThrowingTNTItem extends WeaponHolder {
 
 	@Override
 	public ChatColor getWeaponNameColor(){return weaponNameColor;}
+
+	@Override
+	public Weapon getWeapon(){
+		return weapon;
+	}
 }

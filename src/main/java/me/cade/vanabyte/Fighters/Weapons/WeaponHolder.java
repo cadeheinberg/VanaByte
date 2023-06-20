@@ -44,8 +44,7 @@ public class WeaponHolder {
     //
     //Returns False if there is a cooldown or not a Fighter Kits item
     public boolean doDrop() {
-            if (this.player.getCooldown(FighterKitManager.cooldownMaterial) > 0
-                    || this.player.getCooldown(FighterKitManager.cooldownMaterial) > 0) {
+            if (this.player.getCooldown(FighterKitManager.cooldownMaterial) > 0 || Fighter.get(player).getWeaponAbilityManager().isSomeWeaponAbilityActive() != null) {
                 this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
                 return false;
             }

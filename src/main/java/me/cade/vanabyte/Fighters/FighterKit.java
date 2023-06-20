@@ -61,17 +61,5 @@ public abstract class FighterKit {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	//override in class where pickup is used
-	public void doPickUp(LivingEntity rightClicked) {
-		//pass
-	}
-	//override in class where pickup is used
-	public void doThrow(Player killer, LivingEntity victim) {
-		// pass
-	}
-	//override in class where pickup is used
-	public void doStealHealth(Player victim) {
-		// pass
-	}
 
 }

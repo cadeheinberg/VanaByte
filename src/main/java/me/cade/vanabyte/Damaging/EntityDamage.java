@@ -4,13 +4,10 @@ import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.FighterKits.F2;
 import me.cade.vanabyte.Fighters.FighterKits.F3;
 import me.cade.vanabyte.Fighters.FighterKits.F4;
-import me.cade.vanabyte.Fighters.Weapons.GoblinBow;
-import me.cade.vanabyte.Fighters.Weapons.IgorsTrident;
-import me.cade.vanabyte.Fighters.Weapons.ShottyShotgun;
+import me.cade.vanabyte.Fighters.Weapons.*;
 import me.cade.vanabyte.NPCS.D0_NpcListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
-import me.cade.vanabyte.Fighters.Weapons.Weapon;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
@@ -69,7 +66,7 @@ public class EntityDamage implements Listener {
 			double damage_amount = 0;
 			if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 				Projectile p = (Projectile) e.getDamager();
-				if(!FighterProjectile.projectileHasMetadata(e.getEntity())){
+				if(!FighterProjectile.projectileHasMetadata(e.getDamager())){
 					//If the projectile is not from a player using a Fighter kit
 					//then ignore it
 					return;
@@ -103,7 +100,10 @@ public class EntityDamage implements Listener {
 			if (killer.getPassengers() != null) {
 				if (killer.getPassengers().size() > 0) {
 					if (killer.getPassengers().get(0).equals(e.getEntity())) {
-						fKiller.getFKit().doThrow(killer, (LivingEntity) e.getEntity());
+						if(Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(SumoStick.class) != null && Fighter.get(killer).getFighterKitManager().getSimilarWeaponHolderFighterHas(killer.getItemInUse()) != null) {
+							((SumoStick) Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(SumoStick.class)).doThrow(killer, (LivingEntity) e.getEntity());
+							return;
+						}
 					}
 				}
 			}
@@ -113,7 +113,10 @@ public class EntityDamage implements Listener {
 					return;
 				}
 				Fighter fVictim = Fighter.get(victim);
-				fKiller.getFKit().doStealHealth(victim);
+				if(Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(GriefSword.class) != null && Fighter.get(killer).getFighterKitManager().getSimilarWeaponHolderFighterHas(killer.getItemInUse()) != null) {
+					((GriefSword) Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(GriefSword.class)).doStealHealth(victim);
+					return;
+				}
 				fVictim.setLastDamagedBy(killer);
 				fKiller.setLastToDamage(victim);
 				killer.setCooldown(FighterKitManager.getCombatTrackerMaterial(), 200);

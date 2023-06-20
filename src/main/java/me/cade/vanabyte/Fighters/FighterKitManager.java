@@ -105,9 +105,9 @@ public class FighterKitManager {
         }
         for (WeaponHolder weaponHolder : fKit.getWeaponHolders()) {
             if (weaponHolder == null) {
-                break;
+                continue;
             }if (weaponHolder.getWeapon() == null) {
-                break;
+                continue;
             }
             this.player.getInventory().addItem(weaponHolder.getWeapon().getWeaponItem());
         }
