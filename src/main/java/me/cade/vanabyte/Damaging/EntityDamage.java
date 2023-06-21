@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class EntityDamage implements Listener {
@@ -95,14 +96,16 @@ public class EntityDamage implements Listener {
 			killer = (Player) e.getDamager();
 		}
 		Fighter fKiller = null;
+		if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(GriefSword.class) != null) {
+			((GriefSword) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(GriefSword.class)).doStealHealth();
+		}
 		if(killer != null){
 			fKiller = Fighter.get(killer);
 			if (killer.getPassengers() != null) {
 				if (killer.getPassengers().size() > 0) {
 					if (killer.getPassengers().get(0).equals(e.getEntity())) {
-						if(Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(SumoStick.class) != null && Fighter.get(killer).getFighterKitManager().getSimilarWeaponHolderFighterHas(killer.getItemInUse()) != null) {
-							((SumoStick) Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(SumoStick.class)).doThrow(killer, (LivingEntity) e.getEntity());
-							return;
+						if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class) != null) {
+							((SumoStick) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class)).doThrow(killer, (LivingEntity) e.getEntity());
 						}
 					}
 				}
@@ -113,10 +116,6 @@ public class EntityDamage implements Listener {
 					return;
 				}
 				Fighter fVictim = Fighter.get(victim);
-				if(Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(GriefSword.class) != null && Fighter.get(killer).getFighterKitManager().getSimilarWeaponHolderFighterHas(killer.getItemInUse()) != null) {
-					((GriefSword) Fighter.getFighterFKit(killer).getSpecificWeaponHolderIfItExists(GriefSword.class)).doStealHealth(victim);
-					return;
-				}
 				fVictim.setLastDamagedBy(killer);
 				fKiller.setLastToDamage(victim);
 				killer.setCooldown(FighterKitManager.getCombatTrackerMaterial(), 200);
@@ -138,10 +137,10 @@ public class EntityDamage implements Listener {
 		fVictim.fighterDeath();
 
 		if(!SafeZone.inHub(victim.getLocation().getWorld())){
-			List<ItemStack> drops = e.getDrops();
-			for (ItemStack drop : drops){
+			List<ItemStack> drops = List.copyOf(e.getDrops());
+			for(ItemStack drop : drops){
 				if (FighterKitManager.hasNameOfWeapon(drop)) {
-					drops.remove(drop);
+					e.getDrops().remove(drop);
 				}
 			}
 			ItemStack helmet = victim.getEquipment().getHelmet();
@@ -150,16 +149,16 @@ public class EntityDamage implements Listener {
 			ItemStack boots = victim.getEquipment().getBoots();
 
 			if(helmet != null){
-				drops.remove(fVictim.getPlayer().getEquipment().getHelmet());
+				e.getDrops().remove(helmet);
 			}
 			if(chest != null){
-				drops.remove(fVictim.getPlayer().getEquipment().getChestplate());
+				e.getDrops().remove(chest);
 			}
 			if(leggings != null){
-				drops.remove(fVictim.getPlayer().getEquipment().getLeggings());
+				e.getDrops().remove(leggings);
 			}
 			if(boots != null){
-				drops.remove(fVictim.getPlayer().getEquipment().getBoots());
+				e.getDrops().remove(boots);
 			}
 			fVictim.dropFighterKitSoul();
 		}

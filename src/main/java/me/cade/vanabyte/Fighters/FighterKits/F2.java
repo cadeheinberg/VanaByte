@@ -25,6 +25,7 @@ public class F2 extends FighterKit {
 		weaponHolders.add(new AirbenderSword());
 		weaponHolders.add(new BeserkerAxe());
 		weaponHolders.add(new SumoStick());
+		weaponHolders.add(new GriefSword());
 		weaponHolders.add(new ThrowingTNTItem());
 		weaponHolders.add(new ParachuteItem());
 	}
@@ -36,6 +37,7 @@ public class F2 extends FighterKit {
 		weaponHolders.add(new AirbenderSword(fighter));
 		weaponHolders.add(new BeserkerAxe(fighter));
 		weaponHolders.add(new SumoStick(fighter));
+		weaponHolders.add(new GriefSword(fighter));
 		weaponHolders.add(new ThrowingTNTItem(fighter));
 		weaponHolders.add(new ParachuteItem(fighter));
 	}

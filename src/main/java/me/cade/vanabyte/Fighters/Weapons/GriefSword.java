@@ -85,7 +85,7 @@ public class GriefSword extends WeaponHolder {
         this.makeVisible(player);
         VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
     }
-    public void doStealHealth(Player victim) {
+    public void doStealHealth() {
         if (super.getWeaponAbility().isAbilityActive()) {
             double combined = this.player.getHealth() + 1.5;
             if (combined > 20) {

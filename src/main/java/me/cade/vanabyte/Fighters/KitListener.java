@@ -32,6 +32,16 @@ public class KitListener implements Listener {
 			return; // off hand packet, ignore.
 		}
 		if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
+			if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+				if (e.getPlayer().getPassengers() != null) {
+					if (e.getPlayer().getPassengers().size() > 0) {
+						if(Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class) != null) {
+							((SumoStick) Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class)).doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
+							return;
+						}
+					}
+				}
+			}
 			return;
 		}
 		if (e.getItem() == null) {
@@ -40,7 +50,7 @@ public class KitListener implements Listener {
 		if(e.getMaterial() == Material.BOW || e.getMaterial() == Material.TRIDENT) {
 			return;
 		}
-		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getSimilarWeaponHolderFighterHas(e.getItem());
+		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFKit().getSimilarWeaponHolderFighterHas(e.getItem());
 		if(weaponHolder != null){
 			weaponHolder.doRightClick();
 		}
@@ -55,7 +65,7 @@ public class KitListener implements Listener {
 		if(SafeZone.safeZone(e.getPlayer().getLocation())){
 			return;
 		}
-		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getSimilarWeaponHolderFighterHas(e.getItemDrop().getItemStack());
+		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFKit().getSimilarWeaponHolderFighterHas(e.getItemDrop().getItemStack());
 		if(weaponHolder != null){
 			weaponHolder.doDrop();
 			return;
@@ -112,8 +122,8 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
-		if(fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class) != null && Fighter.get((Player) e.getEntity().getShooter()).getFighterKitManager().getSimilarWeaponHolderFighterHas(((Player) e.getEntity().getShooter()).getItemInUse()) != null) {
-			if (!((IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class)).doThrowTrident((Trident) e.getEntity())) {
+		if(fKit.getSpecificSimilarWeaponHolderInHands(IgorsTrident.class) != null) {
+			if (!((IgorsTrident) fKit.getSpecificSimilarWeaponHolderInHands(IgorsTrident.class)).doThrowTrident((Trident) e.getEntity())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
 			}
@@ -130,8 +140,8 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
-		if (fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class) != null && Fighter.get((Player) e.getEntity()).getFighterKitManager().getSimilarWeaponHolderFighterHas(e.getBow()) != null) {
-			if (!((GoblinBow) fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class)).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
+		if (fKit.getSpecificSimilarWeaponHolderInHands(GoblinBow.class) != null) {
+			if (!((GoblinBow) fKit.getSpecificSimilarWeaponHolderInHands(GoblinBow.class)).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
 			}

@@ -3,6 +3,7 @@ import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -33,12 +34,52 @@ public abstract class FighterKit {
 		return weaponHolders;
 	}
 
+	public WeaponHolder getSimilarWeaponHolderFighterHas(ItemStack item){
+		if(item == null || !item.hasItemMeta() || item.getItemMeta().getDisplayName() == null){
+			return null;
+		}
+		for (WeaponHolder weaponHolder : this.weaponHolders){
+			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
+				continue;
+			}
+			if(weaponHolder.getWeapon().getWeaponItem().isSimilar(item)){
+				return weaponHolder;
+			}
+		}
+		return null;
+	}
+
 	public WeaponHolder getSpecificWeaponHolderIfItExists(Class<?> specificWeaponHolder) {
 		for(WeaponHolder weaponHolder : weaponHolders){
 			if(weaponHolder  == null){
-				break;
+				continue;
 			}
 			if (specificWeaponHolder.isInstance(weaponHolder)){
+				return weaponHolder;
+			}
+		}
+		return null;
+	}
+	public WeaponHolder getSpecificSimilarWeaponHolderInHands(Class<?> specificWeaponHolder) {
+		if(player.getEquipment().getItemInMainHand() == null || !player.getEquipment().getItemInMainHand().hasItemMeta() || player.getEquipment().getItemInMainHand().getItemMeta().getDisplayName() == null){
+			return null;
+		}
+		for(WeaponHolder weaponHolder : weaponHolders){
+			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
+				continue;
+			}
+			if(weaponHolder.getWeapon().getWeaponItem().isSimilar(player.getEquipment().getItemInMainHand()) && specificWeaponHolder.isInstance(weaponHolder)){
+				return weaponHolder;
+			}
+		}
+		if(player.getEquipment().getItemInOffHand() == null || !player.getEquipment().getItemInOffHand().hasItemMeta() || player.getEquipment().getItemInOffHand().getItemMeta().getDisplayName() == null){
+			return null;
+		}
+		for(WeaponHolder weaponHolder : weaponHolders){
+			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
+				continue;
+			}
+			if(weaponHolder.getWeapon().getWeaponItem().isSimilar(player.getEquipment().getItemInOffHand()) && specificWeaponHolder.isInstance(weaponHolder)){
 				return weaponHolder;
 			}
 		}

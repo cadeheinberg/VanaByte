@@ -39,7 +39,7 @@ public class SumoStick extends WeaponHolder {
         this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
-        this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
+        this.rightClickCooldownTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.STICK;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
@@ -62,11 +62,14 @@ public class SumoStick extends WeaponHolder {
     }
     @Override
     public boolean doRightClick() {
-        return false;
+        return true;
     }
     @Override
     public boolean doDrop() {
         if (!super.doDrop()){
+            return false;
+        }
+        if(fighter.getFighterTaskManager().getGroundPoundTask() != 0){
             return false;
         }
         this.activateSpecial();
@@ -84,6 +87,7 @@ public class SumoStick extends WeaponHolder {
     @Override
     public void deActivateSpecial() {
         super.deActivateSpecial();
+        stopListening(fighter);
     }
 
     public void doJump(Player player, Double power, Fighter pFight) {
@@ -139,7 +143,7 @@ public class SumoStick extends WeaponHolder {
 
     public static void stopListening(Fighter fighter) {
         Bukkit.getScheduler().cancelTask(fighter.getFighterTaskManager().getGroundPoundTask());
-        fighter.getFighterTaskManager().setGroundPoundTask(-1);
+        fighter.getFighterTaskManager().setGroundPoundTask(0);
     }
 
     // make this freeze players also
@@ -159,14 +163,11 @@ public class SumoStick extends WeaponHolder {
                 return;
             }
         }
-        if (this.getRightClickCooldownTicks() > 0) {
-            if (player.getCooldown(this.getMaterial()) > 0) {
-                return;
-            }
-            player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
-            player.addPassenger(rightClicked);
+        if (player.getCooldown(this.getMaterial()) > 0) {
             return;
         }
+        player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        player.addPassenger(rightClicked);
     }
 
     public void doThrow(Player killer, LivingEntity victim) {

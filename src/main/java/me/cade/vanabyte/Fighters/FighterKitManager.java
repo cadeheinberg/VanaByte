@@ -163,21 +163,6 @@ public class FighterKitManager {
         return false;
     }
 
-    public WeaponHolder getSimilarWeaponHolderFighterHas(ItemStack item){
-        if(item == null || !item.hasItemMeta() || item.getItemMeta().getDisplayName() == null){
-            return null;
-        }
-        for (WeaponHolder weaponHolder : this.fKit.weaponHolders){
-            if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
-                continue;
-            }
-            if(weaponHolder.getWeapon().getWeaponItem().isSimilar(item)){
-                return weaponHolder;
-            }
-        }
-        return null;
-    }
-
     private void giveArmor() {
 
         ItemStack lhelmet = new ItemStack(Material.LEATHER_HELMET, 1);

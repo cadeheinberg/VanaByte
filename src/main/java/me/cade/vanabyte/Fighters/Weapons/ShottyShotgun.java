@@ -61,7 +61,7 @@ public class ShottyShotgun extends WeaponHolder {
             return false;
         }
         this.shootSnowballs();
-        this.doShotgunRecoil(-0.3);
+        this.doShotgunRecoil(-0.42);
         return true;
     }
     @Override
