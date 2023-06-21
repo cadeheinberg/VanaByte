@@ -100,7 +100,7 @@ public class ParachuteItem extends WeaponHolder {
 		this.fighter.getFighterTaskManager().setParachuteTask(new BukkitRunnable() {
 			@Override
 			public void run() {
-				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Parachute Task Running");
+//				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Parachute Task Running");
 				if (chicken.isOnGround()) {
 					chicken.eject();
 					getOff();
