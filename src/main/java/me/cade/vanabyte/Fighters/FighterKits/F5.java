@@ -1,20 +1,9 @@
 package me.cade.vanabyte.Fighters.FighterKits;
 
-import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.IgorsTrident;
-import me.cade.vanabyte.Fighters.Weapons.SumoStick;
-import me.cade.vanabyte.VanaByte;
+import me.cade.vanabyte.Fighters.Weapons.W5_SumoStick;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 public class F5 extends FighterKit {
 
@@ -26,12 +15,12 @@ public class F5 extends FighterKit {
 
 	public F5() {
 		super();
-		weaponHolders.add(new SumoStick());
+		weaponHolders.add(new W5_SumoStick());
 	}
 
 	public F5(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new SumoStick(fighter));
+		weaponHolders.add(new W5_SumoStick(fighter));
 	}
 	@Override
 	public int getKitID() {

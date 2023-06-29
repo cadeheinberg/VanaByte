@@ -10,7 +10,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
 
-public class MySQL {
+public class MySQL_KitPVP {
 
   private Connection connection;
   private String url;
@@ -23,7 +23,7 @@ public class MySQL {
   
   private static Plugin plugin = VanaByte.getPlugin(VanaByte.class);
   
-  public MySQL() {
+  public MySQL_KitPVP() {
 
     url = DatabaseAccess.getURL();
     port = DatabaseAccess.getPort();
@@ -42,25 +42,24 @@ public class MySQL {
       Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL: ERROR 2");
     }
     
-    tableName = "playerstats";
-    column = new String[17];
+    tableName = "hub_stats";
+    column = new String[16];
     column[0] = "UUID";
     column[1] = "PlayerName";
-    column[2] = "KitID";
-    column[3] = "KitIndex";
-    column[4] = "PlayerLevel";
-    column[5] = "Kills";
-    column[6] = "KillStreak";
-    column[7] = "Deaths";
-    column[8] = "Cakes";
-    column[9] = "Exp";
-    column[10] = "Kit00";
-    column[11] = "Kit01";
-    column[12] = "Kit02";
-    column[13] = "Kit03";
-    column[14] = "Kit04";
-    column[15] = "Kit05";
-    column[16] = "Kit06";
+    column[2] = "server_cakes";
+    column[3] = "server_level";
+    column[4] = "server_xp";
+    column[5] = "kitpvp_kit_id";
+    column[6] = "kitpvp_kills";
+    column[7] = "kitpvp_killstreak";
+    column[8] = "kitpvp_deaths";
+    column[9] = "unlocked_kit_00";
+    column[10] = "unlocked_kit_01";
+    column[11] = "unlocked_kit_02";
+    column[12] = "unlocked_kit_03";
+    column[13] = "unlocked_kit_04";
+    column[14] = "unlocked_kit_05";
+    column[15] = "unlocked_kit_06";
 
     try{
       createTable();
@@ -78,7 +77,7 @@ public class MySQL {
     Statement statement = connection.createStatement();
 
     Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CREATING TABLE");
-    String createTableSQL = "CREATE TABLE IF NOT EXISTS playerstats (UUID varchar(36) primary key, PlayerName varchar(16), ";
+    String createTableSQL = "CREATE TABLE IF NOT EXISTS " + tableName + " (UUID varchar(36) primary key, PlayerName varchar(16), ";
     for (int i = 2; i < column.length; i++) {
       if (i == column.length - 1) {
         createTableSQL = createTableSQL + column[column.length -1] + " int)";
@@ -126,22 +125,21 @@ public class MySQL {
       statement = connection.prepareStatement(insertStatement);
       statement.setString(1, player.getUniqueId().toString());
       statement.setString(2, player.getName());
-      statement.setInt(3, 0);
-      statement.setInt(4, 0);
-      statement.setInt(5, 1);
+      statement.setInt(3, 500);
+      statement.setInt(4, 1);
+      statement.setInt(5, 0);
       statement.setInt(6, 0);
       statement.setInt(7, 0);
       statement.setInt(8, 0);
-      statement.setInt(9, 500);
-      statement.setInt(10, 0);
+      statement.setInt(9, 0);
       //KITS
+      statement.setInt(10, 1);
       statement.setInt(11, 1);
-      statement.setInt(12, 1);
+      statement.setInt(12, 0);
       statement.setInt(13, 0);
       statement.setInt(14, 0);
       statement.setInt(15, 0);
       statement.setInt(16, 0);
-      statement.setInt(17, 0);
       statement.executeUpdate();
     } catch (SQLException e) {
       e.printStackTrace();

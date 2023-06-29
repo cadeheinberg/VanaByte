@@ -2,20 +2,9 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.FighterProjectile;
 import me.cade.vanabyte.Fighters.Weapons.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 public class F3 extends FighterKit {
 
@@ -26,16 +15,16 @@ public class F3 extends FighterKit {
 
 	public F3() {
 		super();
-		weaponHolders.add(new GoblinBow());
-		weaponHolders.add(new GoblinSword());
-		weaponHolders.add(new GoblinArrow());
+		weaponHolders.add(new W3_GoblinBow());
+		weaponHolders.add(new W3_GoblinSword());
+		weaponHolders.add(new W3_GoblinArrow());
 	}
 
 	public F3(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new GoblinBow(fighter));
-		weaponHolders.add(new GoblinSword(fighter));
-		weaponHolders.add(new GoblinArrow(fighter));
+		weaponHolders.add(new W3_GoblinBow(fighter));
+		weaponHolders.add(new W3_GoblinSword(fighter));
+		weaponHolders.add(new W3_GoblinArrow(fighter));
 	}
 	@Override
 	public int getKitID() {

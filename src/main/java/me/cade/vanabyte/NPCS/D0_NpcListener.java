@@ -1,11 +1,8 @@
 package me.cade.vanabyte.NPCS;
 
-import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.Weapons.ShottyShotgun;
-import me.cade.vanabyte.Fighters.Weapons.SumoStick;
-import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
+import me.cade.vanabyte.Fighters.Weapons.W5_SumoStick;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
@@ -66,8 +63,8 @@ public class D0_NpcListener implements Listener {
 			return;
 		}
 	    if (e.getRightClicked() instanceof LivingEntity) {
-			if(Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class) != null){
-				((SumoStick)Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class)).doPickUp((LivingEntity) e.getRightClicked());
+			if(Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class) != null){
+				((W5_SumoStick)Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class)).doPickUp((LivingEntity) e.getRightClicked());
 			}
 	    }
 	}

@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.AirbenderSword;
+import me.cade.vanabyte.Fighters.Weapons.W0_AirbenderSword;
 import org.bukkit.*;
 
 public class F0 extends FighterKit {
@@ -13,12 +13,12 @@ public class F0 extends FighterKit {
 
 	public F0() {
 		super();
-		weaponHolders.add(new AirbenderSword());
+		weaponHolders.add(new W0_AirbenderSword());
 	}
 
 	public F0(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new AirbenderSword(fighter));
+		weaponHolders.add(new W0_AirbenderSword(fighter));
 	}
 	@Override
 	public int getKitID() {

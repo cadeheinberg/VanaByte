@@ -100,7 +100,7 @@ public class WeaponAbility {
             }
         }
         this.abilityActive = fighterAbility;
-        weaponAbilityManager.changeAbilityActiveParticleEffect(weaponHolder);
+        weaponAbilityManager.updateAbilityParticles(weaponHolder);
     }
 
     public void setAbilityRecharged(boolean fighterRecharged) {
@@ -113,7 +113,7 @@ public class WeaponAbility {
             }
         }
         this.abilityRecharged = fighterRecharged;
-        weaponAbilityManager.changeAbilityRechargedParticleEffect();
+        weaponAbilityManager.updateAbilityParticles(weaponHolder);
     }
 
 
@@ -142,6 +142,10 @@ public class WeaponAbility {
 
     public boolean isAbilityActive() {
         return this.abilityActive;
+    }
+
+    public boolean isAbilityRecharged() {
+        return this.abilityRecharged;
     }
 
 }

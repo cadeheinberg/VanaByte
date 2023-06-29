@@ -11,8 +11,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
 
-public class MySQL_Upgrades {
+public class MySQL_Royale {
 
+    private static String MYSQL_name = "MySQL_Royale";
     private Connection connection;
     private String url;
     private String username;
@@ -24,7 +25,7 @@ public class MySQL_Upgrades {
 
     private static Plugin plugin = VanaByte.getPlugin(VanaByte.class);
 
-    public MySQL_Upgrades() {
+    public MySQL_Royale() {
 
         url = DatabaseAccess.getURL();
         port = DatabaseAccess.getPort();
@@ -32,36 +33,37 @@ public class MySQL_Upgrades {
         password = DatabaseAccess.getPassword();
 
         try {
-            Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL_Upgrades: CONNECTING...");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MySQL_Royale: CONNECTING...");
             connect();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL_Upgrades: CONNECTED");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MySQL_Royale: CONNECTED");
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL_Upgrades: ERROR 1");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MySQL_Royale: ERROR 1");
         } catch (SQLException e) {
             e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL_Upgrades: ERROR 2");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MySQL_Royale: ERROR 2");
         }
 
-        tableName = "player_upgrades";
-        column = new String[(Fighter.getNumberOfKits() * 6) + 1];
+        tableName = "royale_stats";
+        column = new String[11];
         column[0] = "UUID";
 
-        // 6 for the number of upgrade stats listed
-        for (int i = 0; i < Fighter.getNumberOfKits(); i++){
-            column[(6*i)+1] = "w" + i + "_melee_inc";
-            column[(6*i)+2] = "w" + i + "_proj_inc";
-            column[(6*i)+3] = "w" + i + "_special_inc";
-            column[(6*i)+4] = "w" + i + "_duration_inc";
-            column[(6*i)+5] = "w" + i + "_reacharge_dec";
-            column[(6*i)+6] = "w" + i + "_cooldownticks_dec";
-        }
+        column[1] = "royale_kit_id";
+        column[2] = "royale_kills";
+        column[3] = "royale_killstreak";
+        column[4] = "royale_deaths";
+        column[5] = "royale_wins";
+        column[6] = "royale_losses";
+        column[7] = "royale_winstreak";
+        column[8] = "royale_mobkills";
+        column[9] = "royale_blocks_mined";
+        column[10] = "royale_blocks_placed";
 
         try{
             createTable();
         } catch (SQLException e){
             e.printStackTrace();
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL_Upgrades: Error creating table");
+            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MySQL_Royale: Error creating table");
         }
 
         this.refreshConnection();
@@ -83,7 +85,7 @@ public class MySQL_Upgrades {
     private void createTable() throws SQLException{
         Statement statement = connection.createStatement();
 
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL_Upgrades: CREATING TABLE");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MySQL_Royale: CREATING TABLE");
         String createTableSQL = "CREATE TABLE IF NOT EXISTS " + tableName + " (UUID varchar(36) primary key, ";
         for (int i = 1; i < column.length; i++) {
             if (i == column.length - 1) {
@@ -94,7 +96,7 @@ public class MySQL_Upgrades {
         }
         statement.execute(createTableSQL);
         statement.close();
-        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL_Upgrades: TABLE CREATED!");
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MySQL_Royale: TABLE CREATED!");
     }
 
     //SET THE DEFAULT VALUES FOR EACH STAT HERE

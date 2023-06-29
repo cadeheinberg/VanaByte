@@ -4,8 +4,6 @@ import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -18,7 +16,7 @@ public class Fighter {
 	private Player player = null;
 	private UUID uuid,lastToDamage,lastDamagedBy = null;
 	private static final int numberOfKits = 7;
-	private int playerLevel,kills,killStreak,deaths,cakes = -1;
+	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
 	protected FighterHologramManager fighterHologramManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
 	protected FighterMYSQLManager fighterMYSQLManager = null;
@@ -104,20 +102,20 @@ public class Fighter {
 		}
 		this.lastDamagedBy = lastDamagedBy.getUniqueId();
 	}
-	protected void setPlayerLevel(int playerLevel) {
-		this.playerLevel = playerLevel;
+	protected void setFighterLevel(int fighterLevel) {
+		this.fighterLevel = fighterLevel;
 		fighterScoreBoardManager.updateLevel();
 	}
 	public void incPlayerLevel(int amount) {
-		this.playerLevel = this.playerLevel + amount;
+		this.fighterLevel = this.fighterLevel + amount;
 		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
-		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled up to level " + playerLevel + "!");
+		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled up to level " + fighterLevel + "!");
 		fighterScoreBoardManager.updateLevel();
 	}
 	public void decPlayerLevel(int amount) {
-		this.playerLevel = this.playerLevel - amount;
+		this.fighterLevel = this.fighterLevel - amount;
 		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
-		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled down to level " + playerLevel + "!");
+		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled down to level " + fighterLevel + "!");
 		fighterScoreBoardManager.updateLevel();
 	}
 	public void setKills(int kills) {
@@ -172,7 +170,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateCookies();
 	}
 	public UUID getLastDamagedBy() {return lastDamagedBy;}
-	public int getPlayerLevel() {return playerLevel;}
+	public int getFighterLevel() {return fighterLevel;}
 	public int getCakes() {return cakes;}
 	public int getDeaths() {return deaths;}
 	public int getKillStreak() {return killStreak;}
@@ -205,5 +203,17 @@ public class Fighter {
 
 	public FighterTaskManager getFighterTaskManager() {
 		return fighterTaskManager;
+	}
+
+	public int getFighterXP() {
+		return fighterXP;
+	}
+
+	public void setFighterXP(int fighterXP) {
+		this.fighterXP = fighterXP;
+	}
+
+	public void incFighterXP(int amount){
+		this.fighterXP = fighterXP + amount;
 	}
 }

@@ -6,7 +6,8 @@ import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Damaging.*;
 import me.cade.vanabyte.Money.A_CakeManager;
-import me.cade.vanabyte.MySQL.MySQL;
+import me.cade.vanabyte.MySQL.MySQL_KitPVP;
+import me.cade.vanabyte.MySQL.MySQL_Royale;
 import me.cade.vanabyte.MySQL.MySQL_Upgrades;
 import me.cade.vanabyte.NPCS.*;
 import me.cade.vanabyte.Permissions.BasicPermissions;
@@ -35,9 +36,10 @@ public class VanaByte extends JavaPlugin {
 
 	public static World thirdWorld;
 	public static Location thirdWorldSpawn;
-	public static MySQL mysql;
-
+	public static MySQL_KitPVP mySQL_Hub;
 	public static MySQL_Upgrades mySQL_upgrades;
+
+	public static MySQL_Royale mySQL_royale;
 
 	private static Plugin plugin = null;
 	private static ProtocolManager protocolManager;
@@ -68,8 +70,9 @@ public class VanaByte extends JavaPlugin {
 	}
 
 	private static void startMySQL() {
-		mysql = new MySQL();
+		mySQL_Hub = new MySQL_KitPVP();
 		mySQL_upgrades = new MySQL_Upgrades();
+		mySQL_royale = new MySQL_Royale();
 	}
 
 	private void registerListeners() {
@@ -91,8 +94,9 @@ public class VanaByte extends JavaPlugin {
 				Fighter.get(player).fighterLeftServer();
 			}
 		}
-		mysql.closeConnection();
+		mySQL_Hub.closeConnection();
 		mySQL_upgrades.closeConnection();
+		mySQL_royale.closeConnection();
 		A_CakeManager.stopCakePackage();
 		Borders.stopCheckingBorders();
 	}

@@ -2,17 +2,9 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.AirbenderSword;
-import me.cade.vanabyte.Fighters.Weapons.BeserkerAxe;
+import me.cade.vanabyte.Fighters.Weapons.W1_BeserkerAxe;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
 public class F1 extends FighterKit {
 	
@@ -23,12 +15,12 @@ public class F1 extends FighterKit {
 	static final Color armorColor = Color.fromRGB(150, 0, 255);
 	public F1() {
 		super();
-		weaponHolders.add(new BeserkerAxe());
+		weaponHolders.add(new W1_BeserkerAxe());
 	}
 
 	public F1(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new BeserkerAxe(fighter));
+		weaponHolders.add(new W1_BeserkerAxe(fighter));
 	}
 	@Override
 	public int getKitID() {

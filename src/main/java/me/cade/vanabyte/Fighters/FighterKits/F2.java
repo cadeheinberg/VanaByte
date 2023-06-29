@@ -2,14 +2,8 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.FighterProjectile;
 import me.cade.vanabyte.Fighters.Weapons.*;
 import org.bukkit.*;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
 
 public class F2 extends FighterKit {
 
@@ -20,26 +14,26 @@ public class F2 extends FighterKit {
 
 	public F2() {
 		super();
-		weaponHolders.add(new ShottyShotgun());
-		weaponHolders.add(new IgorsTrident());
-		weaponHolders.add(new AirbenderSword());
-		weaponHolders.add(new BeserkerAxe());
-		weaponHolders.add(new SumoStick());
-		weaponHolders.add(new GriefSword());
-		weaponHolders.add(new ThrowingTNTItem());
-		weaponHolders.add(new ParachuteItem());
+		weaponHolders.add(new W2_ShottyShotgun());
+		weaponHolders.add(new W4_IgorsTrident());
+		weaponHolders.add(new W0_AirbenderSword());
+		weaponHolders.add(new W1_BeserkerAxe());
+		weaponHolders.add(new W5_SumoStick());
+		weaponHolders.add(new W6_GriefSword());
+		weaponHolders.add(new S1_ThrowingTNT());
+		weaponHolders.add(new S0_Parachute());
 	}
 
 	public F2(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new ShottyShotgun(fighter));
-		weaponHolders.add(new IgorsTrident(fighter));
-		weaponHolders.add(new AirbenderSword(fighter));
-		weaponHolders.add(new BeserkerAxe(fighter));
-		weaponHolders.add(new SumoStick(fighter));
-		weaponHolders.add(new GriefSword(fighter));
-		weaponHolders.add(new ThrowingTNTItem(fighter));
-		weaponHolders.add(new ParachuteItem(fighter));
+		weaponHolders.add(new W2_ShottyShotgun(fighter));
+		weaponHolders.add(new W4_IgorsTrident(fighter));
+		weaponHolders.add(new W0_AirbenderSword(fighter));
+		weaponHolders.add(new W1_BeserkerAxe(fighter));
+		weaponHolders.add(new W5_SumoStick(fighter));
+		weaponHolders.add(new W6_GriefSword(fighter));
+		weaponHolders.add(new S1_ThrowingTNT(fighter));
+		weaponHolders.add(new S0_Parachute(fighter));
 	}
 	@Override
 	public int getKitID() {

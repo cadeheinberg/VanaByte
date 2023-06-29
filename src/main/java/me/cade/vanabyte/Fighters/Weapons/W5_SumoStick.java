@@ -6,7 +6,6 @@ import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -14,9 +13,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-
-public class SumoStick extends WeaponHolder {
+public class W5_SumoStick extends WeaponHolder {
 
     final String weaponDrop = "Ground Pound";
     final String weaponRightClick = "Toss Enemy";
@@ -29,7 +26,7 @@ public class SumoStick extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public SumoStick(Fighter fighter) {
+    public W5_SumoStick(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
@@ -46,7 +43,7 @@ public class SumoStick extends WeaponHolder {
                 this.getAbilityRechargeTicks());
         this.weapon.applyWeaponUnsafeEnchantment(Enchantment.KNOCKBACK, 2);
     }
-    public SumoStick(){
+    public W5_SumoStick(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;

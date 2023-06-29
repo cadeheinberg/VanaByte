@@ -20,7 +20,7 @@ public class PlayerChat implements Listener {
   
   public static String calculatePlayerMessage(Player player, String note) {
 	  Fighter pFight = Fighter.get(player);
-	  int numLevel = pFight.getPlayerLevel();
+	  int numLevel = pFight.getFighterLevel();
 	  String message = "";
 	  String levelPre = "";
 	  levelPre = ChatColor.LIGHT_PURPLE + "" + numLevel;

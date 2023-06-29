@@ -6,16 +6,13 @@ import me.cade.vanabyte.Fighters.FighterProjectile;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-
-public class GoblinBow extends WeaponHolder{
+public class W3_GoblinBow extends WeaponHolder{
 
     final String weaponDrop = "Barrage of Poison";
     final String weaponRightClick = "Shoot Bow";
@@ -28,7 +25,7 @@ public class GoblinBow extends WeaponHolder{
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public GoblinBow(Fighter fighter) {
+    public W3_GoblinBow(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
@@ -45,7 +42,7 @@ public class GoblinBow extends WeaponHolder{
                 this.getAbilityRechargeTicks());
         this.weapon.applyWeaponEnchantment(Enchantment.ARROW_INFINITE, 1);
     }
-    public GoblinBow(){
+    public W3_GoblinBow(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;

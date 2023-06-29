@@ -1,9 +1,6 @@
 package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.Fighters.*;
-import me.cade.vanabyte.Fighters.FighterKits.F2;
-import me.cade.vanabyte.Fighters.FighterKits.F3;
-import me.cade.vanabyte.Fighters.FighterKits.F4;
 import me.cade.vanabyte.Fighters.Weapons.*;
 import me.cade.vanabyte.NPCS.D0_NpcListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
@@ -18,7 +15,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class EntityDamage implements Listener {
@@ -76,16 +72,16 @@ public class EntityDamage implements Listener {
 					killer = (Player) p.getShooter();
 					Fighter fighter = Fighter.get(killer);
 					FighterKit fKit = fighter.getFKit();
-					if (e.getDamager() instanceof Snowball && fKit.getSpecificWeaponHolderIfItExists(ShottyShotgun.class) != null) {
-						damage_amount = ((ShottyShotgun) fKit.getSpecificWeaponHolderIfItExists(ShottyShotgun.class)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
+					if (e.getDamager() instanceof Snowball && fKit.getSpecificWeaponHolderIfItExists(W2_ShottyShotgun.class) != null) {
+						damage_amount = ((W2_ShottyShotgun) fKit.getSpecificWeaponHolderIfItExists(W2_ShottyShotgun.class)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-					} else if (e.getDamager() instanceof Arrow && fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class) != null) {
-						damage_amount = ((GoblinBow) fKit.getSpecificWeaponHolderIfItExists(GoblinBow.class)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
+					} else if (e.getDamager() instanceof Arrow && fKit.getSpecificWeaponHolderIfItExists(W3_GoblinBow.class) != null) {
+						damage_amount = ((W3_GoblinBow) fKit.getSpecificWeaponHolderIfItExists(W3_GoblinBow.class)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-					} else if (e.getDamager() instanceof Trident && fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class) != null) {
-						damage_amount = ((IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(IgorsTrident.class)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
+					} else if (e.getDamager() instanceof Trident && fKit.getSpecificWeaponHolderIfItExists(W4_IgorsTrident.class) != null) {
+						damage_amount = ((W4_IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(W4_IgorsTrident.class)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
 					}
@@ -96,16 +92,16 @@ public class EntityDamage implements Listener {
 			killer = (Player) e.getDamager();
 		}
 		Fighter fKiller = null;
-		if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(GriefSword.class) != null) {
-			((GriefSword) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(GriefSword.class)).doStealHealth();
+		if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(W6_GriefSword.class) != null) {
+			((W6_GriefSword) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(W6_GriefSword.class)).doStealHealth();
 		}
 		if(killer != null){
 			fKiller = Fighter.get(killer);
 			if (killer.getPassengers() != null) {
 				if (killer.getPassengers().size() > 0) {
 					if (killer.getPassengers().get(0).equals(e.getEntity())) {
-						if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class) != null) {
-							((SumoStick) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(SumoStick.class)).doThrow(killer, (LivingEntity) e.getEntity());
+						if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class) != null) {
+							((W5_SumoStick) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class)).doThrow(killer, (LivingEntity) e.getEntity());
 						}
 					}
 				}

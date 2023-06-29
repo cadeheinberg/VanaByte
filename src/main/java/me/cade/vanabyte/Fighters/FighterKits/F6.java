@@ -1,18 +1,10 @@
 package me.cade.vanabyte.Fighters.FighterKits;
 
-import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.GriefSword;
-import me.cade.vanabyte.Fighters.Weapons.SumoStick;
-import me.cade.vanabyte.VanaByte;
+import me.cade.vanabyte.Fighters.Weapons.W6_GriefSword;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 public class F6 extends FighterKit {
 
@@ -23,12 +15,12 @@ public class F6 extends FighterKit {
 
 	public F6() {
 		super();
-		weaponHolders.add(new GriefSword());
+		weaponHolders.add(new W6_GriefSword());
 	}
 
 	public F6(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new GriefSword(fighter));
+		weaponHolders.add(new W6_GriefSword(fighter));
 	}
 	@Override
 	public int getKitID() {

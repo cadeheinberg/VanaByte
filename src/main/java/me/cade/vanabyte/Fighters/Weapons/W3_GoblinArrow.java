@@ -3,18 +3,9 @@ package me.cade.vanabyte.Fighters.Weapons;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import org.bukkit.*;
-import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-import java.util.ArrayList;
-
-public class GoblinSword extends WeaponHolder{
-
+public class W3_GoblinArrow extends WeaponHolder {
     final String weaponDrop = "None";
     final String weaponRightClick = "None";
     final ChatColor weaponNameColor = ChatColor.GREEN;
@@ -26,36 +17,34 @@ public class GoblinSword extends WeaponHolder{
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public GoblinSword(Fighter fighter) {
+    public W3_GoblinArrow(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
         this.fighterKitManager = this.fighter.getFighterKitManager();
-        this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
+        this.meleeDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
         this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
         this.specialDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 0 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
-        this.material = Material.WOODEN_SWORD;
+        this.material = Material.ARROW;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
-        this.weapon.applyWeaponEnchantment(Enchantment.FIRE_ASPECT, 1);
     }
-    public GoblinSword(){
+    public W3_GoblinArrow(){
         super();
-        this.meleeDamage = 6;
+        this.meleeDamage = 0;
         this.projectileDamage = 0;
         this.specialDamage = 0;
         this.abilityDurationTicks = 0;
         this.abilityRechargeTicks = 0;
         this.rightClickCooldownTicks = 0;
-        this.material = Material.WOODEN_SWORD;
+        this.material = Material.ARROW;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
-        this.weapon.applyWeaponEnchantment(Enchantment.FIRE_ASPECT, 1);
     }
     @Override
     public boolean doRightClick() {
@@ -129,5 +118,4 @@ public class GoblinSword extends WeaponHolder{
 
     @Override
     public ChatColor getWeaponNameColor(){return weaponNameColor;}
-
 }

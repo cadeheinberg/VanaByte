@@ -24,7 +24,7 @@ public class FighterKitManager {
     private Fighter fighter = null;
     private static FighterKit[] fKits = { new F0(), new F1(), new F2(), new F3(), new F4(), new F5(), new F6() };
 
-    private static WeaponHolder[] wHolders = { new AirbenderSword(), new BeserkerAxe(), new ShottyShotgun(), new GoblinBow(), new GoblinSword(), new GoblinArrow(), new IgorsTrident(), new SumoStick(), new GriefSword(), new ParachuteItem(), new ThrowingTNTItem() };
+    private static WeaponHolder[] wHolders = { new W0_AirbenderSword(), new W1_BeserkerAxe(), new W2_ShottyShotgun(), new W3_GoblinBow(), new W3_GoblinSword(), new W3_GoblinArrow(), new W4_IgorsTrident(), new W5_SumoStick(), new W6_GriefSword(), new S0_Parachute(), new S1_ThrowingTNT() };
     private int[] unlockedKits = new int[7];
     private int[] kitUpgrades = new int[42];
     private FighterKit fKit = null;
@@ -297,8 +297,8 @@ public class FighterKitManager {
     }
 
     public void fighterDismountParachute() {
-        if(fKit.getSpecificWeaponHolderIfItExists(ParachuteItem.class) != null){
-            ((ParachuteItem) fKit.getSpecificWeaponHolderIfItExists(ParachuteItem.class)).getOff();
+        if(fKit.getSpecificWeaponHolderIfItExists(S0_Parachute.class) != null){
+            ((S0_Parachute) fKit.getSpecificWeaponHolderIfItExists(S0_Parachute.class)).getOff();
         }
     }
 

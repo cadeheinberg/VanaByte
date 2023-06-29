@@ -1,6 +1,5 @@
 package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Money.A_CakeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -73,7 +72,7 @@ public class FighterScoreBoardManager {
 
     level = board.registerNewTeam("Level");
     level.setPrefix(ChatColor.YELLOW + "Level: ");
-    level.setSuffix(ChatColor.WHITE + "" + fighter.getPlayerLevel());
+    level.setSuffix(ChatColor.WHITE + "" + fighter.getFighterLevel());
     level.addEntry(ChatColor.DARK_GRAY + "");
     objective.getScore(ChatColor.DARK_GRAY + "").setScore(3);
 
@@ -121,7 +120,7 @@ public class FighterScoreBoardManager {
   }
 
   public void updateLevel() {
-    level.setSuffix(ChatColor.WHITE + "" + fighter.getPlayerLevel());
+    level.setSuffix(ChatColor.WHITE + "" + fighter.getFighterLevel());
   }
 
   public void updateExp() {

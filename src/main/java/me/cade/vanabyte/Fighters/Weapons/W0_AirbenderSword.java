@@ -12,7 +12,7 @@ import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class AirbenderSword extends WeaponHolder {
+public class W0_AirbenderSword extends WeaponHolder {
     final String weaponDrop = "Gust of Wind";
     final String weaponRightClick = "Use Shield";
     final ChatColor weaponNameColor = ChatColor.WHITE;
@@ -24,7 +24,7 @@ public class AirbenderSword extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public AirbenderSword(Fighter fighter) {
+    public W0_AirbenderSword(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
@@ -40,7 +40,7 @@ public class AirbenderSword extends WeaponHolder {
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
-    public AirbenderSword(){
+    public W0_AirbenderSword(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;

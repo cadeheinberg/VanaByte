@@ -1,16 +1,9 @@
 package me.cade.vanabyte.Fighters.FighterKits;
 
-import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.FighterProjectile;
-import me.cade.vanabyte.Fighters.Weapons.BeserkerAxe;
-import me.cade.vanabyte.Fighters.Weapons.IgorsTrident;
+import me.cade.vanabyte.Fighters.Weapons.W4_IgorsTrident;
 import org.bukkit.*;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Trident;
-import org.bukkit.inventory.ItemStack;
 
 public class F4 extends FighterKit {
 
@@ -22,12 +15,12 @@ public class F4 extends FighterKit {
 
 	public F4() {
 		super();
-		weaponHolders.add(new IgorsTrident());
+		weaponHolders.add(new W4_IgorsTrident());
 	}
 
 	public F4(Fighter fighter) {
 		super(fighter);
-		weaponHolders.add(new IgorsTrident(fighter));
+		weaponHolders.add(new W4_IgorsTrident(fighter));
 	}
 	@Override
 	public int getKitID() {
