@@ -67,10 +67,6 @@ public class MySQL_KitPVP {
       e.printStackTrace();
       System.out.println("Error creating table");
     }
-
-    
-    refreshConnection();
-
   }
 
   private void createTable() throws SQLException{
@@ -98,8 +94,12 @@ public class MySQL_KitPVP {
     }
   }
 
-  private void connect() throws ClassNotFoundException, SQLException {
+  public void connect() throws ClassNotFoundException, SQLException {
     connection = DriverManager.getConnection(url, username, password);
+  }
+
+  public boolean isConnectionValid() throws SQLException {
+      return connection != null && connection.isValid(5);
   }
 
   //SET THE DEFAULT VALUES FOR EACH STAT HERE
@@ -250,21 +250,6 @@ public class MySQL_KitPVP {
       e.printStackTrace();
       return false;
     }
-  }
-  
-  public void refreshConnection() {
-	new BukkitRunnable(){
-        @Override
-        public void run() {
-        	Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL: REFRESHING CONNECTION");
-            try {
-                connection.isValid(0);
-                Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: REFRESHED");
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }              
-        }
-    }.runTaskTimer(plugin, 20*60*60*7, 20*60*60*7);
   }
   
 }

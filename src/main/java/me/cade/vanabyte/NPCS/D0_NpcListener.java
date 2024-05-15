@@ -80,8 +80,8 @@ public class D0_NpcListener implements Listener {
 				if (fighter.getFighterKitManager().getUnlockedKit(i) > 0) {
 					fighter.getFighterKitManager().giveKitWithID(i);
 				} else {
-					player.sendMessage(ChatColor.RED + "You do not own this kit");
-					player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+					player.sendMessage(ChatColor.RED + "Testing: you have unlocked this kit for free!");
+					player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
 					fighter.getFighterKitManager().setUnlockedKit(i, 1);
 					fighter.getFighterHologramManager().refreshKitHolograms(i);
 				}

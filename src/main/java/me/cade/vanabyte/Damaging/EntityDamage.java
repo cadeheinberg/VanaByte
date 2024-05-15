@@ -63,7 +63,7 @@ public class EntityDamage implements Listener {
 			double damage_amount = 0;
 			if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 				Projectile p = (Projectile) e.getDamager();
-				if(!FighterProjectile.projectileHasMetadata(e.getDamager())){
+				if (!FighterProjectile.projectileHasMetadata(e.getDamager())) {
 					//If the projectile is not from a player using a Fighter kit
 					//then ignore it
 					return;
@@ -87,10 +87,11 @@ public class EntityDamage implements Listener {
 					}
 				}
 			}
-		} else {
-			//(e.getDamager() instanceof Player)
-			killer = (Player) e.getDamager();
+			//dont do the below for non players
+			return;
 		}
+		//players only below
+		killer = (Player) e.getDamager();
 		Fighter fKiller = null;
 		if(Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(W6_GriefSword.class) != null) {
 			((W6_GriefSword) Fighter.get(killer).getFKit().getSpecificSimilarWeaponHolderInHands(W6_GriefSword.class)).doStealHealth();

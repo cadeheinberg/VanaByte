@@ -98,6 +98,7 @@ public class W3_GoblinBow extends WeaponHolder{
         if(this.getRightClickCooldownTicks() > 0){
             player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
         }
+        FighterProjectile.addMetadataToProjectile(arrow);
         if (super.getWeaponAbility().isAbilityActive()) {
             arrow.setFireTicks(1000);
             doArrowBarrage(this.player, arrow, force);

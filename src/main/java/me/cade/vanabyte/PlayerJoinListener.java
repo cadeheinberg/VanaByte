@@ -27,19 +27,25 @@ public class PlayerJoinListener implements Listener {
   
   @EventHandler
   public void onLeave(PlayerQuitEvent e) {
-    Fighter.get(e.getPlayer()).fighterLeftServer();
+    if(Fighter.get(e.getPlayer()) != null){
+      Fighter.get(e.getPlayer()).fighterLeftServer();
+    }
   }
   
   @EventHandler
   public void onRespawn(PlayerRespawnEvent e) {
     e.setRespawnLocation(VanaByte.hubSpawn);
-    Fighter.get(e.getPlayer()).fighterRespawn();
+    if(Fighter.get(e.getPlayer()) != null){
+      Fighter.get(e.getPlayer()).fighterRespawn();
+    }
   }
 
   @EventHandler
   public void onWorldChange(PlayerChangedWorldEvent e){
     if(SafeZone.inHub(e.getPlayer().getWorld())){
-      Fighter.get(e.getPlayer()).fighterChangeWorld();
+      if(Fighter.get(e.getPlayer()) != null){
+        Fighter.get(e.getPlayer()).fighterChangeWorld();
+      }
     }
   }
   

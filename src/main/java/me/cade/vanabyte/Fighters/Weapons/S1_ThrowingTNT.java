@@ -34,7 +34,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 		this.specialDamage = 12 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
 		this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
 		this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
-		this.rightClickCooldownTicks = 5 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
+		this.rightClickCooldownTicks = 180 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
 		this.material = Material.COAL;
 		this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
 				this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),

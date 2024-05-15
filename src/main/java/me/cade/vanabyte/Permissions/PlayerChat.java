@@ -16,13 +16,15 @@ public class PlayerChat implements Listener {
     e.setCancelled(true);
     if(e.getPlayer().isOp()){
       String note = e.getMessage().toString();
-      if(note.substring(0,7).equals("!delete")){
-        e.getPlayer().sendMessage("deleting: " + note.substring(8));
-        if(Bukkit.getServer().getPlayer(note.substring(8)) != null){
-          Fighter.get(Bukkit.getServer().getPlayer(note.substring(8))).deleteMeFromDatabase();
+      if(note.length() > 0 && note.substring(0,1).equals("!")){
+        if(note.substring(0,7).equals("!delete")){
+          e.getPlayer().sendMessage("deleting: " + note.substring(8));
+          if(Bukkit.getServer().getPlayer(note.substring(8)) != null){
+            Fighter.get(Bukkit.getServer().getPlayer(note.substring(8))).deleteMeFromDatabase();
+          }
+          e.getPlayer().sendMessage("delete successful");
+          return;
         }
-        e.getPlayer().sendMessage("delete successful");
-        return;
       }
     }
     tellPlayerMessageToAll(calculatePlayerMessage(e.getPlayer(), e.getMessage()));

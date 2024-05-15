@@ -78,8 +78,12 @@ public class MySQL_Royale {
         }
     }
 
-    private void connect() throws ClassNotFoundException, SQLException {
+    public void connect() throws ClassNotFoundException, SQLException {
         connection = DriverManager.getConnection(url, username, password);
+    }
+
+    public boolean isConnectionValid() throws SQLException {
+        return connection != null && connection.isValid(5);
     }
 
     private void createTable() throws SQLException{

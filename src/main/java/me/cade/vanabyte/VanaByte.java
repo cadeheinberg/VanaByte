@@ -9,6 +9,7 @@ import me.cade.vanabyte.Money.A_CakeManager;
 import me.cade.vanabyte.MySQL.MySQL_KitPVP;
 import me.cade.vanabyte.MySQL.MySQL_Royale;
 import me.cade.vanabyte.MySQL.MySQL_Upgrades;
+import me.cade.vanabyte.MySQL.Polling;
 import me.cade.vanabyte.NPCS.*;
 import me.cade.vanabyte.Permissions.BasicPermissions;
 import me.cade.vanabyte.Permissions.PickingUp;
@@ -40,6 +41,8 @@ public class VanaByte extends JavaPlugin {
 	public static MySQL_Upgrades mySQL_upgrades;
 
 	public static MySQL_Royale mySQL_royale;
+
+	public static Polling poller;
 
 	private static Plugin plugin = null;
 	private static ProtocolManager protocolManager;
@@ -73,6 +76,8 @@ public class VanaByte extends JavaPlugin {
 		mySQL_Hub = new MySQL_KitPVP();
 		mySQL_upgrades = new MySQL_Upgrades();
 		mySQL_royale = new MySQL_Royale();
+		poller = new Polling();
+		poller.refreshConnections();
 	}
 
 	private void registerListeners() {
