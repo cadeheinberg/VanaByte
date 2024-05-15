@@ -104,9 +104,22 @@ public class FighterMYSQLManager {
 
     //If the stat is a -1 it wont upload anything
     protected void uploadFighter() {
-        this.uploadFighter_Hub();
-        this.UploadFighter_Upgrades();
-        this.uploadFighter_Royale();
+        if (VanaByte.mySQL_Hub.playerExists(player)) {
+            this.uploadFighter_Hub();
+        }
+        if (VanaByte.mySQL_upgrades.playerExists(player)) {
+            this.UploadFighter_Upgrades();
+        }
+        if (VanaByte.mySQL_royale.playerExists(player)) {
+            this.uploadFighter_Royale();
+        }
+    }
+
+    protected void deleteMeFromDatabase(){
+        VanaByte.mySQL_Hub.deletePlayerFromTable(this.player);
+        VanaByte.mySQL_royale.deletePlayerFromTable(this.player);
+        VanaByte.mySQL_upgrades.deletePlayerFromTable(this.player);
+        //player.kickPlayer("Your stats have been cleared");
     }
 
     private void uploadFighter_Hub(){

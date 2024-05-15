@@ -145,7 +145,20 @@ public class MySQL_KitPVP {
       e.printStackTrace();
     }
   }
-  
+
+
+  public void deletePlayerFromTable(Player player) {
+    PreparedStatement statement;
+    try {
+      statement = connection
+              .prepareStatement("DELETE FROM " + tableName + " WHERE " + column[0] + " = ?");
+      statement.setString(1, player.getUniqueId().toString());
+      statement.execute();
+      player.sendMessage("You have been cleared from kitpvp stats");
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
   public int getStat(Player player, String stat) {
     int getter = -1;
     PreparedStatement statement;

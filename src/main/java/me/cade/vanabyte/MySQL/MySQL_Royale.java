@@ -99,6 +99,19 @@ public class MySQL_Royale {
         Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MySQL_Royale: TABLE CREATED!");
     }
 
+    public void deletePlayerFromTable(Player player) {
+        PreparedStatement statement;
+        try {
+            statement = connection
+                    .prepareStatement("DELETE FROM " + tableName + " WHERE " + column[0] + " = ?");
+            statement.setString(1, player.getUniqueId().toString());
+            statement.execute();
+            player.sendMessage("You have been cleared from hub stats");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     //SET THE DEFAULT VALUES FOR EACH STAT HERE
     public void addScore(Player player) {
         String insertStatement = "INSERT INTO " + tableName + "(";

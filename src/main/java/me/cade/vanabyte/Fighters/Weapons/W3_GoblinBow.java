@@ -95,7 +95,9 @@ public class W3_GoblinBow extends WeaponHolder{
         if (this.player.getCooldown(this.getMaterial()) > 0) {
             return false;
         }
-        this.player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        if(this.getRightClickCooldownTicks() > 0){
+            player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        }
         if (super.getWeaponAbility().isAbilityActive()) {
             arrow.setFireTicks(1000);
             doArrowBarrage(this.player, arrow, force);

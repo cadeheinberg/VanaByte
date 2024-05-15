@@ -213,6 +213,10 @@ public class Fighter {
 		this.fighterXP = fighterXP;
 	}
 
+	public void deleteMeFromDatabase(){
+		this.fighterMYSQLManager.deleteMeFromDatabase();
+	}
+
 	public void incFighterXP(int amount){
 		this.fighterXP = fighterXP + amount;
 	}

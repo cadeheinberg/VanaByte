@@ -76,7 +76,9 @@ public class W4_IgorsTrident extends WeaponHolder {
         if (player.getCooldown(this.getMaterial()) > 0) {
             return false;
         }
-        player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        if(this.getRightClickCooldownTicks() > 0){
+            player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
+        }
         if (super.getWeaponAbility().isAbilityActive()) {
             trident.setFireTicks(1000);
         }

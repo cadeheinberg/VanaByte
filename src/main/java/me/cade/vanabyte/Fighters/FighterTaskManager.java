@@ -89,9 +89,9 @@ public class FighterTaskManager {
                     return;
                 }
                 Fighter.get((Player) Bukkit.getOfflinePlayer(uuid_p)).fighterMYSQLManager.uploadFighter();
-                ((Player) Bukkit.getOfflinePlayer(uuid_p)).sendMessage("Uploading your stats!");
+                //((Player) Bukkit.getOfflinePlayer(uuid_p)).sendMessage("Uploading your stats to MySQL!");
             }
-        }.runTaskTimer(this.fighter.getPlugin(), 20*60*3, 20*60*3).getTaskId();
+        }.runTaskTimer(this.fighter.getPlugin(), 20*60, 20*60).getTaskId();
     }
 
     public void setGroundPoundTask(int setter){
