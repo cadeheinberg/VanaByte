@@ -3,6 +3,7 @@ package me.cade.vanabyte.NPCS;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.Weapons.W5_SumoStick;
+import me.cade.vanabyte.NPCS.RealEntities.ArmorStand;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
@@ -17,7 +18,7 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class D0_NpcListener implements Listener {
+public class NpcListener implements Listener {
 
 	@EventHandler
 	public void onClick(PlayerInteractEntityEvent e) {
@@ -53,15 +54,14 @@ public class D0_NpcListener implements Listener {
 				//if you are here, you are trying to set upgrades
 				//keep in mind, a really high cooldown upgrade will be 100 - 99999 and turn negative
 				//this will cause errors
-
 //				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 0) + 10);
 //				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 1) + 10);
 //				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 2) + 10);
 //				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 3) + 40);
 //				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 4) + 1);
 //				Fighter.get(e.getPlayer()).getFighterKitManager().setKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5, Fighter.get(e.getPlayer()).getFighterKitManager().getKitUpgradesUsingIDAndOffset(Fighter.get(e.getPlayer()).getKitID(), 5) + 1);
-				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
-				Fighter.get(e.getPlayer()).giveKit();
+//				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
+//				Fighter.get(e.getPlayer()).giveKit();
 				return;
 			}
 			return;
@@ -75,7 +75,7 @@ public class D0_NpcListener implements Listener {
 	
 	public static void handleKitSelection(Player player, int x){
 		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-			if (D_SpawnKitSelectors.getLocationOfSelector(i).getBlockX() == x) {
+			if (ArmorStand.getLocationOfSelector(i).getBlockX() == x) {
 				Fighter fighter = Fighter.fighters.get(player.getUniqueId());
 				if (fighter.getFighterKitManager().getUnlockedKit(i) > 0) {
 					fighter.getFighterKitManager().giveKitWithID(i);

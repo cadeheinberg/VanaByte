@@ -62,8 +62,8 @@ public class VanaByte extends JavaPlugin {
 		startMySQL();
 		myFormat.setGroupingUsed(true);
 		setLocations();
-		D_SpawnAllNPCS.removeAllNpcs();
-		D_SpawnAllNPCS.spawnNPCS();
+		SpawnRealEntities.removeAllNpcs();
+		SpawnRealEntities.spawnNPCS();
 		registerListeners();
 		Borders.startCheckingBorders();
 		A_CakeManager.startCakePackage();
@@ -82,7 +82,7 @@ public class VanaByte extends JavaPlugin {
 
 	private void registerListeners() {
 		PluginManager pm = Bukkit.getServer().getPluginManager();
-		pm.registerEvents(new D0_NpcListener(), this);
+		pm.registerEvents(new NpcListener(), this);
 		pm.registerEvents(new PlayerJoinListener(), this);
 		pm.registerEvents(new FallDamageListener(), this);
 		pm.registerEvents(new KitListener(), this);

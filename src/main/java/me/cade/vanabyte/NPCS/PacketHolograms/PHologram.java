@@ -1,4 +1,4 @@
-package me.cade.vanabyte.NPCS.ProtocolHolograms;
+package me.cade.vanabyte.NPCS.PacketHolograms;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

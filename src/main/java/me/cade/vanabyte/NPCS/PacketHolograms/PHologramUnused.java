@@ -1,14 +1,4 @@
-package me.cade.vanabyte.NPCS.ProtocolHolograms;
-
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.PacketContainer;
-import com.comphenix.protocol.reflect.StructureModifier;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
-import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
+package me.cade.vanabyte.NPCS.PacketHolograms;
 
 public class PHologramUnused {
 

@@ -1,16 +1,16 @@
 package me.cade.vanabyte.NPCS;
 
+import me.cade.vanabyte.NPCS.RealEntities.ArmorStand;
+import me.cade.vanabyte.NPCS.RealEntities.LivingEntity;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
-public class D_SpawnAllNPCS {
+public class SpawnRealEntities {
 
   public static void spawnNPCS() {
-    D_SpawnKitSelectors.spawnKitSelectors();
-    SpawnShowdownSelector.spawn();
-    D_SpawnGameSelectors.spawn();
-    D_SpawnShopSelectors.spawn();
+    ArmorStand.spawnAll();
+    LivingEntity.spawnAll();
   }
   
   public static void removeAllNpcs() {

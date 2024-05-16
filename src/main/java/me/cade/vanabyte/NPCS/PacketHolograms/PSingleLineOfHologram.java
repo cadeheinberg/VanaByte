@@ -1,4 +1,4 @@
-package me.cade.vanabyte.NPCS.ProtocolHolograms;
+package me.cade.vanabyte.NPCS.PacketHolograms;
 
 import com.comphenix.protocol.PacketType;
 import com.comphenix.protocol.ProtocolLibrary;
@@ -12,7 +12,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 

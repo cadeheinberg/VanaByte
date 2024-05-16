@@ -1,25 +1,36 @@
-package me.cade.vanabyte.NPCS;
+package me.cade.vanabyte.NPCS.RealEntities;
 
+import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.*;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-public class D1_ArmorStand {
+public class ArmorStand {
 
   private String name;
   private Location location;
-  private ArmorStand stand;
+  private org.bukkit.entity.ArmorStand stand;
+  private static ArmorStand[] kits;
+  private static FighterKit[] fKits = FighterKitManager.getFkitsNoPlayer();
+  private static Location[] locations = {
+          new Location(VanaByte.hub, -1043.5, 195.3, -111.5, 135, 0),
+          new Location(VanaByte.hub, -1045.5, 195.3, -108.5, 135, 0),
+          new Location(VanaByte.hub, -1048.5, 195.3, -106.5, 135, 0),
+          new Location(VanaByte.hub, -1052.5, 195.3, -105.5, 180, 0),
+          new Location(VanaByte.hub, -1056.5, 195.3, -106.5, -135, 0),
+          new Location(VanaByte.hub, -1059.5, 195.3, -108.5, -135, 0),
+          new Location(VanaByte.hub, -1061.5, 195.3, -111.5, -135, 0)
+  };
   
-  public D1_ArmorStand(String name, Location location, float yaw, boolean visible, boolean marker, boolean gravity) {
+  public ArmorStand(String name, Location location, float yaw, boolean visible, boolean marker, boolean gravity) {
     this.name = name;
     this.location = location;
     this.location.setYaw(yaw);
-    stand = (ArmorStand) VanaByte.hub.spawnEntity(location, EntityType.ARMOR_STAND);
+    stand = (org.bukkit.entity.ArmorStand) VanaByte.hub.spawnEntity(location, EntityType.ARMOR_STAND);
     stand.setArms(true);
     stand.setAI(false);
     stand.setVisible(visible);
@@ -34,7 +45,7 @@ public class D1_ArmorStand {
     return this.name;
   }
   
-  public ArmorStand getStand() {
+  public org.bukkit.entity.ArmorStand getStand() {
     return stand;
   }
   
@@ -107,6 +118,25 @@ public class D1_ArmorStand {
     stand.getEquipment().setChestplate(lchest);
     stand.getEquipment().setLeggings(lleggs);
     stand.getEquipment().setBoots(lboots);
+  }
+
+  public static void spawnAll() {
+    ChatColor y = ChatColor.YELLOW;
+    ChatColor b = ChatColor.BOLD;
+    String p = y + "" + b + "";
+    kits = new ArmorStand[Fighter.getNumberOfKits()];
+    for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
+      kits[i] = new ArmorStand(p + fKits[i].getKitName(), locations[i], locations[i].getYaw(), false, false, true);
+      kits[i].equipColoredArmor(fKits[i].getArmorColor());
+      kits[i].getStand().setItemInHand(fKits[i].getWeaponHolders().get(0).getWeapon().getWeaponItem());
+    }
+    spawnBattleRoyale();
+  }
+  public static void spawnBattleRoyale() {
+    new ArmorStand(ChatColor.YELLOW+ "" + ChatColor.BOLD + "Click to Join", new Location(VanaByte.hub, -1052.5, 193.55, -112.5, 180, 0), 180, false, false, false);
+  }
+  public static Location getLocationOfSelector(int kitID) {
+    return locations[kitID];
   }
   
 }
