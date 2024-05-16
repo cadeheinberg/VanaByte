@@ -2,7 +2,7 @@ package me.cade.vanabyte.Money;
 
 import org.bukkit.Material;
 
-public class A_CakeManager {
+public class CakeManager {
   
   public static final String currencyNameSingular = "Cake";
   public static final String currencyNamePlural = "Cakes";

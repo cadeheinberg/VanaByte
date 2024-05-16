@@ -1,5 +1,6 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.FighterWeapons.FighterAbilityManager;
 import me.cade.vanabyte.NPCS.PacketHologramsManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
@@ -23,7 +24,7 @@ public class Fighter {
 	protected FighterMYSQLManager fighterMYSQLManager = null;
 	protected FighterKitManager fighterKitManager = null;
 	protected FighterScoreBoardManager fighterScoreBoardManager = null;
-	protected WeaponAbilityManager weaponAbilityManager = null;
+	protected FighterAbilityManager fighterAbilityManager = null;
 
 	public Fighter(Player player) {
 		this.player = player;
@@ -33,7 +34,7 @@ public class Fighter {
 		this.fighterTaskManager = new FighterTaskManager(this.player, this);
 		this.fighterKitManager = new FighterKitManager(this.player, this);
 		this.fighterMYSQLManager = new FighterMYSQLManager(this.player, this);
-		this.weaponAbilityManager = new WeaponAbilityManager(this);
+		this.fighterAbilityManager = new FighterAbilityManager(this);
 		this.fighterScoreBoardManager = new FighterScoreBoardManager(player);
 		this.fighterJoined();
 	}
@@ -45,11 +46,11 @@ public class Fighter {
 		fighterHologramManager.fighterJoined();
 		//Need to do this after everything has been setup
 		fighterKitManager.giveKit();
-		weaponAbilityManager.fighterJoined();
+		fighterAbilityManager.fighterJoined();
 	}
 
 	public void fighterRespawn() {
-		weaponAbilityManager.fighterRespawned();
+		fighterAbilityManager.fighterRespawned();
 		fighterKitManager.fighterRespawned();
 		fighterTaskManager.fighterRespawned();
 		fighterHologramManager.fighterRespawned();
@@ -62,13 +63,13 @@ public class Fighter {
 		fighterMYSQLManager.fighterLeftServer();
 		fighterTaskManager.fighterLeftServer();
 		fighterKitManager.fighterLeftServer();
-		weaponAbilityManager.fighterLeftServer();
+		fighterAbilityManager.fighterLeftServer();
 		fighterHologramManager.fighterLeftServer();
 	}
 
 	public void fighterDeath() {
 		this.incDeaths();
-		weaponAbilityManager.fighterDied();
+		fighterAbilityManager.fighterDied();
 		fighterKitManager.fighterDied();
 		fighterTaskManager.fighterDied();
 		fighterHologramManager.fighterDied();
@@ -76,7 +77,7 @@ public class Fighter {
 	}
 
 	public void fighterChangeWorld(){
-		weaponAbilityManager.fighterChangedWorld();
+		fighterAbilityManager.fighterChangedWorld();
 		fighterKitManager.fighterChangedWorld();
 		fighterTaskManager.fighterChangedWorld();
 		fighterHologramManager.fighterChangedWorld();
@@ -198,8 +199,8 @@ public class Fighter {
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
 	public PacketHologramsManager getFighterHologramManager() {return fighterHologramManager;}
 
-	public WeaponAbilityManager getWeaponAbilityManager(){
-		return weaponAbilityManager;
+	public FighterAbilityManager getWeaponAbilityManager(){
+		return fighterAbilityManager;
 	}
 
 	public FighterTaskManager getFighterTaskManager() {

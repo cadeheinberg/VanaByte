@@ -1,7 +1,7 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.FighterKits.*;
-import me.cade.vanabyte.Fighters.Weapons.*;
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
@@ -116,7 +116,7 @@ public class FighterKitManager {
         player.playSound(player.getLocation(), Sound.ENTITY_CHICKEN_EGG, 8, 1);
         this.resetAllFighterItemCooldowns();
         this.applyNightVision();
-        fighter.weaponAbilityManager.fighterGotNewKit();
+        fighter.fighterAbilityManager.fighterGotNewKit();
     }
 
     private void clearFighterKitItems(){

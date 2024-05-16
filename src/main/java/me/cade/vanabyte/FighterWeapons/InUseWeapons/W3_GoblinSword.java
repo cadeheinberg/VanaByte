@@ -1,18 +1,17 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.Vector;
 
-public class W1_BeserkerAxe extends WeaponHolder {
-    final String weaponDrop = "Speed/Jump/Dig Boost";
-    final String weaponRightClick = "Super Leap";
-    final ChatColor weaponNameColor = ChatColor.LIGHT_PURPLE;
-    final String weaponName = weaponNameColor + "Beserker Axe";
+public class W3_GoblinSword extends WeaponHolder {
+
+    final String weaponDrop = "None";
+    final String weaponRightClick = "None";
+    final ChatColor weaponNameColor = ChatColor.GREEN;
+    final String weaponName = weaponNameColor + "Goblin Sword";
     private Material material = null;
     private int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks = -1;
     private double specialDamage, meleeDamage, projectileDamage = -1;
@@ -20,70 +19,52 @@ public class W1_BeserkerAxe extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
-    public W1_BeserkerAxe(Fighter fighter) {
+    public W3_GoblinSword(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
         this.fighterKitManager = this.fighter.getFighterKitManager();
         this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
         this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
-        this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
-        this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
-        this.rightClickCooldownTicks = 80 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
-        this.material = Material.IRON_AXE;
+        this.specialDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.abilityDurationTicks = 0 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
+        this.abilityRechargeTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
+        this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
+        this.material = Material.WOODEN_SWORD;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
+        this.weapon.applyWeaponEnchantment(Enchantment.FIRE_ASPECT, 1);
     }
-    public W1_BeserkerAxe(){
+    public W3_GoblinSword(){
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;
-        this.specialDamage = 7;
-        this.abilityDurationTicks = 200;
-        this.abilityRechargeTicks = 50;
-        this.rightClickCooldownTicks = 80;
-        this.material = Material.IRON_AXE;
+        this.specialDamage = 0;
+        this.abilityDurationTicks = 0;
+        this.abilityRechargeTicks = 0;
+        this.rightClickCooldownTicks = 0;
+        this.material = Material.WOODEN_SWORD;
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
-    }
-
-    private void doBoosterJump() {
-        this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
-        Vector currentDirection = this.player.getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(1.7, 1.7, 1.7));
-        this.player.setVelocity(currentDirection);
+        this.weapon.applyWeaponEnchantment(Enchantment.FIRE_ASPECT, 1);
     }
     @Override
     public boolean doRightClick() {
-        if (super.doRightClick()) {
-            this.doBoosterJump();
-            return true;
-        }
         return false;
     }
     @Override
     public boolean doDrop() {
-        if (!super.doDrop()){
-            return false;
-        }
-        this.activateSpecial();
-        return true;
+        return false;
     }
     @Override
     public void activateSpecial() {
-        super.activateSpecial();
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, this.abilityDurationTicks, 0));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, this.abilityDurationTicks, 3));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, this.abilityDurationTicks, 0));
-        this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+        //pass
     }
-
     @Override
     public void deActivateSpecial() {
-        super.deActivateSpecial();
+        //pass
     }
 
     @Override
@@ -141,4 +122,5 @@ public class W1_BeserkerAxe extends WeaponHolder {
 
     @Override
     public ChatColor getWeaponNameColor(){return weaponNameColor;}
+
 }

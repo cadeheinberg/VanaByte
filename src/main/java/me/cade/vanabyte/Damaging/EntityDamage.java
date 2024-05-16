@@ -1,7 +1,7 @@
 package me.cade.vanabyte.Damaging;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.*;
-import me.cade.vanabyte.Fighters.Weapons.*;
 import me.cade.vanabyte.NPCS.NpcListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;

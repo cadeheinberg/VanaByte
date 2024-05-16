@@ -1,8 +1,8 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.WeaponAbilityManager;
 import me.cade.vanabyte.VanaByte;
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -17,7 +17,7 @@ public class WeaponAbility {
     private Fighter fighter = null;
     private Player player = null;
     private WeaponHolder weaponHolder = null;
-    private WeaponAbilityManager weaponAbilityManager = null;
+    private FighterAbilityManager fighterAbilityManager = null;
     private boolean abilityActive = false;
     private boolean abilityRecharged = true;
 
@@ -27,7 +27,7 @@ public class WeaponAbility {
         this.fighter = fighter;
         this.player = fighter.getPlayer();
         this.weaponHolder = weaponHolder;
-        this.weaponAbilityManager = fighter.getWeaponAbilityManager();
+        this.fighterAbilityManager = fighter.getWeaponAbilityManager();
         this.weaponAbility = this;
     }
     public void resetSpecialAbility(){
@@ -100,7 +100,7 @@ public class WeaponAbility {
             }
         }
         this.abilityActive = fighterAbility;
-        weaponAbilityManager.updateAbilityParticles(weaponHolder);
+        fighterAbilityManager.updateAbilityParticles(weaponHolder);
     }
 
     public void setAbilityRecharged(boolean fighterRecharged) {
@@ -113,7 +113,7 @@ public class WeaponAbility {
             }
         }
         this.abilityRecharged = fighterRecharged;
-        weaponAbilityManager.updateAbilityParticles(weaponHolder);
+        fighterAbilityManager.updateAbilityParticles(weaponHolder);
     }
 
 

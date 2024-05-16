@@ -1,11 +1,9 @@
 package me.cade.vanabyte;
 
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.ProtocolManager;
 import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Damaging.*;
-import me.cade.vanabyte.Money.A_CakeManager;
+import me.cade.vanabyte.Money.CakeManager;
 import me.cade.vanabyte.MySQL.MySQL_KitPVP;
 import me.cade.vanabyte.MySQL.MySQL_Royale;
 import me.cade.vanabyte.MySQL.MySQL_Upgrades;
@@ -45,7 +43,6 @@ public class VanaByte extends JavaPlugin {
 	public static Polling poller;
 
 	private static Plugin plugin = null;
-	private static ProtocolManager protocolManager;
 	private static PlayerParticlesAPI ppAPI;
 	
 	private static NumberFormat myFormat = NumberFormat.getInstance();
@@ -53,7 +50,6 @@ public class VanaByte extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		plugin = VanaByte.getPlugin(VanaByte.class);
-		protocolManager = ProtocolLibrary.getProtocolManager();
         if (Bukkit.getPluginManager().isPluginEnabled("PlayerParticles")) {
             ppAPI = PlayerParticlesAPI.getInstance();
         }
@@ -66,7 +62,7 @@ public class VanaByte extends JavaPlugin {
 		SpawnRealEntities.spawnNPCS();
 		registerListeners();
 		Borders.startCheckingBorders();
-		A_CakeManager.startCakePackage();
+		CakeManager.startCakePackage();
 		//getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		// do last
 		addPlayersToFighters();
@@ -102,7 +98,7 @@ public class VanaByte extends JavaPlugin {
 		mySQL_Hub.closeConnection();
 		mySQL_upgrades.closeConnection();
 		mySQL_royale.closeConnection();
-		A_CakeManager.stopCakePackage();
+		CakeManager.stopCakePackage();
 		Borders.stopCheckingBorders();
 	}
 
@@ -207,9 +203,9 @@ public class VanaByte extends JavaPlugin {
 		return plugin;
 	}
 
-	public static ProtocolManager getProtocolManager() {
-		return protocolManager;
-	}
+//	public static ProtocolManager getProtocolManager() {
+//		return protocolManager;
+//	}
 
 	public static PlayerParticlesAPI getPpAPI() {
 		return ppAPI;

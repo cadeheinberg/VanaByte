@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.W4_IgorsTrident;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W4_IgorsTrident;
 import org.bukkit.*;
 
 public class F4 extends FighterKit {

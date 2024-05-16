@@ -1,6 +1,6 @@
-package me.cade.vanabyte.Fighters.Weapons.Unused;
+package me.cade.vanabyte.FighterWeapons.UnusedWeapons;
 
-import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.entity.Player;

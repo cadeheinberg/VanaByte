@@ -1,7 +1,6 @@
 package me.cade.vanabyte.Fighters;
-import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
 import org.bukkit.*;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 

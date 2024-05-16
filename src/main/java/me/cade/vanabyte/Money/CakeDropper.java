@@ -70,7 +70,7 @@ public class CakeDropper {
           if (chunkEntities.get(i) instanceof LivingEntity) {
             continue;
           }
-          if (chunkEntities.get(i).getName().equals(A_CakeManager.currencyNameSingular)) {
+          if (chunkEntities.get(i).getName().equals(CakeManager.currencyNameSingular)) {
             count++;
           }
         }
@@ -92,7 +92,7 @@ public class CakeDropper {
     
     //create itemstack
     //A_CakeManager.cakeMaterial is set to Material.CAKE
-    ItemStack cakeDrop = new ItemStack(A_CakeManager.cakeMaterial, 1);
+    ItemStack cakeDrop = new ItemStack(CakeManager.cakeMaterial, 1);
     
     //prevent item stacking
     ArrayList<String> cakeLore = new ArrayList<String>();
@@ -101,7 +101,7 @@ public class CakeDropper {
     //set the proper name/lore for the dropped item
     //A_CakeManager.currencyNameSingular is set to "Cake"
     ItemMeta meta = cakeDrop.getItemMeta();
-    meta.setDisplayName(A_CakeManager.currencyNameSingular);
+    meta.setDisplayName(CakeManager.currencyNameSingular);
     meta.setLore(cakeLore);
     cakeDrop.setItemMeta(meta);
     

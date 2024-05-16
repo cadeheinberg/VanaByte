@@ -1,8 +1,10 @@
 package me.cade.vanabyte.Fighters.FighterKits;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W3_GoblinArrow;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W3_GoblinBow;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W3_GoblinSword;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 

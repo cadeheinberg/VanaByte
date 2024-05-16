@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -212,7 +212,7 @@ public class Weapon {
     return weaponItem;
   }
 
-    public void resetCooldown(Player player) {
+  public void resetCooldown(Player player) {
         player.setCooldown(this.weaponMaterial, 0);
     }
 

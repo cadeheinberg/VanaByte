@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.styles.ParticleStyle;

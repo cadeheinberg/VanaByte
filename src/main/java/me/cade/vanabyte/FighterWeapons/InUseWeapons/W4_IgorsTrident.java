@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.Fighters.Fighter;

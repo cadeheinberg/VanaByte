@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.W6_GriefSword;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W6_GriefSword;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 

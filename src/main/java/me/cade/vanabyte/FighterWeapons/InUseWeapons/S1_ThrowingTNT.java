@@ -1,19 +1,22 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
+import org.bukkit.entity.TNTPrimed;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class S0_Parachute extends WeaponHolder {
-	final String weaponDrop = "Open Parachute";
-	final String weaponRightClick = "Open Parachute";
+public class S1_ThrowingTNT extends WeaponHolder {
+	final String weaponDrop = "Throw TNT";
+	final String weaponRightClick = "Throw TNT";
 	final ChatColor weaponNameColor = ChatColor.YELLOW;
-	final String weaponName = weaponNameColor + "Parachute";
+	final String weaponName = weaponNameColor + "Throwing TNT";
 	private Material material = null;
 	private int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks = -1;
 	private double specialDamage, meleeDamage, projectileDamage = -1;
@@ -21,8 +24,7 @@ public class S0_Parachute extends WeaponHolder {
 	private Fighter fighter = null;
 	private Player player = null;
 	private Weapon weapon = null;
-	private Chicken chicken = null;
-	public S0_Parachute(Fighter fighter) {
+	public S1_ThrowingTNT(Fighter fighter) {
 		super(fighter);
 		this.fighter = fighter;
 		this.player = this.fighter.getPlayer();
@@ -32,13 +34,13 @@ public class S0_Parachute extends WeaponHolder {
 		this.specialDamage = 12 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
 		this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
 		this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
-		this.rightClickCooldownTicks = 5 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
-		this.material = Material.PHANTOM_MEMBRANE;
+		this.rightClickCooldownTicks = 180 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
+		this.material = Material.COAL;
 		this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
 				this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
 				this.getAbilityRechargeTicks());
 	}
-	public S0_Parachute(){
+	public S1_ThrowingTNT(){
 		super();
 		this.meleeDamage = 6;
 		this.projectileDamage = 0;
@@ -46,35 +48,24 @@ public class S0_Parachute extends WeaponHolder {
 		this.abilityDurationTicks = 200;
 		this.abilityRechargeTicks = 50;
 		this.rightClickCooldownTicks = 0;
-		this.material = Material.PHANTOM_MEMBRANE;
+		this.material = Material.IRON_SWORD;
 		this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
 				this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
 				this.getAbilityRechargeTicks());
 	}
-
-	@SuppressWarnings("deprecation")
 	@Override
 	public boolean doRightClick() {
-		if (player.isOnGround()) {
-			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+		if(!super.doRightClick()) {
 			return false;
 		}
-		if (this.fighter.getFighterTaskManager().getParachuteTask() != 0) {
-			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-			return false;
-		}
-		if(this.chicken != null){
-			this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-			return false;
-		}
-		if(!super.doRightClick()){
-			return false;
-		}
-		this.doParachute(player);
+		this.doThrowingTNT();
 		return true;
 	}
 	@Override
 	public boolean doDrop() {
+		if(!super.doDrop()){
+			return false;
+		}
 		return this.doRightClick();
 	}
 	@Override
@@ -85,45 +76,16 @@ public class S0_Parachute extends WeaponHolder {
 	public void deActivateSpecial() {
 		super.deActivateSpecial();
 	}
-
-	@SuppressWarnings("deprecation")
-	private void doParachute(Player player) {
-		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 8, 1);
-		Chicken chicken = (Chicken) player.getWorld().spawnEntity(player.getLocation(), EntityType.CHICKEN);
-		chicken.addPassenger(player);
-		chicken.setMetadata("parachute", new FixedMetadataValue(VanaByte.getInstance(), true));
-		this.chicken = chicken;
-		doGliding(chicken, player);
-	}
-
-	private void doGliding(Chicken chicken, Player player) {
-		this.fighter.getFighterTaskManager().setParachuteTask(new BukkitRunnable() {
-			@Override
-			public void run() {
-//				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Parachute Task Running");
-				if (chicken.isOnGround()) {
-					chicken.eject();
-					getOff();
-					return;
-				}
-				Location loc = player.getEyeLocation();
-				if (loc.getPitch() < 40) {
-					loc.setPitch(40);
-				} else if (loc.getPitch() >= 75) {
-					loc.setPitch(75);
-				}
-				Vector vector = loc.getDirection();
-				chicken.setVelocity(vector.multiply(0.6));
-			}
-		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId());
-	}
-
-	public void getOff() {
-		this.fighter.getFighterTaskManager().cancelParachuteTask();
-		if(chicken != null) {
-			chicken.remove();
-			this.chicken = null;
-		}
+	private void doThrowingTNT() {
+		Entity tnt = player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.PRIMED_TNT);
+		TNTPrimed fuse = (TNTPrimed) tnt;
+		tnt.setCustomName(this.player.getName());
+		tnt.setCustomNameVisible(false);
+		tnt.setMetadata("thrower", new FixedMetadataValue(VanaByte.getInstance(), this.player.getName()));
+		fuse.setFuseTicks(15);
+		Vector currentDirection4 = player.getLocation().getDirection().normalize();
+		currentDirection4 = currentDirection4.multiply(new Vector(1, 1, 1));
+		tnt.setVelocity(currentDirection4);
 	}
 	@Override
 	public String getWeaponDrop() {

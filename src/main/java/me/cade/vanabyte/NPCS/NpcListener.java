@@ -2,7 +2,7 @@ package me.cade.vanabyte.NPCS;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.Weapons.W5_SumoStick;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
 import me.cade.vanabyte.NPCS.RealEntities.ArmorStand;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;

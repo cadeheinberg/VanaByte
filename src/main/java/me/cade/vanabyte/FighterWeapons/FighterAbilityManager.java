@@ -1,52 +1,53 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.FighterWeapons;
 
 import dev.esophose.playerparticles.particles.ParticleEffect;
 import dev.esophose.playerparticles.particles.data.OrdinaryColor;
 import dev.esophose.playerparticles.styles.ParticleStyle;
-import me.cade.vanabyte.Fighters.Weapons.W6_GriefSword;
-import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W6_GriefSword;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
+import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.entity.Player;
 
-public class WeaponAbilityManager {
+public class FighterAbilityManager {
 
     public enum FighterParticlesEnum {NONE, RECHARGED, ACTIVATED}
 
     private Player player = null;
     private Fighter fighter = null;
 
-    public WeaponAbilityManager(Fighter fighter) {
+    public FighterAbilityManager(Fighter fighter) {
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
     }
 
-    protected void fighterJoined() {
+    public void fighterJoined() {
         this.clearFighterParticles();
         this.resetAllWeaponAbilities();
         this.setAbilityParticles(FighterParticlesEnum.NONE, java.awt.Color.WHITE);
     }
 
-    protected void fighterDied() {
+    public void fighterDied() {
 
     }
 
-    protected void fighterLeftServer() {
+    public void fighterLeftServer() {
 
     }
 
-    protected void fighterChangedWorld() {
+    public void fighterChangedWorld() {
         this.clearFighterParticles();
         this.resetAllWeaponAbilities();
         this.setAbilityParticles(FighterParticlesEnum.NONE, java.awt.Color.WHITE);
     }
 
-    protected void fighterRespawned() {
+    public void fighterRespawned() {
         this.clearFighterParticles();
         this.resetAllWeaponAbilities();
         this.setAbilityParticles(FighterParticlesEnum.NONE, java.awt.Color.WHITE);
     }
 
-    protected void fighterGotNewKit() {
+    public void fighterGotNewKit() {
         this.clearFighterParticles();
         this.resetAllWeaponAbilities();
         this.setAbilityParticles(FighterParticlesEnum.NONE, java.awt.Color.WHITE);
@@ -89,7 +90,7 @@ public class WeaponAbilityManager {
         return null;
     }
 
-    private void setAbilityParticles(FighterParticlesEnum fp, java.awt.Color color) {
+    public void setAbilityParticles(FighterParticlesEnum fp, java.awt.Color color) {
         if (VanaByte.getPpAPI() == null) {
             return;
         }
@@ -135,62 +136,5 @@ public class WeaponAbilityManager {
     }
 
 }
-//    public static void makeEnchanted(Player player) {
-//
-//        ItemStack helmet = player.getEquipment().getHelmet();
-//        ItemStack chest = player.getEquipment().getChestplate();
-//        ItemStack leggings = player.getEquipment().getLeggings();
-//        ItemStack boots = player.getEquipment().getBoots();
-//
-//        if(helmet != null){
-//            helmet.addEnchantment(Enchantment.DURABILITY, 1);
-//        }
-//        if(chest != null){
-//            chest.addEnchantment(Enchantment.DURABILITY, 1);
-//        }
-//        if(leggings != null){
-//            leggings.addEnchantment(Enchantment.DURABILITY, 1);
-//        }
-//        if(boots != null){
-//            boots.addEnchantment(Enchantment.DURABILITY, 1);
-//        }
-//
-//        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-//            if(helmet != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.HEAD, helmet);
-//            }
-//            if(chest != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.CHEST, chest);
-//            }
-//            if(leggings != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.LEGS, leggings);
-//            }
-//            if(boots != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.FEET,  boots);
-//            }
-//        }
-//    }
-//
-//    public static void removeEnchanted(Player player) {
-//        ItemStack helmet = player.getEquipment().getHelmet();
-//        ItemStack chest = player.getEquipment().getChestplate();
-//        ItemStack leggings = player.getEquipment().getLeggings();
-//        ItemStack boots = player.getEquipment().getBoots();
-//
-//        for (Player p : Bukkit.getServer().getOnlinePlayers()) {
-//            if(helmet != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.HEAD, helmet);
-//            }
-//            if(chest != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.CHEST, chest);
-//            }
-//            if(leggings != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.LEGS, leggings);
-//            }
-//            if(boots != null){
-//                p.sendEquipmentChange(player, EquipmentSlot.FEET,  boots);
-//            }
-//        }
-//    }
 
 

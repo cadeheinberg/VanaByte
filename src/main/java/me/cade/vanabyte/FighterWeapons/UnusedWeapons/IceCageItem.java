@@ -1,12 +1,4 @@
-package me.cade.vanabyte.Fighters.Weapons.Unused;
-
-import me.cade.vanabyte.VanaByte;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.Vector;
+package me.cade.vanabyte.FighterWeapons.UnusedWeapons;
 
 public class IceCageItem {
 

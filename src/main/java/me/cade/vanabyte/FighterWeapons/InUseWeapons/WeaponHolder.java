@@ -1,5 +1,6 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
+import me.cade.vanabyte.FighterWeapons.WeaponAbility;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.FighterKit;

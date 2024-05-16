@@ -1,6 +1,6 @@
 package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Money.A_CakeManager;
+import me.cade.vanabyte.Money.CakeManager;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -40,8 +40,8 @@ public class FighterScoreBoardManager {
     Score b = objective.getScore("");
     b.setScore(10);
 
-    cookies = board.registerNewTeam(A_CakeManager.currencyNamePlural);
-    cookies.setPrefix(ChatColor.AQUA + A_CakeManager.currencyNamePlural + ": ");
+    cookies = board.registerNewTeam(CakeManager.currencyNamePlural);
+    cookies.setPrefix(ChatColor.AQUA + CakeManager.currencyNamePlural + ": ");
     cookies.setSuffix(ChatColor.WHITE + "" + fighter.getCakes());
     cookies.addEntry(ChatColor.AQUA + "");
     objective.getScore(ChatColor.AQUA + "").setScore(9);    

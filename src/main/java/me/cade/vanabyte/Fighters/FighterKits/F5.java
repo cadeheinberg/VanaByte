@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.W5_SumoStick;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
 import org.bukkit.*;
 
 public class F5 extends FighterKit {

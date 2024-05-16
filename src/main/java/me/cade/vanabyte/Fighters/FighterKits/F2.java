@@ -1,8 +1,9 @@
 package me.cade.vanabyte.Fighters.FighterKits;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.S1_ThrowingTNT;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W2_ShottyShotgun;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.*;
 import org.bukkit.*;
 
 public class F2 extends FighterKit {

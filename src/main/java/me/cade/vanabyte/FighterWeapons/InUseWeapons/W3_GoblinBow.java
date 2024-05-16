@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters.Weapons;
+package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
@@ -12,7 +12,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-public class W3_GoblinBow extends WeaponHolder{
+public class W3_GoblinBow extends WeaponHolder {
 
     final String weaponDrop = "Barrage of Poison";
     final String weaponRightClick = "Shoot Bow";

@@ -10,7 +10,7 @@ public class CakePickUp {
 
   public static void pickUpCake(Player player) {
     Fighter fighter = Fighter.get(player);
-    fighter.incCakesByAmount(A_CakeManager.cakeMoneyWorth);
+    fighter.incCakesByAmount(CakeManager.cakeMoneyWorth);
     //Increase experience here
     // change player cooldown recharge multiplier
     player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 8, 1);

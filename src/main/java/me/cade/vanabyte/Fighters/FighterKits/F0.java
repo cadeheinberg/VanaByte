@@ -2,8 +2,8 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.S0_Parachute;
-import me.cade.vanabyte.Fighters.Weapons.W0_AirbenderSword;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.S0_Parachute;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W0_AirbenderSword;
 import org.bukkit.*;
 
 public class F0 extends FighterKit {

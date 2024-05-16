@@ -1,7 +1,7 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
-import me.cade.vanabyte.Fighters.Weapons.*;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;

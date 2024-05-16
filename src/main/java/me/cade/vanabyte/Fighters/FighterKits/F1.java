@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.FighterKits;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.Fighters.Weapons.W1_BeserkerAxe;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W1_BeserkerAxe;
 import org.bukkit.ChatColor;
 import org.bukkit.Color;
 
