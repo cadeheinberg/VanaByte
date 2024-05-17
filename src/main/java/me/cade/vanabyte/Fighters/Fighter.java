@@ -148,6 +148,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateDeaths();
 		fighterScoreBoardManager.updateRatio();
 		fighterScoreBoardManager.updateKillstreak();
+		fighterHologramManager.refreshWelcomeHologram();
 	}
 	public void incDeaths() {
 		this.deaths++;

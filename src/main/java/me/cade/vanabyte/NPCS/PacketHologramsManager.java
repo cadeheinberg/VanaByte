@@ -62,7 +62,7 @@ public class PacketHologramsManager {
             welcomeHologram.setLine(2,"You have " + fighter.getDeaths() + " deaths :(");
             welcomeHologram.showHologramToPlayer(player);
         }else{
-            welcomeHologram = new MyHologram("welcome_" + player.getUniqueId(), VanaByte.hubSpawn.clone().add(0 , 0, 0), ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome " + player.getName());
+            welcomeHologram = new MyHologram("welcome_" + player.getUniqueId(), VanaByte.hubSpawn.clone().add(0 , 1.5, 0), ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome " + player.getName());
             welcomeHologram.addLine("You have " + fighter.getKills() + " kills!!!");
             welcomeHologram.addLine("You have " + fighter.getDeaths() + " deaths :(");
             welcomeHologram.showHologramToPlayer(player);
@@ -83,7 +83,7 @@ public class PacketHologramsManager {
             kitHolograms[kitID].setLine(2, rc_special);
             kitHolograms[kitID].showHologramToPlayer(this.player);
         }else{
-            kitHolograms[kitID] = new MyHologram("kit0" + kitID + "_" + player.getUniqueId(), ArmorStand.getLocationOfSelector(kitID).clone().add(0, .50, 0), locked);
+            kitHolograms[kitID] = new MyHologram("kit0" + kitID + "_" + player.getUniqueId(), ArmorStand.getLocationOfSelector(kitID).clone().add(0, 2.50, 0), locked);
             kitHolograms[kitID].addLine(q_special);
             kitHolograms[kitID].addLine(rc_special);
             kitHolograms[kitID].showHologramToPlayer(this.player);

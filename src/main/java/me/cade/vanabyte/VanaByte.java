@@ -78,7 +78,7 @@ public class VanaByte extends JavaPlugin {
 
 	private void registerListeners() {
 		PluginManager pm = Bukkit.getServer().getPluginManager();
-		pm.registerEvents(new NpcListener(), this);
+		pm.registerEvents(new NPCListener(), this);
 		pm.registerEvents(new PlayerJoinListener(), this);
 		pm.registerEvents(new FallDamageListener(), this);
 		pm.registerEvents(new KitListener(), this);

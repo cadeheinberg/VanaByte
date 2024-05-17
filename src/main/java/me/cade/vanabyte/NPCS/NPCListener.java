@@ -18,7 +18,7 @@ import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
-public class NpcListener implements Listener {
+public class NPCListener implements Listener {
 
 	@EventHandler
 	public void onClick(PlayerInteractEntityEvent e) {
@@ -80,8 +80,8 @@ public class NpcListener implements Listener {
 				if (fighter.getFighterKitManager().getUnlockedKit(i) > 0) {
 					fighter.getFighterKitManager().giveKitWithID(i);
 				} else {
-					player.sendMessage(ChatColor.RED + "Testing: you have unlocked this kit for free!");
-					player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
+					player.sendMessage(ChatColor.GREEN + "Server in beta, you have unlocked this kit for free!");
+					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 					fighter.getFighterKitManager().setUnlockedKit(i, 1);
 					fighter.getFighterHologramManager().refreshKitHolograms(i);
 				}

@@ -58,11 +58,15 @@ public class MyHologramLine {
 
         // Create the armor stand
         ArmorStand armorStand = new ArmorStand(EntityType.ARMOR_STAND, worldServer);
+        armorStand.setUUID(this.entityUUid);
+        armorStand.setId(this.entityId);
         armorStand.setPos(location.getX(), location.getY(), location.getZ());
         armorStand.setCustomName(Component.literal(displayText));
         armorStand.setCustomNameVisible(true);
         armorStand.setInvisible(true);
         armorStand.setNoGravity(true);
+        armorStand.setMarker(true);
+        armorStand.setInvulnerable(true);
 
         SynchedEntityData dataWatcher = armorStand.getEntityData();
         dataWatcher.set(new EntityDataAccessor<>(0, EntityDataSerializers.BYTE), (byte) 0x20); // invisible

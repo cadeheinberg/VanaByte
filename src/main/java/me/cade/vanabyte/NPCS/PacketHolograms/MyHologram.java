@@ -8,8 +8,6 @@ import java.util.Map;
 
 public class MyHologram {
 
-    //String - key to retrieve PHologram object
-    //PHologram - the object holding hologram details
     private static final Map<String, MyHologram> hologramMap = new HashMap<>();
 
     private Location location;

@@ -2,7 +2,7 @@ package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.*;
-import me.cade.vanabyte.NPCS.NpcListener;
+import me.cade.vanabyte.NPCS.NPCListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;
@@ -51,7 +51,7 @@ public class EntityDamage implements Listener {
 					return;
 				}
 				int x = e.getEntity().getLocation().getBlockX();
-				NpcListener.handleKitSelection((Player) e.getDamager(), x);
+				NPCListener.handleKitSelection((Player) e.getDamager(), x);
 			}
 			return;
 		}
