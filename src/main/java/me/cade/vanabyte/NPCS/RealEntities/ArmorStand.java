@@ -9,6 +9,8 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
+import java.lang.annotation.ElementType;
+
 public class ArmorStand {
 
   private String name;

@@ -2,7 +2,7 @@ name: VanaByte
 version: '${project.version}'
 main: me.cade.vanabyte.VanaByte
 api-version: 1.19
-depend: [ProtocolLib, PlayerParticles]
+depend: [PlayerParticles]
 
 commands:
   spawn:
