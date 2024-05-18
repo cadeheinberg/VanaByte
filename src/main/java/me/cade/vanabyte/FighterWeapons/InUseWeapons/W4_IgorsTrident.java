@@ -84,7 +84,7 @@ public class W4_IgorsTrident extends WeaponHolder {
         }
         FighterProjectile.addMetadataToProjectile(trident);
         this.player.getInventory().remove(this.getWeapon().getWeaponItem());
-        player.getInventory().addItem(this.getWeapon().getWeaponItem());
+        player.getInventory().setItemInMainHand(this.getWeapon().getWeaponItem());
         trident.setShooter(player);
         return true;
     }

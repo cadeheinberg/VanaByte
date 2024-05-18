@@ -5,6 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -13,7 +14,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 
 public class Weapon {
-  
+
   private ItemStack weaponItem;
   private Material weaponMaterial;
   private String weaponName;
@@ -58,13 +59,22 @@ public class Weapon {
       meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
       meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
       meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-      meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
       meta.setLore(itemLore);
       meta.setUnbreakable(true);
       weaponItem.setItemMeta(meta);
       this.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("GENERIC_ATTACK_DAMAGE",
               meleeDamage, AttributeModifier.Operation.ADD_NUMBER));
   }
+
+  public boolean isSimilarToItem(ItemStack item) {
+      if (this.weaponItem.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())) {
+          if (this.weaponItem.getType() == item.getType()) {
+              return true;
+          }
+      }
+      return false;
+  }
+
 
   public Weapon(Material material, String name, String lore) {
     ArrayList<String> itemLore = new ArrayList<String>();
@@ -78,12 +88,11 @@ public class Weapon {
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
     meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
     meta.setLore(itemLore);
     meta.setUnbreakable(true);
     weaponItem.setItemMeta(meta);
     if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
+        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
         weaponItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
     }
   }
@@ -101,12 +110,11 @@ public class Weapon {
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
     meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
     meta.setLore(itemLore);
     meta.setUnbreakable(true);
     weaponItem.setItemMeta(meta);
     if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
+        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
     }
   }
   
@@ -124,12 +132,11 @@ public class Weapon {
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
     meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
     meta.setLore(itemLore);
     meta.setUnbreakable(true);
     weaponItem.setItemMeta(meta);
     if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
+        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
     }
   }
   
@@ -148,12 +155,11 @@ public class Weapon {
     meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
     meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
     meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
     meta.setLore(itemLore);
     meta.setUnbreakable(true);
     weaponItem.setItemMeta(meta);
     if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
+        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
     }
   }
   
@@ -173,12 +179,11 @@ public class Weapon {
       meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
       meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
       meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-      meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS);
       meta.setLore(itemLore);
       meta.setUnbreakable(true);
       weaponItem.setItemMeta(meta);
       if (!material.isBlock()) {
-          weaponItem.addUnsafeEnchantment(Enchantment.DURABILITY, 999);
+          weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
       }
   }
 

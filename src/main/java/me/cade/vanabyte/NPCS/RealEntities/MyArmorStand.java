@@ -9,14 +9,12 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 
-import java.lang.annotation.ElementType;
-
-public class ArmorStand {
+public class MyArmorStand {
 
   private String name;
   private Location location;
   private org.bukkit.entity.ArmorStand stand;
-  private static ArmorStand[] kits;
+  private static MyArmorStand[] kits;
   private static FighterKit[] fKits = FighterKitManager.getFkitsNoPlayer();
   private static Location[] locations = {
           new Location(VanaByte.hub, -1043.5, 195.3, -111.5, 135, 0),
@@ -28,7 +26,7 @@ public class ArmorStand {
           new Location(VanaByte.hub, -1061.5, 195.3, -111.5, -135, 0)
   };
   
-  public ArmorStand(String name, Location location, float yaw, boolean visible, boolean marker, boolean gravity) {
+  public MyArmorStand(String name, Location location, float yaw, boolean visible, boolean marker, boolean gravity) {
     this.name = name;
     this.location = location;
     this.location.setYaw(yaw);
@@ -126,16 +124,16 @@ public class ArmorStand {
     ChatColor y = ChatColor.YELLOW;
     ChatColor b = ChatColor.BOLD;
     String p = y + "" + b + "";
-    kits = new ArmorStand[Fighter.getNumberOfKits()];
+    kits = new MyArmorStand[Fighter.getNumberOfKits()];
     for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-      kits[i] = new ArmorStand(p + fKits[i].getKitName(), locations[i], locations[i].getYaw(), false, false, true);
+      kits[i] = new MyArmorStand(p + fKits[i].getKitName(), locations[i], locations[i].getYaw(), false, false, true);
       kits[i].equipColoredArmor(fKits[i].getArmorColor());
       kits[i].getStand().setItemInHand(fKits[i].getWeaponHolders().get(0).getWeapon().getWeaponItem());
     }
     spawnBattleRoyale();
   }
   public static void spawnBattleRoyale() {
-    new ArmorStand(ChatColor.YELLOW+ "" + ChatColor.BOLD + "Click to Join", new Location(VanaByte.hub, -1052.5, 193.55, -112.5, 180, 0), 180, false, false, false);
+    new MyArmorStand(ChatColor.YELLOW+ "" + ChatColor.BOLD + "Click to Join", new Location(VanaByte.hub, -1052.5, 193.55, -112.5, 180, 0), 180, false, false, false);
   }
   public static Location getLocationOfSelector(int kitID) {
     return locations[kitID];

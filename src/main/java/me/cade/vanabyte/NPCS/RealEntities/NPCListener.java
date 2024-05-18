@@ -1,9 +1,8 @@
-package me.cade.vanabyte.NPCS;
+package me.cade.vanabyte.NPCS.RealEntities;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
-import me.cade.vanabyte.NPCS.RealEntities.ArmorStand;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
@@ -50,7 +49,7 @@ public class NPCListener implements Listener {
 			}else if (e.getRightClicked().getType() == EntityType.IRON_GOLEM) {
 				e.getPlayer().teleport(VanaByte.secondWorldSpawn);
 				return;
-			} else if (e.getRightClicked().getType() == EntityType.SNOWMAN) {
+			} else if (e.getRightClicked().getType() == EntityType.SNOW_GOLEM) {
 				//if you are here, you are trying to set upgrades
 				//keep in mind, a really high cooldown upgrade will be 100 - 99999 and turn negative
 				//this will cause errors
@@ -75,7 +74,7 @@ public class NPCListener implements Listener {
 	
 	public static void handleKitSelection(Player player, int x){
 		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-			if (ArmorStand.getLocationOfSelector(i).getBlockX() == x) {
+			if (MyArmorStand.getLocationOfSelector(i).getBlockX() == x) {
 				Fighter fighter = Fighter.fighters.get(player.getUniqueId());
 				if (fighter.getFighterKitManager().getUnlockedKit(i) > 0) {
 					fighter.getFighterKitManager().giveKitWithID(i);
@@ -83,7 +82,7 @@ public class NPCListener implements Listener {
 					player.sendMessage(ChatColor.GREEN + "Server in beta, you have unlocked this kit for free!");
 					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 					fighter.getFighterKitManager().setUnlockedKit(i, 1);
-					fighter.getFighterHologramManager().refreshKitHolograms(i);
+					fighter.getFighterHologramManager().refreshMyKitHolograms(i);
 				}
 			}
 		}

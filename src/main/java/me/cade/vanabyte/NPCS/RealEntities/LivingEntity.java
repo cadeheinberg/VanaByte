@@ -30,7 +30,7 @@ public class LivingEntity {
     private static EntityType[] types = {
             EntityType.IRON_GOLEM,
 			EntityType.CAT,
-			EntityType.SNOWMAN,
+			EntityType.SNOW_GOLEM,
 			EntityType.VILLAGER,
 			EntityType.VILLAGER,
 			EntityType.VILLAGER

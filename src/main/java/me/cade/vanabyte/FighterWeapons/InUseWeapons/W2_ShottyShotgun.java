@@ -31,8 +31,8 @@ public class W2_ShottyShotgun extends WeaponHolder {
         this.player = this.fighter.getPlayer();
         this.fighterKitManager = this.fighter.getFighterKitManager();
         this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
-        this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.projectileDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
+        this.specialDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 20 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
@@ -82,6 +82,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
     public void deActivateSpecial() {
         super.deActivateSpecial();
     }
+
     public double doSnowballHitEntity(LivingEntity victim, Snowball snowball) {
         if (snowball.getFireTicks() > 0) {
             victim.setFireTicks(50);

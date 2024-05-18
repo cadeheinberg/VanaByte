@@ -41,7 +41,7 @@ public abstract class FighterKit {
 			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
 				continue;
 			}
-			if(weaponHolder.getWeapon().getWeaponItem().isSimilar(item)){
+			if(weaponHolder.getWeapon().isSimilarToItem(item)){
 				return weaponHolder;
 			}
 		}
@@ -67,7 +67,10 @@ public abstract class FighterKit {
 			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
 				continue;
 			}
-			if(weaponHolder.getWeapon().getWeaponItem().isSimilar(player.getEquipment().getItemInMainHand()) && specificWeaponHolder.isInstance(weaponHolder)){
+			if(!specificWeaponHolder.isInstance(weaponHolder)){
+				continue;
+			}
+			if(weaponHolder.getWeapon().isSimilarToItem(player.getEquipment().getItemInMainHand())){
 				return weaponHolder;
 			}
 		}
@@ -78,7 +81,10 @@ public abstract class FighterKit {
 			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
 				continue;
 			}
-			if(weaponHolder.getWeapon().getWeaponItem().isSimilar(player.getEquipment().getItemInOffHand()) && specificWeaponHolder.isInstance(weaponHolder)){
+			if(!specificWeaponHolder.isInstance(weaponHolder)){
+				continue;
+			}
+			if(weaponHolder.getWeapon().isSimilarToItem(player.getEquipment().getItemInOffHand())){
 				return weaponHolder;
 			}
 		}

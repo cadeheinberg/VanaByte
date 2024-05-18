@@ -1,6 +1,5 @@
 package me.cade.vanabyte;
 
-import dev.esophose.playerparticles.api.PlayerParticlesAPI;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Damaging.*;
 import me.cade.vanabyte.Money.CakeManager;
@@ -8,7 +7,8 @@ import me.cade.vanabyte.MySQL.MySQL_KitPVP;
 import me.cade.vanabyte.MySQL.MySQL_Royale;
 import me.cade.vanabyte.MySQL.MySQL_Upgrades;
 import me.cade.vanabyte.MySQL.Polling;
-import me.cade.vanabyte.NPCS.*;
+import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
+import me.cade.vanabyte.NPCS.RealEntities.SpawnRealEntities;
 import me.cade.vanabyte.Permissions.BasicPermissions;
 import me.cade.vanabyte.Permissions.PickingUp;
 import me.cade.vanabyte.Permissions.PlayerChat;
@@ -43,16 +43,16 @@ public class VanaByte extends JavaPlugin {
 	public static Polling poller;
 
 	private static Plugin plugin = null;
-	private static PlayerParticlesAPI ppAPI;
+	//private static PlayerParticlesAPI ppAPI;
 	
 	private static NumberFormat myFormat = NumberFormat.getInstance();
 
 	@Override
 	public void onEnable() {
 		plugin = VanaByte.getPlugin(VanaByte.class);
-        if (Bukkit.getPluginManager().isPluginEnabled("PlayerParticles")) {
-            ppAPI = PlayerParticlesAPI.getInstance();
-        }
+//        if (Bukkit.getPluginManager().isPluginEnabled("PlayerParticles")) {
+//            ppAPI = PlayerParticlesAPI.getInstance();
+//        }
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		startMySQL();
@@ -186,10 +186,10 @@ public class VanaByte extends JavaPlugin {
 			ItemStack lboots = new ItemStack(Material.DIAMOND_BOOTS, 1);
 			ItemMeta lbo = lboots.getItemMeta();
 
-			lhe.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
-			lch.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
-			lle.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
-			lbo.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+			lhe.addEnchant(Enchantment.PROTECTION, 4, true);
+			lch.addEnchant(Enchantment.PROTECTION, 4, true);
+			lle.addEnchant(Enchantment.PROTECTION, 4, true);
+			lbo.addEnchant(Enchantment.PROTECTION, 4, true);
 
 			player.getEquipment().setHelmet(lhelmet);
 			player.getEquipment().setChestplate(lchest);
@@ -207,9 +207,9 @@ public class VanaByte extends JavaPlugin {
 //		return protocolManager;
 //	}
 
-	public static PlayerParticlesAPI getPpAPI() {
-		return ppAPI;
-	}
+//	public static PlayerParticlesAPI getPpAPI() {
+//		return ppAPI;
+//	}
 	
 	public static NumberFormat getMyNumberFormat() {
 		return myFormat;

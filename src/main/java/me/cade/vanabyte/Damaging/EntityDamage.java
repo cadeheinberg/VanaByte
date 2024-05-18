@@ -2,7 +2,7 @@ package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.*;
-import me.cade.vanabyte.NPCS.NPCListener;
+import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;
@@ -72,18 +72,25 @@ public class EntityDamage implements Listener {
 					killer = (Player) p.getShooter();
 					Fighter fighter = Fighter.get(killer);
 					FighterKit fKit = fighter.getFKit();
+					killer.sendMessage("hit enemy");
 					if (e.getDamager() instanceof Snowball && fKit.getSpecificWeaponHolderIfItExists(W2_ShottyShotgun.class) != null) {
+						killer.sendMessage("hit 1");
 						damage_amount = ((W2_ShottyShotgun) fKit.getSpecificWeaponHolderIfItExists(W2_ShottyShotgun.class)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
+						killer.sendMessage("hit 2");
 					} else if (e.getDamager() instanceof Arrow && fKit.getSpecificWeaponHolderIfItExists(W3_GoblinBow.class) != null) {
+						killer.sendMessage("hit 3");
 						damage_amount = ((W3_GoblinBow) fKit.getSpecificWeaponHolderIfItExists(W3_GoblinBow.class)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
+						killer.sendMessage("hit 4");
 					} else if (e.getDamager() instanceof Trident && fKit.getSpecificWeaponHolderIfItExists(W4_IgorsTrident.class) != null) {
+						killer.sendMessage("hit 5");
 						damage_amount = ((W4_IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(W4_IgorsTrident.class)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
+						killer.sendMessage("hit 6");
 					}
 				}
 			}

@@ -1,7 +1,5 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
-import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
@@ -72,13 +70,13 @@ public class W6_GriefSword extends WeaponHolder {
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, this.abilityDurationTicks, 0));
         this.makeInvisible(this.player);
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
-        VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.HEART, ParticleStyle.fromName("swords"));
+        //VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.HEART, ParticleStyle.fromName("swords"));
     }
     @Override
     public void deActivateSpecial() {
         super.deActivateSpecial();
         this.makeVisible(player);
-        VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
+        //VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
     }
     public void doStealHealth() {
         if (super.getWeaponAbility().isAbilityActive()) {

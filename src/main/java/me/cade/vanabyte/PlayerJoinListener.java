@@ -1,6 +1,5 @@
 package me.cade.vanabyte;
 
-import me.cade.vanabyte.*;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;

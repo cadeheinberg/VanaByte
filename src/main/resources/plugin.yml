@@ -1,8 +1,7 @@
 name: VanaByte
 version: '${project.version}'
 main: me.cade.vanabyte.VanaByte
-api-version: 1.19
-depend: [PlayerParticles]
+api-version: '1.20'
 
 commands:
   spawn:
@@ -12,4 +11,3 @@ commands:
   fly:
   heal:
   vanascuteness:
-

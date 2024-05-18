@@ -1,7 +1,7 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.FighterWeapons.FighterAbilityManager;
-import me.cade.vanabyte.NPCS.PacketHologramsManager;
+import me.cade.vanabyte.NPCS.Holograms.HologramsManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -19,7 +19,7 @@ public class Fighter {
 	private UUID uuid,lastToDamage,lastDamagedBy = null;
 	private static final int numberOfKits = 7;
 	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
-	protected PacketHologramsManager fighterHologramManager = null;
+	protected HologramsManager fighterHologramManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
 	protected FighterMYSQLManager fighterMYSQLManager = null;
 	protected FighterKitManager fighterKitManager = null;
@@ -30,7 +30,7 @@ public class Fighter {
 		this.player = player;
 		this.uuid = player.getUniqueId();
 		this.addToFightersHashMap();
-		this.fighterHologramManager = new PacketHologramsManager(this.player, this);
+		this.fighterHologramManager = new HologramsManager(this.player, this);
 		this.fighterTaskManager = new FighterTaskManager(this.player, this);
 		this.fighterKitManager = new FighterKitManager(this.player, this);
 		this.fighterMYSQLManager = new FighterMYSQLManager(this.player, this);
@@ -125,7 +125,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateKills();
 		fighterScoreBoardManager.updateRatio();
 		fighterScoreBoardManager.updateKillstreak();
-		fighterHologramManager.refreshWelcomeHologram();
+		fighterHologramManager.fighterKilled();
 	}
 	public void incKills() {
 		this.kills++;
@@ -133,7 +133,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateKills();
 		fighterScoreBoardManager.updateRatio();
 		fighterScoreBoardManager.updateKillstreak();
-		fighterHologramManager.refreshWelcomeHologram();
+		fighterHologramManager.fighterKilled();
 	}
 	public void setKillStreak(int killStreak) {
 		this.killStreak = killStreak;
@@ -148,7 +148,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateDeaths();
 		fighterScoreBoardManager.updateRatio();
 		fighterScoreBoardManager.updateKillstreak();
-		fighterHologramManager.refreshWelcomeHologram();
+		fighterHologramManager.fighterDied();
 	}
 	public void incDeaths() {
 		this.deaths++;
@@ -157,7 +157,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateRatio();
 		fighterScoreBoardManager.updateKillstreak();
 		fighterTaskManager.cancelGameplayTasks();
-		fighterHologramManager.refreshWelcomeHologram();
+		fighterHologramManager.fighterDied();
 	}
 
 	public void setCakes(int cakes) {
@@ -178,9 +178,6 @@ public class Fighter {
 	public int getDeaths() {return deaths;}
 	public int getKillStreak() {return killStreak;}
 	public int getKills() {return kills;}
-	public void spawnHolograms(){
-		fighterHologramManager.spawnHolograms();
-	}
 	public void fighterDismountParachute(){
 		fighterKitManager.fighterDismountParachute();
 	}
@@ -198,7 +195,7 @@ public class Fighter {
 	public static int getNumberOfKits() {return numberOfKits;}
 	public int getKitID(){return fighterKitManager.getKitID();}
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
-	public PacketHologramsManager getFighterHologramManager() {return fighterHologramManager;}
+	public HologramsManager getFighterHologramManager() {return fighterHologramManager;}
 
 	public FighterAbilityManager getWeaponAbilityManager(){
 		return fighterAbilityManager;

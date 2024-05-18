@@ -9,7 +9,7 @@ public class SmokeGrenadeItem extends WeaponHolder {
 	
 	public static void doSmokeGrenade(Player player) {
 		Location location = player.getLocation();
-		location.getWorld().spawnParticle(Particle.SMOKE_LARGE, location.getX(), location.getY() + 2,
+		location.getWorld().spawnParticle(Particle.LARGE_SMOKE, location.getX(), location.getY() + 2,
 			      location.getZ(), 10, 5.0, 5.0, 5.0, 0.3);
 	}
 

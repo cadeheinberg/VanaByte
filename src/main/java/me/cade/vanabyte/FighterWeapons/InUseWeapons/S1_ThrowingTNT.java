@@ -77,7 +77,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 		super.deActivateSpecial();
 	}
 	private void doThrowingTNT() {
-		Entity tnt = player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.PRIMED_TNT);
+		Entity tnt = player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.TNT);
 		TNTPrimed fuse = (TNTPrimed) tnt;
 		tnt.setCustomName(this.player.getName());
 		tnt.setCustomNameVisible(false);

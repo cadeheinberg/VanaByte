@@ -1,8 +1,5 @@
 package me.cade.vanabyte.FighterWeapons;
 
-import dev.esophose.playerparticles.particles.ParticleEffect;
-import dev.esophose.playerparticles.particles.data.OrdinaryColor;
-import dev.esophose.playerparticles.styles.ParticleStyle;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.W6_GriefSword;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
 import me.cade.vanabyte.Fighters.Fighter;
@@ -54,7 +51,7 @@ public class FighterAbilityManager {
     }
 
     public void clearFighterParticles() {
-        VanaByte.getPpAPI().resetActivePlayerParticles(player);
+        //VanaByte.getPpAPI().resetActivePlayerParticles(player);
     }
 
     public void resetAllWeaponAbilities() {
@@ -91,15 +88,15 @@ public class FighterAbilityManager {
     }
 
     public void setAbilityParticles(FighterParticlesEnum fp, java.awt.Color color) {
-        if (VanaByte.getPpAPI() == null) {
-            return;
-        }
+//        if (VanaByte.getPpAPI() == null) {
+//            return;
+//        }
         switch (fp) {
             case NONE:
                 this.clearFighterParticles();
                 break;
             case RECHARGED:
-                VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
+//                VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
 //                VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("point"));
 //                VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, ParticleStyle.fromName("point"),
 //                        new OrdinaryColor(color.getRed(),
@@ -107,11 +104,11 @@ public class FighterAbilityManager {
                 break;
             case ACTIVATED:
 //                VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("point"));
-                VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
-                VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, ParticleStyle.fromName("normal"),
-                        new OrdinaryColor(color.getRed(),
-                                color.getGreen(), color.getBlue()));
-                // code blockc
+//                VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleStyle.fromName("normal"));
+//                VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.DUST, ParticleStyle.fromName("normal"),
+//                        new OrdinaryColor(color.getRed(),
+//                                color.getGreen(), color.getBlue()));
+//                // code blockc
                 break;
             default:
                 //set to none

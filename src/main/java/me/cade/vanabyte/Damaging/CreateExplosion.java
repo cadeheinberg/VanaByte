@@ -16,7 +16,7 @@ public class CreateExplosion {
 		if(!SafeZone.inHub(location.getWorld())){
 			location.getWorld().createExplosion(location, 6F, false, true, shooter);
 		}
-		location.getWorld().spawnParticle(Particle.EXPLOSION_HUGE, location.getX(), location.getY() + 2,
+		location.getWorld().spawnParticle(Particle.EXPLOSION, location.getX(), location.getY() + 2,
 				location.getZ(), 2);
 		location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 2, 1);
 		for (Entity ent : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
@@ -38,8 +38,8 @@ public class CreateExplosion {
 			if (((LivingEntity) ent) != shooter) {
 				((LivingEntity) ent).damage(damage, shooter);
 				if (confusion) {
-					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
-					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
+					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 2));
+					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 120, 2));
 				}
 			}
 		}

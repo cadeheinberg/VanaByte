@@ -14,7 +14,7 @@ public class CakePickUp {
     //Increase experience here
     // change player cooldown recharge multiplier
     player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_EAT, 8, 1);
-    player.addPotionEffect(new PotionEffect(PotionEffectType.HEAL, 140, 1));
+    player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_HEALTH, 140, 1));
   }
   
 }

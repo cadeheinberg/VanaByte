@@ -9,7 +9,8 @@ import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Borders {
-  
+
+  //test comment
   private static Plugin plugin = VanaByte.getPlugin(VanaByte.class);
   private static int bordersTask = 0;
 

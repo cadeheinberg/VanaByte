@@ -40,7 +40,7 @@ public class W3_GoblinBow extends WeaponHolder {
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
-        this.weapon.applyWeaponEnchantment(Enchantment.ARROW_INFINITE, 1);
+        this.weapon.applyWeaponEnchantment(Enchantment.INFINITY, 1);
     }
     public W3_GoblinBow(){
         super();
@@ -54,7 +54,7 @@ public class W3_GoblinBow extends WeaponHolder {
         this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
-        this.weapon.applyWeaponEnchantment(Enchantment.ARROW_INFINITE, 1);
+        this.weapon.applyWeaponEnchantment(Enchantment.INFINITY, 1);
     }
     @Override
     public boolean doRightClick() {
@@ -84,8 +84,8 @@ public class W3_GoblinBow extends WeaponHolder {
             Fighter.get(player).fighterDismountParachute();
         }
         if (arrow.getFireTicks() > 0) {
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 120, 2));
-            victim.addPotionEffect(new PotionEffect(PotionEffectType.CONFUSION, 120, 2));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 2));
+            victim.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 120, 2));
             return this.getSpecialDamage();
         }
         return projectileDamage;

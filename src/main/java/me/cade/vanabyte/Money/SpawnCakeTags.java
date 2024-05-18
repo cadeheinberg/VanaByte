@@ -1,6 +1,6 @@
 package me.cade.vanabyte.Money;
 
-import me.cade.vanabyte.NPCS.RealEntities.ArmorStand;
+import me.cade.vanabyte.NPCS.RealEntities.MyArmorStand;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,19 +17,19 @@ public class SpawnCakeTags {
 
   public static void makeIceCake(String time) {
     Location local = new Location(VanaByte.hub, -1014.5, 67, -143.5);
-    ArmorStand stand = new ArmorStand(genericName, local, 0, false, true, false);
+    MyArmorStand stand = new MyArmorStand(genericName, local, 0, false, true, false);
     iceCake = stand.getStand().getUniqueId();
   }
 
   public static void makeSandCake(String time) {
     Location local = new Location(VanaByte.hub, -1057.5, 67, -101.5);
-    ArmorStand stand = new ArmorStand(genericName, local, 0, false, true, false);
+    MyArmorStand stand = new MyArmorStand(genericName, local, 0, false, true, false);
     sandCake = stand.getStand().getUniqueId();
   }
 
   public static void makeGrassCake(String time) {
     Location local = new Location(VanaByte.hub, -1092.5, 67, -93.5);
-    ArmorStand stand = new ArmorStand(genericName, local, 0, false, true, false);
+    MyArmorStand stand = new MyArmorStand(genericName, local, 0, false, true, false);
     grassCake = stand.getStand().getUniqueId();
   }
 

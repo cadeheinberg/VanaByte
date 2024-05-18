@@ -15,7 +15,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.spigotmc.event.entity.EntityDismountEvent;
 
 public class KitListener implements Listener {
 

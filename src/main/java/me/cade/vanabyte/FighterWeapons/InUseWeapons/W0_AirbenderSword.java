@@ -70,7 +70,7 @@ public class W0_AirbenderSword extends WeaponHolder {
     public void activateSpecial() {
         super.activateSpecial();
         this.gustOfWindSpell();
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, abilityDurationTicks, 1));
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, abilityDurationTicks, 1));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityDurationTicks, 1));
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
     }
@@ -95,7 +95,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         ArrayList<Integer> hitList = new ArrayList<Integer>();
         for (int j = 2; j < range; j++) {
             origin = origin.add(dX * j, dY * j, dZ * j);
-            this.player.spawnParticle(Particle.REDSTONE, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
+            this.player.spawnParticle(Particle.DUST, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
             ArrayList<Entity> entityList = (ArrayList<Entity>) this.player.getWorld().getNearbyEntities(origin, 2.5, 2.5,
                     2.5);
             for (Entity entity : entityList) {
@@ -123,7 +123,7 @@ public class W0_AirbenderSword extends WeaponHolder {
     }
 
     private static void launchPlayer(Player player, Double power) {
-        player.spawnParticle(Particle.REDSTONE, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
+        player.spawnParticle(Particle.DUST, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
         Vector currentDirection = player.getLocation().getDirection().normalize();
         currentDirection = currentDirection.multiply(new Vector(power, power, power));
         player.setVelocity(currentDirection);

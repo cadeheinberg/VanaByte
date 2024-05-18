@@ -76,8 +76,8 @@ public class W1_BeserkerAxe extends WeaponHolder {
     public void activateSpecial() {
         super.activateSpecial();
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, this.abilityDurationTicks, 0));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, this.abilityDurationTicks, 3));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, this.abilityDurationTicks, 0));
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, this.abilityDurationTicks, 3));
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, this.abilityDurationTicks, 0));
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
     }
 

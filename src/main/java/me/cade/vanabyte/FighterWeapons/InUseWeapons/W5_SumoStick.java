@@ -33,7 +33,7 @@ public class W5_SumoStick extends WeaponHolder {
         this.fighterKitManager = this.fighter.getFighterKitManager();
         this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
         this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.specialDamage = 15 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
@@ -76,7 +76,7 @@ public class W5_SumoStick extends WeaponHolder {
     public void activateSpecial() {
         super.activateSpecial();
         doJump(this.player, 1.4, Fighter.get(this.player));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE, this.abilityDurationTicks, 0));
+        this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, this.abilityDurationTicks, 0));
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, this.abilityDurationTicks, 1));
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
     }
