@@ -30,7 +30,12 @@ public class BasicPermissions implements Listener {
 	}
 
 	@EventHandler
-	public static void onPlayerLevelChange(PlayerLevelChangeEvent e){
+	public void onPlayerSwapHands(PlayerSwapHandItemsEvent e){
+		e.setCancelled(true);
+	}
+
+	@EventHandler
+	public void onPlayerLevelChange(PlayerLevelChangeEvent e){
 		if(e.getNewLevel() - e.getOldLevel() > 0){
 			Fighter.get(e.getPlayer()).incPlayerLevel(e.getNewLevel() - e.getOldLevel());
 		}else{
@@ -39,7 +44,7 @@ public class BasicPermissions implements Listener {
 	}
 
 	@EventHandler
-	public static void onPlayerLevelChange(PlayerExpChangeEvent e){
+	public void onPlayerLevelChange(PlayerExpChangeEvent e){
 		Fighter.get(e.getPlayer()).getFighterScoreBoardManager().updateExp();
 	}
 

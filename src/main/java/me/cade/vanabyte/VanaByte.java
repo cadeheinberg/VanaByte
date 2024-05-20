@@ -1,5 +1,6 @@
 package me.cade.vanabyte;
 
+import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageManager;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Damaging.*;
 import me.cade.vanabyte.Money.CakeManager;
@@ -38,10 +39,10 @@ public class VanaByte extends JavaPlugin {
 
 	public static MySQL_KitPVP mySQL_Hub;
 	public static MySQL_Upgrades mySQL_upgrades;
-
 	public static MySQL_Royale mySQL_royale;
-
 	public static Polling poller;
+
+	public static EntityDamageManager entityDamageManager;
 
 	private static Plugin plugin = null;
 	//private static PlayerParticlesAPI ppAPI;
@@ -67,6 +68,7 @@ public class VanaByte extends JavaPlugin {
 		//getServer().getMessenger().registerOutgoingPluginChannel(this, "BungeeCord");
 		// do last
 		addPlayersToFighters();
+		entityDamageManager = new EntityDamageManager();
 	}
 
 	private static void startMySQL() {
@@ -84,7 +86,7 @@ public class VanaByte extends JavaPlugin {
 		pm.registerEvents(new FallDamageListener(), this);
 		pm.registerEvents(new KitListener(), this);
 		pm.registerEvents(new BasicPermissions(), this);
-		pm.registerEvents(new EntityDamage(), this);
+		pm.registerEvents(new EntityDamageListener(), this);
 		pm.registerEvents(new PlayerChat(), this);
 		pm.registerEvents(new PickingUp(), this);
 		pm.registerEvents(new MyGUIListener(), this);
@@ -215,6 +217,10 @@ public class VanaByte extends JavaPlugin {
 	
 	public static NumberFormat getMyNumberFormat() {
 		return myFormat;
+	}
+
+	public static EntityDamageManager getEntityDamageManger() {
+		return entityDamageManager;
 	}
 
 }

@@ -47,7 +47,7 @@ public class NPCListener implements Listener {
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_CAT_PURREOW, 8, 1);
 				return;
 			}else if (e.getRightClicked().getType() == EntityType.WOLF) {
-				if(e.getPlayer().isOp()){
+				if(1+1 == 2){
 					e.getPlayer().teleport(VanaByte.anarchyWorldSpawn);
 				}else{
 					e.getPlayer().sendMessage(ChatColor.GREEN + "Coming soon!");
@@ -71,8 +71,8 @@ public class NPCListener implements Listener {
 			return;
 		}
 	    if (e.getRightClicked() instanceof LivingEntity) {
-			if(Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class) != null){
-				((W5_SumoStick)Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class)).doPickUp((LivingEntity) e.getRightClicked());
+			if(Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(W5_SumoStick.class) != null){
+				((W5_SumoStick)Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(W5_SumoStick.class)).doPickUp((LivingEntity) e.getRightClicked());
 			}
 	    }
 	}

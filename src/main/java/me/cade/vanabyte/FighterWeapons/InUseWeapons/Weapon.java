@@ -20,10 +20,11 @@ import java.util.ArrayList;
 
 public class Weapon {
 
-  private ItemStack weaponItem;
-  private Material weaponMaterial;
-  private String weaponName;
-  private static ChatColor noColor = ChatColor.GRAY;
+  private final ItemStack weaponItem;
+  private final Material weaponMaterial;
+  private final String weaponName;
+  private final WeaponType weaponType;
+  private static final ChatColor noColor = ChatColor.GRAY;
   private static final NamespacedKey WEAPON_TYPE_KEY = new NamespacedKey(VanaByte.getInstance(), "WeaponType");
 
   public Weapon(WeaponType weaponType, Material material, String weaponName, double meleeDamage, double projectileDamage, double specialDamage, int cooldownTicks, int durationTicks, int rechargeTicks) {
@@ -58,6 +59,7 @@ public class Weapon {
           itemLore.add(noColor + "" + Math.round((rechargeTicks/20.0) * 10)/10.0 + "s" + noColor + " Q recharge");
       }
       weaponMaterial = material;
+      this.weaponType = weaponType;
       this.weaponName = weaponName;
       weaponItem = new ItemStack(weaponMaterial, 1);
       ItemMeta meta = weaponItem.getItemMeta();
@@ -69,19 +71,10 @@ public class Weapon {
       meta.setLore(itemLore);
       meta.setUnbreakable(true);
       PersistentDataContainer container = meta.getPersistentDataContainer();
-      container.set(WEAPON_TYPE_KEY, PersistentDataType.STRING, weaponType.name());
+      container.set(WEAPON_TYPE_KEY, PersistentDataType.STRING, this.weaponType.name());
       weaponItem.setItemMeta(meta);
       this.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("GENERIC_ATTACK_DAMAGE",
               meleeDamage, AttributeModifier.Operation.ADD_NUMBER));
-  }
-
-  public boolean isSimilarToItem(ItemStack item) {
-      if (this.weaponItem.getItemMeta().getDisplayName().equals(item.getItemMeta().getDisplayName())) {
-          if (this.weaponItem.getType() == item.getType()) {
-              return true;
-          }
-      }
-      return false;
   }
 
   public void applyWeaponEnchantment(Enchantment enchantment, int power) {
@@ -112,6 +105,10 @@ public class Weapon {
 
   public ItemStack getWeaponItem() {
     return weaponItem;
+  }
+
+  public WeaponType getWeaponType(){
+      return weaponType;
   }
 
   public void resetCooldown(Player player) {

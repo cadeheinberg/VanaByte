@@ -32,7 +32,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         this.fighterKitManager = this.fighter.getFighterKitManager();
         this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
         this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.specialDamage = 15 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
@@ -45,7 +45,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         super();
         this.meleeDamage = 6;
         this.projectileDamage = 0;
-        this.specialDamage = 7;
+        this.specialDamage = 15;
         this.abilityDurationTicks = 200;
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
@@ -112,7 +112,7 @@ public class W0_AirbenderSword extends WeaponHolder {
                         return;
                     }
                 }
-                ((LivingEntity) entity).damage(this.specialDamage, this.player);
+                ((LivingEntity) entity).damage(15, this.player);
                 Vector currentDirection = playerLocation.getDirection().normalize();
                 currentDirection = currentDirection.multiply(new Vector(power, power, power));
                 entity.setVelocity(currentDirection);

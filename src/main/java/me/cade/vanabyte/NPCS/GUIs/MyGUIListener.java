@@ -1,5 +1,7 @@
 package me.cade.vanabyte.NPCS.GUIs;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.Weapon;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import org.bukkit.GameMode;
@@ -13,6 +15,7 @@ public class MyGUIListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
+        e.getWhoClicked().sendMessage("raw: " + e.getRawSlot() + "slot " + e.getSlot());
         if(!(e.getWhoClicked() instanceof Player)){
             return;
         }
@@ -26,19 +29,21 @@ public class MyGUIListener implements Listener {
                 }
             }
         }
-        if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY || e.getAction() == InventoryAction.PICKUP_ALL || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PICKUP_HALF || e.getAction() == InventoryAction.PICKUP_ONE || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PLACE_ALL || e.getAction() == InventoryAction.PLACE_ONE){
-            if (e.getCursor() != null && e.getCursor().hasItemMeta()) {
-                if (FighterKitManager.hasNameOfWeapon(e.getCursor())) {
-                    e.setCancelled(true);
-                    return;
-                }
+        if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY ||
+                e.getAction() == InventoryAction.PICKUP_ALL ||
+                e.getAction() == InventoryAction.PLACE_SOME ||
+                e.getAction() == InventoryAction.PICKUP_HALF ||
+                e.getAction() == InventoryAction.PICKUP_ONE ||
+                e.getAction() == InventoryAction.PLACE_SOME ||
+                e.getAction() == InventoryAction.PLACE_ALL ||
+                e.getAction() == InventoryAction.PLACE_ONE){
+            if(Weapon.getWeaponType(e.getCursor()) == null || Weapon.getWeaponType(e.getCursor()) == WeaponType.UNKNOWN_WEAPON){
+                return;
             }
-            if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()) {
-                if (FighterKitManager.hasNameOfWeapon(e.getCurrentItem())) {
-                    e.setCancelled(true);
-                    return;
-                }
+            if (e.getCurrentItem() == null || Weapon.getWeaponType(e.getCurrentItem()) == WeaponType.UNKNOWN_WEAPON) {
+                return;
             }
+            e.setCancelled(true);
         }
         if(Fighter.get((Player) e.getWhoClicked()).getGUIManager().getMatchingGUI(e.getClickedInventory()) == null){
             return;

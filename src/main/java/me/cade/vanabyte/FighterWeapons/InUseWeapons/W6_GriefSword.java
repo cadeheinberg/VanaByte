@@ -79,9 +79,9 @@ public class W6_GriefSword extends WeaponHolder {
         this.makeVisible(player);
         //VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
     }
-    public void doStealHealth() {
+    public void doStealHealth(double health) {
         if (super.getWeaponAbility().isAbilityActive()) {
-            double combined = this.player.getHealth() + 1.5;
+            double combined = this.player.getHealth() + health;
             if (combined > 20) {
                 this.player.setHealth(20);
             } else {

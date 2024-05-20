@@ -181,7 +181,7 @@ public class W5_SumoStick extends WeaponHolder {
                 currentDirection = currentDirection.multiply(new Vector(2, 2, 2));
                 victim.setVelocity(currentDirection);
             }
-        }, 1);
+        }, 2);
     }
 
     @Override

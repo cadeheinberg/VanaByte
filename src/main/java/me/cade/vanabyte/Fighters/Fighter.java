@@ -14,13 +14,14 @@ import java.util.UUID;
 
 public class Fighter {
 
-	private Plugin plugin = VanaByte.getPlugin(VanaByte.class);
-
 	public static HashMap<UUID, Fighter> fighters = new HashMap<UUID, Fighter>();
+
+	private Plugin plugin = VanaByte.getPlugin(VanaByte.class);
 	private Player player = null;
-	private UUID uuid,lastToDamage,lastDamagedBy = null;
+	private UUID uuid = null;
 	private static final int numberOfKits = 7;
 	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
+
 	protected FighterPacketHologramsManager fighterPacketHologramsManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
 	protected FighterMYSQLManager fighterMYSQLManager = null;
@@ -61,8 +62,6 @@ public class Fighter {
 		fighterTaskManager.fighterRespawned();
 		fighterPacketHologramsManager.fighterRespawned();
 		fighterMYSQLManager.fighterRespawned();
-		this.setLastDamagedBy(null);
-		this.setLastToDamage(null);
 	}
 
 	public void fighterLeftServer() {
@@ -96,20 +95,6 @@ public class Fighter {
 
 	public void dropFighterKitSoul(){}
 
-	public void setLastToDamage(Player lastToDamage) {
-		if (this.lastToDamage == null) {
-			this.lastToDamage = null;
-			return;
-		}
-		this.lastToDamage = lastToDamage.getUniqueId();
-	}
-	public void setLastDamagedBy(Player lastDamagedBy) {
-		if (lastDamagedBy == null) {
-			this.lastDamagedBy = null;
-			return;
-		}
-		this.lastDamagedBy = lastDamagedBy.getUniqueId();
-	}
 	protected void setFighterLevel(int fighterLevel) {
 		this.fighterLevel = fighterLevel;
 		fighterScoreBoardManager.updateLevel();
@@ -178,7 +163,6 @@ public class Fighter {
 		this.cakes = this.cakes - inc;
 		fighterScoreBoardManager.updateCookies();
 	}
-	public UUID getLastDamagedBy() {return lastDamagedBy;}
 	public int getFighterLevel() {return fighterLevel;}
 	public int getCakes() {return cakes;}
 	public int getDeaths() {return deaths;}
@@ -191,7 +175,6 @@ public class Fighter {
 	public Player getPlayer() {return player;}
 	public static Fighter get(Player player) {return fighters.get(player.getUniqueId());}
 	public UUID getUuid() {return uuid;}
-	public UUID getLastToDamage() {return lastToDamage;}
 	public Plugin getPlugin() {return plugin;}
 	public void setCooldownTask(int cooldownTask) {fighterTaskManager.cooldownTask = cooldownTask;}
 	public void setRechargeTask(int rechargeTask) {fighterTaskManager.rechargeTask = rechargeTask;}

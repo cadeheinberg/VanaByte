@@ -3,8 +3,10 @@ package me.cade.vanabyte.Fighters;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.FighterKits.*;
 import me.cade.vanabyte.Permissions.SafeZone;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -12,7 +14,10 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -31,8 +36,7 @@ public class FighterKitManager {
     private int kitID,kitIndex = -1;
 
     public static Material cooldownMaterial = Material.BARRIER;
-
-    public static Material combatTrackerMaterial = Material.DRAGON_HEAD;
+    private static final NamespacedKey ARMOR_TYPE_KEY = new NamespacedKey(VanaByte.getInstance(), "ArmorType");
 
     protected FighterKitManager(Player player, Fighter fighter){
         this.player = player;
@@ -201,7 +205,7 @@ public class FighterKitManager {
         lbo.addEnchant(Enchantment.BINDING_CURSE, 1, true);
 
         ArrayList<String> itemLore = new ArrayList<String>();
-        itemLore.add(3 + " armor protection");
+        itemLore.add(5 + " armor protection");
         lhe.setLore(itemLore);
         lch.setLore(itemLore);
         lle.setLore(itemLore);
@@ -211,6 +215,16 @@ public class FighterKitManager {
         lch.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         lle.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
         lbo.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+
+        PersistentDataContainer lheContainer = lhe.getPersistentDataContainer();
+        lheContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
+        PersistentDataContainer lchContainer = lhe.getPersistentDataContainer();
+        lchContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
+        PersistentDataContainer lleContainer = lhe.getPersistentDataContainer();
+        lleContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
+        PersistentDataContainer lboContainer = lhe.getPersistentDataContainer();
+        lboContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
+
         lhelmet.setItemMeta(lhe);
         lchest.setItemMeta(lch);
         lleggs.setItemMeta(lle);
@@ -310,7 +324,20 @@ public class FighterKitManager {
         return fighter;
     }
 
-    public static Material getCombatTrackerMaterial() {
-        return combatTrackerMaterial;
+    public static ArmorType getArmorType(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        if(meta == null){
+            return ArmorType.UNKOWN_ARMOR;
+        }
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if(container == null){
+            return ArmorType.UNKOWN_ARMOR;
+        }
+        if (!(container.has(ARMOR_TYPE_KEY, PersistentDataType.STRING))) {
+            return ArmorType.UNKOWN_ARMOR;
+        }
+        String armorTypeName = container.get(ARMOR_TYPE_KEY, PersistentDataType.STRING);
+        return ArmorType.valueOf(armorTypeName);
     }
+
 }

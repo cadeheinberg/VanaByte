@@ -1,5 +1,7 @@
 package me.cade.vanabyte.Fighters;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -33,59 +35,15 @@ public abstract class FighterKit {
 		return weaponHolders;
 	}
 
-	public WeaponHolder getSimilarWeaponHolderFighterHas(ItemStack item){
-		if(item == null || !item.hasItemMeta() || item.getItemMeta().getDisplayName() == null){
-			return null;
-		}
-		for (WeaponHolder weaponHolder : this.weaponHolders){
-			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
+	public WeaponHolder getWeaponHolderWithType(WeaponType weaponType) {
+		for (WeaponHolder weaponHolder : weaponHolders) {
+			if (weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null) {
 				continue;
 			}
-			if(weaponHolder.getWeapon().isSimilarToItem(item)){
-				return weaponHolder;
-			}
-		}
-		return null;
-	}
-
-	public WeaponHolder getSpecificWeaponHolderIfItExists(Class<?> specificWeaponHolder) {
-		for(WeaponHolder weaponHolder : weaponHolders){
-			if(weaponHolder  == null){
-				continue;
-			}
-			if (specificWeaponHolder.isInstance(weaponHolder)){
-				return weaponHolder;
-			}
-		}
-		return null;
-	}
-	public WeaponHolder getSpecificSimilarWeaponHolderInHands(Class<?> specificWeaponHolder) {
-		if(player.getEquipment().getItemInMainHand() == null || !player.getEquipment().getItemInMainHand().hasItemMeta() || player.getEquipment().getItemInMainHand().getItemMeta().getDisplayName() == null){
-			return null;
-		}
-		for(WeaponHolder weaponHolder : weaponHolders){
-			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
-				continue;
-			}
-			if(!specificWeaponHolder.isInstance(weaponHolder)){
-				continue;
-			}
-			if(weaponHolder.getWeapon().isSimilarToItem(player.getEquipment().getItemInMainHand())){
-				return weaponHolder;
-			}
-		}
-		if(player.getEquipment().getItemInOffHand() == null || !player.getEquipment().getItemInOffHand().hasItemMeta() || player.getEquipment().getItemInOffHand().getItemMeta().getDisplayName() == null){
-			return null;
-		}
-		for(WeaponHolder weaponHolder : weaponHolders){
-			if(weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null){
-				continue;
-			}
-			if(!specificWeaponHolder.isInstance(weaponHolder)){
-				continue;
-			}
-			if(weaponHolder.getWeapon().isSimilarToItem(player.getEquipment().getItemInOffHand())){
-				return weaponHolder;
+			for (WeaponHolder myWeaponHolders : this.weaponHolders) {
+				if (myWeaponHolders.getWeapon().getWeaponType() == weaponType) {
+					return weaponHolder;
+				}
 			}
 		}
 		return null;

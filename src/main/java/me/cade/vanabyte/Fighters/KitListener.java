@@ -1,14 +1,13 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
+import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Permissions.SafeZone;
-import net.minecraft.world.entity.vehicle.MinecartTNT;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.block.Block;
-import org.bukkit.block.data.type.TNT;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -17,6 +16,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 public class KitListener implements Listener {
 
@@ -39,16 +39,13 @@ public class KitListener implements Listener {
 		}
 		if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
 			if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
-				if (e.getPlayer().getPassengers() != null) {
-					if (e.getPlayer().getPassengers().size() > 0) {
-						if(Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class) != null) {
-							((W5_SumoStick) Fighter.get(e.getPlayer()).getFKit().getSpecificSimilarWeaponHolderInHands(W5_SumoStick.class)).doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
-							return;
-						}
+				if (e.getPlayer().getPassengers() != null && e.getPlayer().getPassengers().size() > 1) {
+					if(Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(WeaponType.SUMO_STICK) != null) {
+						((W5_SumoStick) Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(WeaponType.SUMO_STICK)).doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
+						return;
 					}
 				}
 			}
-			return;
 		}
 		if (e.getItem() == null) {
 			return;
@@ -128,8 +125,8 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
-		if(fKit.getSpecificSimilarWeaponHolderInHands(W4_IgorsTrident.class) != null) {
-			if (!((W4_IgorsTrident) fKit.getSpecificSimilarWeaponHolderInHands(W4_IgorsTrident.class)).doThrowTrident((Trident) e.getEntity())) {
+		if(fKit.getWeaponHolderWithType(W4_IgorsTrident.class) != null) {
+			if (!((W4_IgorsTrident) fKit.getWeaponHolderWithType(W4_IgorsTrident.class)).doThrowTrident((Trident) e.getEntity())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
 			}
@@ -146,8 +143,8 @@ public class KitListener implements Listener {
 			return;
 		}
 		FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
-		if (fKit.getSpecificSimilarWeaponHolderInHands(W3_GoblinBow.class) != null) {
-			if (!((W3_GoblinBow) fKit.getSpecificSimilarWeaponHolderInHands(W3_GoblinBow.class)).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
+		if (fKit.getWeaponHolderWithType(W3_GoblinBow.class) != null) {
+			if (!((W3_GoblinBow) fKit.getWeaponHolderWithType(W3_GoblinBow.class)).doArrowShoot((Arrow) e.getProjectile(), e.getForce())) {
 				//Set canceled if there is a cooldown
 				e.setCancelled(true);
 			}
