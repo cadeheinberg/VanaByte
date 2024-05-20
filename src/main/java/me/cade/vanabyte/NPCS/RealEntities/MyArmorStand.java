@@ -130,11 +130,8 @@ public class MyArmorStand {
       kits[i].equipColoredArmor(fKits[i].getArmorColor());
       kits[i].getStand().setItemInHand(fKits[i].getWeaponHolders().get(0).getWeapon().getWeaponItem());
     }
-    spawnBattleRoyale();
   }
-  public static void spawnBattleRoyale() {
-    new MyArmorStand(ChatColor.YELLOW+ "" + ChatColor.BOLD + "Click to Join", new Location(VanaByte.hub, -1052.5, 193.55, -112.5, 180, 0), 180, false, false, false);
-  }
+
   public static Location getLocationOfSelector(int kitID) {
     return locations[kitID];
   }

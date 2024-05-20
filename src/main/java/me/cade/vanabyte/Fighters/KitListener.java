@@ -3,10 +3,12 @@ package me.cade.vanabyte.Fighters;
 import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Permissions.SafeZone;
+import net.minecraft.world.entity.vehicle.MinecartTNT;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.type.TNT;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -20,7 +22,16 @@ public class KitListener implements Listener {
 
 	@EventHandler
 	public void onRightClick(PlayerInteractEvent e) {
+		if(e.getPlayer().getGameMode() == GameMode.CREATIVE){
+			return;
+		}
 		if (SafeZone.safeZone(e.getPlayer().getLocation())) {
+			if(e.getClickedBlock() != null){
+				if(e.getClickedBlock().getType() == Material.ENCHANTING_TABLE){
+					e.setCancelled(true);
+					Fighter.get(e.getPlayer()).getGUIManager().openKitLecternGUI(e.getClickedBlock().getLocation());
+				}
+			}
 			return;
 		}
 		if (e.getHand() == EquipmentSlot.OFF_HAND) {
@@ -153,21 +164,30 @@ public class KitListener implements Listener {
 
 	@EventHandler
 	public void onExplode(EntityExplodeEvent e) {
-		if (e.getEntity() instanceof TNTPrimed) {
-			// If its a creeper or something natural ignore it
-			return;
-		}
-		if(!e.getEntity().hasMetadata("thrower")){
-			// If its a normal TNT and not Fighter produced ignore it
-			return;
-		}
 		e.setCancelled(true);
-		for (Block b : e.blockList()) {
-			if (b.getType() == Material.PACKED_ICE) {
-				b.breakNaturally();
-			}
-		}
-		e.blockList().clear();
+//		if (e.getEntityType() != EntityType.PLAYER) {
+//			return;
+//		}
+//
+//		for (Block b : e.blockList()) {
+//				if (b.getType() == Material.TNT) {
+//					// Replace the TNT block with air
+//					b.setType(Material.AIR);
+//					// Spawn a primed TNT entity at the block's location
+//					TNTPrimed tntPrimed = (TNTPrimed) b.getWorld().spawnEntity(b.getLocation(), EntityType.TNT);
+//					tntPrimed.setFuseTicks(80); // Set fuse ticks (time before explosion)
+//				} else if (b.getType() == Material.TNT_MINECART) {
+//					// If it's a TNT minecart, you can just detonate it
+//					// This will require finding the TNT minecart entity at the block's location
+//					for (Entity entity : b.getWorld().getNearbyEntities(b.getLocation(), 1, 1, 1)) {
+//						if (entity instanceof MinecartTNT) {
+//							((MinecartTNT) entity).explode(0);
+//						}
+//					}
+//				} else {
+//					b.breakNaturally();
+//				}
+//		}
 	}
 
 	@EventHandler

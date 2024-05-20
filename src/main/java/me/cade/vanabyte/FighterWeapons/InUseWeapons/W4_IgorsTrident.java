@@ -33,7 +33,7 @@ public class W4_IgorsTrident extends WeaponHolder {
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 5 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.TRIDENT;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.IGORS_TRIDENT, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
@@ -46,10 +46,11 @@ public class W4_IgorsTrident extends WeaponHolder {
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 5;
         this.material = Material.TRIDENT;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.IGORS_TRIDENT, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
+
     @Override
     public boolean doRightClick() {
         return false;

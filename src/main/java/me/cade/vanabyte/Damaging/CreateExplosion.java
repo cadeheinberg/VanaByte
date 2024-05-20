@@ -2,6 +2,8 @@ package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.*;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -14,12 +16,13 @@ public class CreateExplosion {
 	public static void doAnExplosion(Player shooter, Location location, double power, double damage,
 			boolean confusion) {
 		if(!SafeZone.inHub(location.getWorld())){
-			location.getWorld().createExplosion(location, 6F, false, true, shooter);
+			//location.getWorld().createExplosion(location, 4F, false, true, shooter);
+			//just create your own explosion to break blocks cause spigots is bad
 		}
 		location.getWorld().spawnParticle(Particle.EXPLOSION, location.getX(), location.getY() + 2,
 				location.getZ(), 2);
 		location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 2, 1);
-		for (Entity ent : location.getWorld().getNearbyEntities(location, 3, 3, 3)) {
+		for (Entity ent : location.getWorld().getNearbyEntities(location, 4, 4, 4)) {
 			if (!(ent instanceof LivingEntity)) {
 				continue;
 			}
@@ -36,7 +39,7 @@ public class CreateExplosion {
 			currentDirection = currentDirection.multiply(new Vector(power, power, power));
 			ent.setVelocity(currentDirection);
 			if (((LivingEntity) ent) != shooter) {
-				((LivingEntity) ent).damage(damage, shooter);
+				((LivingEntity) ent).damage(damage, (Entity) shooter);
 				if (confusion) {
 					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 2));
 					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 120, 2));

@@ -37,7 +37,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 20 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.IRON_SHOVEL;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.SHOTTY_SHOTGUN, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
@@ -50,7 +50,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
         this.material = Material.IRON_SHOVEL;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.SHOTTY_SHOTGUN, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }

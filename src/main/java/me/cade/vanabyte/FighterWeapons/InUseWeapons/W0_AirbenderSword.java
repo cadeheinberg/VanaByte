@@ -37,7 +37,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.IRON_SWORD;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.AIRBENDER_SWORD, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
@@ -50,7 +50,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
         this.material = Material.IRON_SWORD;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.AIRBENDER_SWORD, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }

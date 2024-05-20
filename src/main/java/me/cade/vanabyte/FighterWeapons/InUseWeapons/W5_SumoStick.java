@@ -38,7 +38,7 @@ public class W5_SumoStick extends WeaponHolder {
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.STICK;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.SUMO_STICK, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
         this.weapon.applyWeaponUnsafeEnchantment(Enchantment.KNOCKBACK, 2);
@@ -52,11 +52,12 @@ public class W5_SumoStick extends WeaponHolder {
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
         this.material = Material.STICK;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.SUMO_STICK, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
         this.weapon.applyWeaponUnsafeEnchantment(Enchantment.KNOCKBACK, 2);
     }
+
     @Override
     public boolean doRightClick() {
         return true;

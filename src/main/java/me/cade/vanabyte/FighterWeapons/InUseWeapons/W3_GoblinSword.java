@@ -31,7 +31,7 @@ public class W3_GoblinSword extends WeaponHolder {
         this.abilityRechargeTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.WOODEN_SWORD;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.GOBLIN_SWORD, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
         this.weapon.applyWeaponEnchantment(Enchantment.FIRE_ASPECT, 1);
@@ -45,7 +45,7 @@ public class W3_GoblinSword extends WeaponHolder {
         this.abilityRechargeTicks = 0;
         this.rightClickCooldownTicks = 0;
         this.material = Material.WOODEN_SWORD;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.GOBLIN_SWORD, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
         this.weapon.applyWeaponEnchantment(Enchantment.FIRE_ASPECT, 1);

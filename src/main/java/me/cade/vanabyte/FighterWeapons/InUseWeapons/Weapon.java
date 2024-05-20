@@ -1,7 +1,9 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -10,6 +12,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataHolder;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 
@@ -19,7 +24,9 @@ public class Weapon {
   private Material weaponMaterial;
   private String weaponName;
   private static ChatColor noColor = ChatColor.GRAY;
-  public Weapon(Material material, String weaponName, double meleeDamage, double projectileDamage, double specialDamage, int cooldownTicks, int durationTicks, int rechargeTicks) {
+  private static final NamespacedKey WEAPON_TYPE_KEY = new NamespacedKey(VanaByte.getInstance(), "WeaponType");
+
+  public Weapon(WeaponType weaponType, Material material, String weaponName, double meleeDamage, double projectileDamage, double specialDamage, int cooldownTicks, int durationTicks, int rechargeTicks) {
       ArrayList<String> itemLore = new ArrayList<String>();
       if(meleeDamage > 0) {
           itemLore.add(ChatColor.WHITE + "" + meleeDamage + ChatColor.YELLOW + " attack damage");
@@ -61,6 +68,8 @@ public class Weapon {
       meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
       meta.setLore(itemLore);
       meta.setUnbreakable(true);
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      container.set(WEAPON_TYPE_KEY, PersistentDataType.STRING, weaponType.name());
       weaponItem.setItemMeta(meta);
       this.addNewAttribute(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier("GENERIC_ATTACK_DAMAGE",
               meleeDamage, AttributeModifier.Operation.ADD_NUMBER));
@@ -73,118 +82,6 @@ public class Weapon {
           }
       }
       return false;
-  }
-
-
-  public Weapon(Material material, String name, String lore) {
-    ArrayList<String> itemLore = new ArrayList<String>();
-    itemLore.add(lore);
-    weaponMaterial = material;
-    weaponName = name;
-    weaponItem = new ItemStack(weaponMaterial, 1);
-    ItemMeta meta = weaponItem.getItemMeta();
-    meta.setDisplayName(weaponName);
-    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-    meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.setLore(itemLore);
-    meta.setUnbreakable(true);
-    weaponItem.setItemMeta(meta);
-    if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
-        weaponItem.addUnsafeEnchantment(Enchantment.BINDING_CURSE, 1);
-    }
-  }
-  
-  public Weapon(Material material, String name, String lore, String lore2) {
-    ArrayList<String> itemLore = new ArrayList<String>();
-    itemLore.add(lore);
-    itemLore.add(lore2);
-    weaponMaterial = material;
-    weaponName = name;
-    weaponItem = new ItemStack(weaponMaterial, 1);
-    ItemMeta meta = weaponItem.getItemMeta();
-    meta.setDisplayName(weaponName);
-    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-    meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.setLore(itemLore);
-    meta.setUnbreakable(true);
-    weaponItem.setItemMeta(meta);
-    if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
-    }
-  }
-  
-  public Weapon(Material material, String name, String lore, String lore2, String lore3) {
-    ArrayList<String> itemLore = new ArrayList<String>();
-    itemLore.add(lore);
-    itemLore.add(lore2);
-    itemLore.add(lore3);
-    weaponMaterial = material;
-    weaponName = name;
-    weaponItem = new ItemStack(weaponMaterial, 1);
-    ItemMeta meta = weaponItem.getItemMeta();
-    meta.setDisplayName(weaponName);
-    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-    meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.setLore(itemLore);
-    meta.setUnbreakable(true);
-    weaponItem.setItemMeta(meta);
-    if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
-    }
-  }
-  
-  public Weapon(Material material, String name, String lore, String lore2, String lore3, String lore4) {
-    ArrayList<String> itemLore = new ArrayList<String>();
-    itemLore.add(lore);
-    itemLore.add(lore2);
-    itemLore.add(lore3);
-    itemLore.add(lore4);
-    weaponMaterial = material;
-    weaponName = name;
-    weaponItem = new ItemStack(weaponMaterial, 1);
-    ItemMeta meta = weaponItem.getItemMeta();
-    meta.setDisplayName(weaponName);
-    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-    meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-    meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-    meta.setLore(itemLore);
-    meta.setUnbreakable(true);
-    weaponItem.setItemMeta(meta);
-    if(!material.isBlock()) {
-        weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
-    }
-  }
-  
-  public Weapon(Material material, String name, String lore, String lore2, String lore3, String lore4, String lore5) {
-      ArrayList<String> itemLore = new ArrayList<String>();
-      itemLore.add(lore);
-      itemLore.add(lore2);
-      itemLore.add(lore3);
-      itemLore.add(lore4);
-      itemLore.add(lore5);
-      weaponMaterial = material;
-      weaponName = name;
-      weaponItem = new ItemStack(weaponMaterial, 1);
-      ItemMeta meta = weaponItem.getItemMeta();
-      meta.setDisplayName(weaponName);
-      meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-      meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-      meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
-      meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-      meta.setLore(itemLore);
-      meta.setUnbreakable(true);
-      weaponItem.setItemMeta(meta);
-      if (!material.isBlock()) {
-          weaponItem.addUnsafeEnchantment(Enchantment.UNBREAKING, 999);
-      }
   }
 
   public void applyWeaponEnchantment(Enchantment enchantment, int power) {
@@ -219,6 +116,22 @@ public class Weapon {
 
   public void resetCooldown(Player player) {
         player.setCooldown(this.weaponMaterial, 0);
-    }
+  }
+
+  public static WeaponType getWeaponType(ItemStack itemStack) {
+      ItemMeta meta = itemStack.getItemMeta();
+      if(meta == null){
+          return WeaponType.UNKNOWN_WEAPON;
+      }
+      PersistentDataContainer container = meta.getPersistentDataContainer();
+      if(container == null){
+          return WeaponType.UNKNOWN_WEAPON;
+      }
+      if (!(container.has(WEAPON_TYPE_KEY, PersistentDataType.STRING))) {
+          return WeaponType.UNKNOWN_WEAPON;
+      }
+      String weaponTypeName = container.get(WEAPON_TYPE_KEY, PersistentDataType.STRING);
+      return WeaponType.valueOf(weaponTypeName);
+  }
 
 }

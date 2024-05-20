@@ -7,6 +7,7 @@ import me.cade.vanabyte.MySQL.MySQL_KitPVP;
 import me.cade.vanabyte.MySQL.MySQL_Royale;
 import me.cade.vanabyte.MySQL.MySQL_Upgrades;
 import me.cade.vanabyte.MySQL.Polling;
+import me.cade.vanabyte.NPCS.GUIs.MyGUIListener;
 import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
 import me.cade.vanabyte.NPCS.RealEntities.SpawnRealEntities;
 import me.cade.vanabyte.Permissions.BasicPermissions;
@@ -30,11 +31,11 @@ public class VanaByte extends JavaPlugin {
 
 	public static World hub;
 	public static Location hubSpawn;
-	public static World secondWorld;
-	public static Location secondWorldSpawn;
-
+	public static World anarchyWorld;
+	public static Location anarchyWorldSpawn;
 	public static World thirdWorld;
 	public static Location thirdWorldSpawn;
+
 	public static MySQL_KitPVP mySQL_Hub;
 	public static MySQL_Upgrades mySQL_upgrades;
 
@@ -86,6 +87,7 @@ public class VanaByte extends JavaPlugin {
 		pm.registerEvents(new EntityDamage(), this);
 		pm.registerEvents(new PlayerChat(), this);
 		pm.registerEvents(new PickingUp(), this);
+		pm.registerEvents(new MyGUIListener(), this);
 	}
 
 	@Override
@@ -106,8 +108,8 @@ public class VanaByte extends JavaPlugin {
 		hub = Bukkit.getServer().getWorld("world");
 		hubSpawn = new Location(hub, -1052.5, 197.5, -131.5);
 		Bukkit.getServer().createWorld(new WorldCreator("world2"));
-		secondWorld = Bukkit.getServer().getWorld("world2");
-		secondWorldSpawn = new Location(secondWorld, -13, 200, -11);
+		anarchyWorld = Bukkit.getServer().getWorld("world2");
+		anarchyWorldSpawn = new Location(anarchyWorld, -13, 200, -11);
 		Bukkit.getServer().createWorld(new WorldCreator("world3"));
 		thirdWorld = Bukkit.getServer().getWorld("world3");
 		thirdWorldSpawn = new Location(thirdWorld, -0, 200, -0);
@@ -136,7 +138,7 @@ public class VanaByte extends JavaPlugin {
 			if(input == 0){
 				toSend.teleport(hubSpawn);
 			}else if (input == 1){
-				toSend.teleport(secondWorldSpawn);
+				toSend.teleport(anarchyWorldSpawn);
 			} else if (input == 2) {
 				toSend.teleport(thirdWorldSpawn);
 			}

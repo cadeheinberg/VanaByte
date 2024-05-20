@@ -71,49 +71,6 @@ public class BasicPermissions implements Listener {
 			e.setCancelled(true);
 		}
 	}
-	@EventHandler
-	public void onMenuClick(InventoryClickEvent e) {
-		if(e.getWhoClicked() instanceof Player && ((Player) e.getWhoClicked()).getGameMode() == GameMode.CREATIVE){
-			//if player is in creative mode ignore
-			return;
-		}
-//		e.getWhoClicked().sendMessage("ClickedInventory: " + e.getClickedInventory().getType());
-//		e.getWhoClicked().sendMessage("Inventory: " + e.getInventory().getType());
-//		e.getWhoClicked().sendMessage("InventoryView: " + e.getView().getType());
-//		e.getWhoClicked().sendMessage("InventoryViewTop: " + e.getView().getTopInventory().getType());
-//		e.getWhoClicked().sendMessage("InventoryViewBottom: " + e.getView().getBottomInventory().getType());
-//		if(SafeZone.inHub(e.getWhoClicked().getWorld())){
-//			e.setCancelled(true);
-//			return;
-//		}
-		if(!(e.getWhoClicked() instanceof Player)){
-			return;
-		}
-		if(e.getInventory() != null && e.getInventory().getType() == InventoryType.CRAFTING){
-			if(e.getView() != null && e.getView().getTopInventory() != null && e.getView().getTopInventory().getType() == InventoryType.CRAFTING){
-				if(e.getView().getBottomInventory() != null && e.getView().getBottomInventory().getType() == InventoryType.PLAYER){
-					return;
-				}
-			}
-		}
-		if(e.getAction() == InventoryAction.MOVE_TO_OTHER_INVENTORY || e.getAction() == InventoryAction.PICKUP_ALL || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PICKUP_HALF || e.getAction() == InventoryAction.PICKUP_ONE || e.getAction() == InventoryAction.PLACE_SOME || e.getAction() == InventoryAction.PLACE_ALL || e.getAction() == InventoryAction.PLACE_ONE){
-			if (e.getCursor() != null && e.getCursor().hasItemMeta()) {
-				if (FighterKitManager.hasNameOfWeapon(e.getCursor())) {
-					e.setCancelled(true);
-					e.getWhoClicked().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
-					((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-				}
-			}
-			if (e.getCurrentItem() != null && e.getCurrentItem().hasItemMeta()) {
-				if (FighterKitManager.hasNameOfWeapon(e.getCurrentItem())) {
-					e.setCancelled(true);
-					e.getWhoClicked().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
-					((Player) e.getWhoClicked()).playSound(e.getWhoClicked().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-				}
-			}
-		}
-
-	}
 
 	@EventHandler
 	public void onPlace(BlockPlaceEvent e) {

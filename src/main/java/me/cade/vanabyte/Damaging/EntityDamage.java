@@ -2,6 +2,7 @@ package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.*;
+import me.cade.vanabyte.NPCS.GUIs.QuestListener;
 import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
@@ -12,15 +13,44 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class EntityDamage implements Listener {
 
 	@EventHandler
+	public void onEntityDeath(EntityDeathEvent e) {
+//		if(e.getEntity() instanceof Zombie){
+//			Bukkit.getServer().broadcastMessage("entity death " + e.getDamageSource().getDamageType());
+//		}
+		//ignore entities that arent living
+		if(!(e.getEntity() instanceof LivingEntity)){
+			return;
+		}
+		//ignore player deaths in this method
+		if(e.getEntity() instanceof Player){
+			return;
+		}
+		//e.getEntity().getKiller().sendMessage("You killed a " + e.getEntity().getType().name() + " huh " + e.getDamageSource());
+		//e.getEntity().getKiller().sendMessage("You killed a " + e.getEntity().getType().name() + " with " + e.getDamageSource().getDamageType());
+		//ignore when there is no killer
+		if(e.getEntity().getKiller() == null){
+			return;
+		}
+		if(e.getEntity().getKiller() instanceof Player) {
+			QuestListener.entityKilledByPlayer(e);
+		}
+	}
+
+	@EventHandler
 	public void onDamage(EntityDamageEvent e) {
+//		if(e.getEntity() instanceof Zombie){
+//			Bukkit.getServer().broadcastMessage("ede " + e.getDamageSource().getDamageType());
+//		}
 		if (SafeZone.safeZone(e.getEntity().getLocation())) {
 			if(SafeZone.ladderZone(e.getEntity().getLocation())){
 				//inside ladder match
@@ -39,6 +69,7 @@ public class EntityDamage implements Listener {
 	// do grief give back health special
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
+//		e.getDamager().sendMessage("edbee " + e.getCause());
 		if (SafeZone.safeZone(e.getEntity().getLocation())) {
 			if(SafeZone.ladderZone(e.getEntity().getLocation()) && SafeZone.ladderZone(e.getDamager().getLocation())){
 				//inside ladder match
@@ -72,25 +103,18 @@ public class EntityDamage implements Listener {
 					killer = (Player) p.getShooter();
 					Fighter fighter = Fighter.get(killer);
 					FighterKit fKit = fighter.getFKit();
-					killer.sendMessage("hit enemy");
 					if (e.getDamager() instanceof Snowball && fKit.getSpecificWeaponHolderIfItExists(W2_ShottyShotgun.class) != null) {
-						killer.sendMessage("hit 1");
 						damage_amount = ((W2_ShottyShotgun) fKit.getSpecificWeaponHolderIfItExists(W2_ShottyShotgun.class)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-						killer.sendMessage("hit 2");
 					} else if (e.getDamager() instanceof Arrow && fKit.getSpecificWeaponHolderIfItExists(W3_GoblinBow.class) != null) {
-						killer.sendMessage("hit 3");
 						damage_amount = ((W3_GoblinBow) fKit.getSpecificWeaponHolderIfItExists(W3_GoblinBow.class)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-						killer.sendMessage("hit 4");
 					} else if (e.getDamager() instanceof Trident && fKit.getSpecificWeaponHolderIfItExists(W4_IgorsTrident.class) != null) {
-						killer.sendMessage("hit 5");
 						damage_amount = ((W4_IgorsTrident) fKit.getSpecificWeaponHolderIfItExists(W4_IgorsTrident.class)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
 						e.getDamager().remove();
 						e.setDamage(damage_amount);
-						killer.sendMessage("hit 6");
 					}
 				}
 			}
@@ -141,7 +165,7 @@ public class EntityDamage implements Listener {
 		fVictim.fighterDeath();
 
 		if(!SafeZone.inHub(victim.getLocation().getWorld())){
-			List<ItemStack> drops = List.copyOf(e.getDrops());
+			List<ItemStack> drops = e.getDrops();
 			for(ItemStack drop : drops){
 				if (FighterKitManager.hasNameOfWeapon(drop)) {
 					e.getDrops().remove(drop);

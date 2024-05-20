@@ -12,23 +12,23 @@ public class LivingEntity {
 	private static int spawnAmount = 2;
 
 	private static String[] names = {
-			ChatColor.AQUA + "" + ChatColor.GOLD + "" + ChatColor.BOLD + "Join Anarchy",
-			ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "Vana's Battle Royale",
+			ChatColor.GOLD + "" + ChatColor.BOLD + "Join Anarchy",
+			ChatColor.GOLD + "" + ChatColor.BOLD + "Que for Vana's Royale",
 			ChatColor.AQUA + "" + ChatColor.BOLD + "Kit Upgrades",
 			ChatColor.AQUA + "" + ChatColor.BOLD + "Enhancement Perks",
 			ChatColor.AQUA + "" + ChatColor.BOLD + "Custom Crafting",
 			ChatColor.AQUA + "" + ChatColor.BOLD + "Starting Packs",
 	};
     private static Location[] locations = {
-            new Location(VanaByte.hub, -1062.5, 197, -138.5, -135, 0),
-			new Location(VanaByte.hub, -1052.5, 195.1, -112.5, 180, 0),
+            new Location(VanaByte.hub, -1042.5, 195.1, -119.5, 45, 0),
+			new Location(VanaByte.hub, -1062.5, 195.1, -119.5, -45, 0),
 			new Location(VanaByte.hub, -1063.5, 195, -118.5, -45, 0),
 			new Location(VanaByte.hub, -1061.5, 195, -120.5, -45, 0),
 			new Location(VanaByte.hub, -1043.5, 195, -120.5, 45, 0),
 			new Location(VanaByte.hub, -1041.5, 195, -118.5, 45, 0),
     };
     private static EntityType[] types = {
-            EntityType.IRON_GOLEM,
+            EntityType.WOLF,
 			EntityType.CAT,
 			EntityType.SNOW_GOLEM,
 			EntityType.VILLAGER,

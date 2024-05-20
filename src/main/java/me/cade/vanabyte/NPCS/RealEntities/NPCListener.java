@@ -46,8 +46,13 @@ public class NPCListener implements Listener {
 				e.getPlayer().sendMessage(ChatColor.GREEN + "Coming soon!");
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_CAT_PURREOW, 8, 1);
 				return;
-			}else if (e.getRightClicked().getType() == EntityType.IRON_GOLEM) {
-				e.getPlayer().teleport(VanaByte.secondWorldSpawn);
+			}else if (e.getRightClicked().getType() == EntityType.WOLF) {
+				if(e.getPlayer().isOp()){
+					e.getPlayer().teleport(VanaByte.anarchyWorldSpawn);
+				}else{
+					e.getPlayer().sendMessage(ChatColor.GREEN + "Coming soon!");
+					e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_WOLF_HOWL, 8, 1);
+				}
 				return;
 			} else if (e.getRightClicked().getType() == EntityType.SNOW_GOLEM) {
 				//if you are here, you are trying to set upgrades
@@ -82,7 +87,7 @@ public class NPCListener implements Listener {
 					player.sendMessage(ChatColor.GREEN + "Server in beta, you have unlocked this kit for free!");
 					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 					fighter.getFighterKitManager().setUnlockedKit(i, 1);
-					fighter.getFighterHologramManager().refreshMyKitHolograms(i);
+					fighter.getFighterPacketHologramsManager().fighterPurchasedKit();
 				}
 			}
 		}

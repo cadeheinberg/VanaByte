@@ -1,26 +1,40 @@
-package me.cade.vanabyte.NPCS.Holograms;
+package me.cade.vanabyte.NPCS.RealEntities;
 
-import me.cade.vanabyte.PlayerJoinListener;
 import me.cade.vanabyte.VanaByte;
-import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Location;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
-public class MyHologram {
+public class RealHologram {
 
-    private static Plugin plugin = VanaByte.getPlugin(VanaByte.class);
+    private static int spawnAmount = 1;
+
+    private static String[] names = {
+            ChatColor.GREEN + "Upgrades",
+    };
+    private static Location[] locations = {
+            new Location(VanaByte.hub, -1052.5, 195.2, -112.5, 0, 0)
+    };
+
+    private static RealHologram[] selectors = new RealHologram[spawnAmount];
+
+    public static void spawnAll() {
+        for (int i = 0; i < spawnAmount; i++) {
+            selectors[i] = new RealHologram(locations[i], Arrays.asList(names[i]));
+        }
+    }
+
     private Location location = null;
     private List<ArmorStand> hologramLines = null;
-    private List<UUID> viewers = null;
 
-    protected MyHologram(Location inLocation, List<String> displayLines){
+    protected RealHologram(Location inLocation, List<String> displayLines){
         hologramLines = new ArrayList<>();
         //Bukkit.getServer().getOnlinePlayers().forEach(player -> {player.sendMessage("hologram: " + inLocation.getX() + " " + inLocation.getY() + " " + inLocation.getZ());});
         for(int i = 0; i < displayLines.size(); i++){
@@ -34,7 +48,6 @@ public class MyHologram {
             hologramLines.add(armorStand);
         }
         this.location = inLocation;
-        viewers = new ArrayList<>();
     }
 
     protected void setText(List<String> displayLines){
@@ -62,23 +75,6 @@ public class MyHologram {
                 hologramLines.add(armorStand);
             }
         }
-    }
-
-    protected void ShowTo(Player player){
-        for(ArmorStand armorStand : hologramLines){
-            player.showEntity(plugin, armorStand);
-        }
-        viewers.add(player.getUniqueId());
-    }
-
-    protected void hideFrom(Player player){
-        for(ArmorStand armorStand : hologramLines){
-            player.hideEntity(plugin, armorStand);
-        }
-    }
-
-    protected boolean hasViewer(UUID uuid){
-        return viewers.contains(uuid);
     }
 
 }

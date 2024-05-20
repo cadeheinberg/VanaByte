@@ -26,5 +26,12 @@ public class SafeZone {
     }
     return false;
   }
+
+  public static boolean inAnarchy(World world){
+    if (world == VanaByte.anarchyWorld){
+      return true;
+    }
+    return false;
+  }
   
 }

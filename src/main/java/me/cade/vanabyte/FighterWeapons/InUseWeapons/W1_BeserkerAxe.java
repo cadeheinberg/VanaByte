@@ -20,6 +20,7 @@ public class W1_BeserkerAxe extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
+
     public W1_BeserkerAxe(Fighter fighter) {
         super(fighter);
         this.fighter = fighter;
@@ -32,7 +33,7 @@ public class W1_BeserkerAxe extends WeaponHolder {
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 80 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.IRON_AXE;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.BESERKER_AXE, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
@@ -45,7 +46,7 @@ public class W1_BeserkerAxe extends WeaponHolder {
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 80;
         this.material = Material.IRON_AXE;
-        this.weapon = new Weapon(this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.BESERKER_AXE, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
