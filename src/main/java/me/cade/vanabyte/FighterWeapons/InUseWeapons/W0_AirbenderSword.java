@@ -119,8 +119,7 @@ public class W0_AirbenderSword extends WeaponHolder {
                     }
                 }
                 VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).build(), this.specialDamage), this.weapon.getWeaponType()));
-                //((CraftEntity) entity).getHandle().hurt(new net.minecraft.world.damagesource.DamageSource, 15f);
-                ((LivingEntity) entity).damage(this.specialDamage, this.player);
+                ((LivingEntity) entity).damage(this.specialDamage);
                 Vector currentDirection = playerLocation.getDirection().normalize();
                 currentDirection = currentDirection.multiply(new Vector(power, power, power));
                 entity.setVelocity(currentDirection);

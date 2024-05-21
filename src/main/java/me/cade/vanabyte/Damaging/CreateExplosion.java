@@ -43,8 +43,8 @@ public class CreateExplosion {
 			currentDirection = currentDirection.multiply(new Vector(power, power, power));
 			ent.setVelocity(currentDirection);
 			if (((LivingEntity) ent) != shooter) {
-				((LivingEntity) ent).damage(damage, (Entity) shooter);
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(shooter, ent, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).build(), damage), weaponType));
+				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(shooter, ent, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage), weaponType));
+				((LivingEntity) ent).damage(damage);
 				if (confusion) {
 					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 2));
 					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 120, 2));

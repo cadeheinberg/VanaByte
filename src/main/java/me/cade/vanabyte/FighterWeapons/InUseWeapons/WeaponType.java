@@ -23,6 +23,16 @@ public enum WeaponType {
         this.name = name;
     }
 
+
+    public static WeaponType fromName(String name) {
+        for (WeaponType type : WeaponType.values()) {
+            if (type.getName().equalsIgnoreCase(name)) {
+                return type;
+            }
+        }
+        return WeaponType.UNKNOWN_WEAPON;
+    }
+
     public String getName() {
         return this.name;
     }

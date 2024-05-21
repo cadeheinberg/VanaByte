@@ -3,13 +3,11 @@ package me.cade.vanabyte.NPCS.GUIs;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.Weapon;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKitManager;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.*;
-import org.bukkit.inventory.ItemStack;
 
 public class MyGUIListener implements Listener {
 

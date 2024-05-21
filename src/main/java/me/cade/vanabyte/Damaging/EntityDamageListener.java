@@ -12,6 +12,8 @@ import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -63,12 +65,16 @@ public class EntityDamageListener implements Listener {
 		Fighter fVictim = Fighter.get(victim);
 		fVictim.fighterDeath();
 
-		EntityDamageEntry damageEntry = VanaByte.getEntityDamageManger().getOrCreate(victim.getUniqueId()).getLastAttacker();
+		EntityDamageData victimDamageData = VanaByte.getEntityDamageManger().getOrCreate(victim.getUniqueId());
+		EntityDamageEntry damageEntry = victimDamageData.getLastAttacker();
+		if(damageEntry == null){
+			//no entity responsible for this death
+			return;
+		}
 		EntityType killerType = damageEntry.getAttackerType();
 		UUID killerUUID = damageEntry.getAttackerUUID();
 		WeaponType weaponType = damageEntry.getWeaponType();
 		Entity killer = Bukkit.getServer().getEntity(killerUUID);
-
 		if(SafeZone.inAnarchy(victim.getWorld())){
 //			List<ItemStack> drops = e.getDrops();
 //			for(ItemStack drop : drops){
@@ -80,7 +86,6 @@ public class EntityDamageListener implements Listener {
 //				}
 //			}
 		}
-
 		if(killer == null){
 			e.setDeathMessage("");
 		} else if(killer instanceof Player){
@@ -96,8 +101,8 @@ public class EntityDamageListener implements Listener {
 				Fighter fKiller = Fighter.get(pkiller);
 				if(fKiller != null){
 					fKiller.incKills();
-					return;
 				}
+				QuestListener.entityKilledByPlayer(damageEntry);
 			}
 		} else if(killer instanceof LivingEntity){
 			LivingEntity lKiller = (LivingEntity) killer;
@@ -143,6 +148,7 @@ public class EntityDamageListener implements Listener {
 			return;
 		}
 		if (damagingEntity == null) {
+			Bukkit.getServer().broadcastMessage("EntityDamageEntity 5");
 			e.getEntity().sendMessage("EntityDamage 7");
 			//ToDo
 		} else if (damagingEntity instanceof Player){
@@ -211,7 +217,7 @@ public class EntityDamageListener implements Listener {
 					return;
 				}
 				Fighter fKiller = Fighter.get(pkiller);
-				if(fKiller != null){
+				if(fKiller == null){
 					return;
 				}
 				FighterKit fKitKiller = fKiller.getFKit();
@@ -224,27 +230,27 @@ public class EntityDamageListener implements Listener {
 					//eventually just use the metadata to store weapon type
 					//cause you might add multiple weapons that shoot snowballs
 					WeaponType weaponType = WeaponType.SHOTTY_SHOTGUN;
-					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, weaponType));
 					if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
 						damage_amount = ((W2_ShottyShotgun) fKitKiller.getWeaponHolderWithType(weaponType)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
-						e.getDamager().remove();
+						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) pkiller, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage_amount), weaponType));
 						e.setDamage(damage_amount);
+						e.getDamager().remove();
 					}
 				} else if (damagingEntity instanceof Arrow){
 					WeaponType weaponType = WeaponType.GOBLIN_BOW;
-					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, weaponType));
 					if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
 						damage_amount = ((W3_GoblinBow) fKitKiller.getWeaponHolderWithType(weaponType)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
-						e.getDamager().remove();
+						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) pkiller, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage_amount), weaponType));
 						e.setDamage(damage_amount);
+						e.getDamager().remove();
 					}
 				}else if (damagingEntity instanceof Trident) {
 					WeaponType weaponType = WeaponType.IGORS_TRIDENT;
-					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, weaponType));
 					if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
 						damage_amount = ((W4_IgorsTrident) fKitKiller.getWeaponHolderWithType(weaponType)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
-						e.getDamager().remove();
+						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) pkiller, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage_amount), weaponType));
 						e.setDamage(damage_amount);
+						e.getDamager().remove();
 					}
 				} else {
 						//some other projectile
@@ -280,7 +286,7 @@ public class EntityDamageListener implements Listener {
 			return false;
 		}
 		if(killer instanceof Player){
-			if (((Player) killer).isOnline()) {
+			if (!((Player) killer).isOnline()) {
 				return false;
 			}
 		}

@@ -140,13 +140,13 @@ public class KitListener implements Listener {
 			return;
 		}
 		Player pkiller = (Player) e.getEntity().getShooter();
-		WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(e.getEntity());
+		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(pkiller);
 		if(weaponType == null ||
 				Fighter.get(pkiller) == null ||
 				Fighter.get(pkiller).getFKit() == null){
 			return;
 		}
-		if (e.getEntityType() == EntityType.TRIDENT) {
+		if (e.getEntity().getType() == EntityType.TRIDENT) {
 			FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
 			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(WeaponType.IGORS_TRIDENT);
 			if(weaponHolder == null){
@@ -169,13 +169,13 @@ public class KitListener implements Listener {
 			return;
 		}
 		Player pkiller = (Player) e.getEntity();
-		WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(e.getProjectile());
+		WeaponType weaponType = Weapon.getWeaponType(e.getBow());
 		if(weaponType == null ||
 				Fighter.get(pkiller) == null ||
 				Fighter.get(pkiller).getFKit() == null){
 			return;
 		}
-		if (e.getEntityType() == EntityType.ARROW) {
+		if (e.getProjectile().getType() == EntityType.ARROW) {
 			FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
 			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(WeaponType.GOBLIN_BOW);
 			if(weaponHolder == null){
@@ -229,7 +229,7 @@ public class KitListener implements Listener {
 		if(!(e.getEntity() instanceof TNTPrimed)){
 			return;
 		}
-		if (EntityMetadata.getWeaponTypeFromEntity(e.getEntity()) != null) {
+		if (EntityMetadata.getWeaponTypeFromEntity(e.getEntity()) == null) {
 			return;
 		}
 		if (EntityMetadata.getWeaponTypeFromEntity(e.getEntity()) == WeaponType.UNKNOWN_WEAPON) {

@@ -132,4 +132,21 @@ public class Weapon {
       return WeaponType.valueOf(weaponTypeName);
   }
 
+    public static WeaponType getWeaponTypeFromMainHand(Player player) {
+        ItemStack itemStack = player.getEquipment().getItemInMainHand();
+        ItemMeta meta = itemStack.getItemMeta();
+        if(meta == null){
+            return WeaponType.UNKNOWN_WEAPON;
+        }
+        PersistentDataContainer container = meta.getPersistentDataContainer();
+        if(container == null){
+            return WeaponType.UNKNOWN_WEAPON;
+        }
+        if (!(container.has(WEAPON_TYPE_KEY, PersistentDataType.STRING))) {
+            return WeaponType.UNKNOWN_WEAPON;
+        }
+        String weaponTypeName = container.get(WEAPON_TYPE_KEY, PersistentDataType.STRING);
+        return WeaponType.valueOf(weaponTypeName);
+    }
+
 }

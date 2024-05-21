@@ -8,6 +8,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 public class QuestListener implements Listener {
 
     public static void entityKilledByPlayer(EntityDamageEntry e) {
-        Bukkit.getServer().getPlayer(e.getAttackerUUID()).sendMessage("You killed a " + e.getVictimType() + " with " + e.getWeaponType().getName());
+        Bukkit.getServer().getPlayer(e.getAttackerUUID()).sendMessage("quests: you killed " + e.getVictimType() + " with " + e.getWeaponType().getName());
     }
 }

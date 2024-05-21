@@ -1,5 +1,7 @@
 package me.cade.vanabyte.Damaging.DamageTracker;
 
+import org.bukkit.Bukkit;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -17,6 +19,10 @@ public class EntityDamageData {
     }
 
     public void addEntry(EntityDamageEntry entry) {
+//        Bukkit.getServer().broadcastMessage("logging: attacker" + Bukkit.getServer().getEntity(entry.getAttackerUUID()) +
+//                "victim" + Bukkit.getServer().getEntity(entry.getVictimUUID()) +
+//                "weapon" + entry.getWeaponType() +
+//                "damage" + entry.getDamage());
         entries.add(entry);
     }
 
@@ -24,6 +30,8 @@ public class EntityDamageData {
         return List.copyOf(entries);
     }
 
+    //todo, get the last player that damaged if they exis
+    //todo, if there isnt a player, get the last entity
     public EntityDamageEntry getLastAttacker() {
         //using last 10 seconds
         long time = System.currentTimeMillis() - (10 * 1000L);

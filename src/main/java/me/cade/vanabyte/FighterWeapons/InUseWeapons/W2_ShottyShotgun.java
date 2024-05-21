@@ -31,8 +31,8 @@ public class W2_ShottyShotgun extends WeaponHolder {
         this.player = this.fighter.getPlayer();
         this.fighterKitManager = this.fighter.getFighterKitManager();
         this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
-        this.projectileDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 10 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.projectileDamage = 15 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
+        this.specialDamage = 15 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 20 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
@@ -44,8 +44,8 @@ public class W2_ShottyShotgun extends WeaponHolder {
     public W2_ShottyShotgun(){
         super();
         this.meleeDamage = 6;
-        this.projectileDamage = 0;
-        this.specialDamage = 7;
+        this.projectileDamage = 15;
+        this.specialDamage = 15;
         this.abilityDurationTicks = 200;
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
