@@ -1,5 +1,6 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
+import me.cade.vanabyte.Fighters.EntityMetadata;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
@@ -81,7 +82,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 		TNTPrimed fuse = (TNTPrimed) tnt;
 		tnt.setCustomName(this.player.getName());
 		tnt.setCustomNameVisible(false);
-		tnt.setMetadata("thrower", new FixedMetadataValue(VanaByte.getInstance(), this.player.getName()));
+		EntityMetadata.addWeaponTypeToEntity(tnt, this.weapon.getWeaponType(), this.player.getUniqueId());
 		fuse.setFuseTicks(15);
 		Vector currentDirection4 = player.getLocation().getDirection().normalize();
 		currentDirection4 = currentDirection4.multiply(new Vector(1, 1, 1));

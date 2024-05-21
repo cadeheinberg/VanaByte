@@ -4,10 +4,16 @@ import me.cade.vanabyte.FighterWeapons.WeaponAbility;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.FighterKit;
+import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Snowball;
+import org.bukkit.entity.Trident;
+import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class WeaponHolder {
     static final String weaponDrop = null;
@@ -50,6 +56,10 @@ public class WeaponHolder {
                 return false;
             }
             return true;
+    }
+
+    public boolean doProjectileHitBlock(ProjectileHitEvent e) {
+        return true;
     }
 
     public void activateSpecial() {

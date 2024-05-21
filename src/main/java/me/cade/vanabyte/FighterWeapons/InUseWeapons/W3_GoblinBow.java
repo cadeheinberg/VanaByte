@@ -2,12 +2,14 @@ package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.FighterProjectile;
+import me.cade.vanabyte.Fighters.EntityMetadata;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -79,6 +81,16 @@ public class W3_GoblinBow extends WeaponHolder {
         super.deActivateSpecial();
     }
 
+    @Override
+    public boolean doProjectileHitBlock(ProjectileHitEvent e) {
+        if (!super.doProjectileHitBlock(e)) {
+            return false;
+        }
+        //arrow hit ground
+        e.getEntity().remove();
+        return true;
+    }
+
     public double doArrowHitEntity(LivingEntity victim, Arrow arrow) {
         // create your own form of knockback
         if (victim instanceof Player) {
@@ -99,7 +111,7 @@ public class W3_GoblinBow extends WeaponHolder {
         if(this.getRightClickCooldownTicks() > 0){
             player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
         }
-        FighterProjectile.addMetadataToProjectile(arrow);
+        EntityMetadata.addWeaponTypeToEntity(arrow, this.weapon.getWeaponType(), this.player.getUniqueId());
         if (super.getWeaponAbility().isAbilityActive()) {
             arrow.setFireTicks(1000);
             doArrowBarrage(this.player, arrow, force);
@@ -107,43 +119,43 @@ public class W3_GoblinBow extends WeaponHolder {
         return true;
     }
 
-    public static void doArrowBarrage(Player player, Arrow arrow, double force) {
+    public void doArrowBarrage(Player player, Arrow arrow, double force) {
         if (force > 0.75) {
             Arrow arrow1 = player.launchProjectile(Arrow.class);
             arrow1.setVelocity(arrow.getVelocity().add(new Vector(0, 0.25, 0)));
             arrow1.setFireTicks(2000);
             arrow1.setShooter(player);
-            FighterProjectile.addMetadataToProjectile(arrow1);
+            EntityMetadata.addWeaponTypeToEntity(arrow1, this.weapon.getWeaponType(), this.player.getUniqueId());
 
             Arrow arrow2 = player.launchProjectile(Arrow.class);
             arrow2.setVelocity(arrow.getVelocity().add(new Vector(0, -0.25, 0)));
             arrow2.setFireTicks(2000);
             arrow2.setShooter(player);
-            FighterProjectile.addMetadataToProjectile(arrow2);
+            EntityMetadata.addWeaponTypeToEntity(arrow2, this.weapon.getWeaponType(), this.player.getUniqueId());
 
             Arrow arrow3 = player.launchProjectile(Arrow.class);
             arrow3.setVelocity(arrow.getVelocity().add(new Vector(0.25, 0, 0)));
             arrow3.setFireTicks(2000);
             arrow3.setShooter(player);
-            FighterProjectile.addMetadataToProjectile(arrow3);
+            EntityMetadata.addWeaponTypeToEntity(arrow3, this.weapon.getWeaponType(), this.player.getUniqueId());
 
             Arrow arrow4 = player.launchProjectile(Arrow.class);
             arrow4.setVelocity(arrow.getVelocity().add(new Vector(-0.25, 0, 0)));
             arrow4.setFireTicks(2000);
             arrow4.setShooter(player);
-            FighterProjectile.addMetadataToProjectile(arrow4);
+            EntityMetadata.addWeaponTypeToEntity(arrow4, this.weapon.getWeaponType(), this.player.getUniqueId());
 
             Arrow arrow5 = player.launchProjectile(Arrow.class);
             arrow5.setVelocity(arrow.getVelocity().add(new Vector(0, 0, 0.25)));
             arrow5.setFireTicks(2000);
             arrow5.setShooter(player);
-            FighterProjectile.addMetadataToProjectile(arrow5);
+            EntityMetadata.addWeaponTypeToEntity(arrow5, this.weapon.getWeaponType(), this.player.getUniqueId());
 
             Arrow arrow6 = player.launchProjectile(Arrow.class);
             arrow6.setVelocity(arrow.getVelocity().add(new Vector(0, 0, -0.25)));
             arrow6.setFireTicks(2000);
             arrow6.setShooter(player);
-            FighterProjectile.addMetadataToProjectile(arrow6);
+            EntityMetadata.addWeaponTypeToEntity(arrow6, this.weapon.getWeaponType(), this.player.getUniqueId());
             return;
         }
     }

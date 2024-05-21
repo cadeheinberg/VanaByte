@@ -1,5 +1,6 @@
 package me.cade.vanabyte.NPCS.RealEntities;
 
+import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
@@ -71,8 +72,8 @@ public class NPCListener implements Listener {
 			return;
 		}
 	    if (e.getRightClicked() instanceof LivingEntity) {
-			if(Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(W5_SumoStick.class) != null){
-				((W5_SumoStick)Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(W5_SumoStick.class)).doPickUp((LivingEntity) e.getRightClicked());
+			if(Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(WeaponType.SUMO_STICK) != null){
+				((W5_SumoStick)Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(WeaponType.SUMO_STICK)).doPickUp((LivingEntity) e.getRightClicked());
 			}
 	    }
 	}

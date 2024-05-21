@@ -1,13 +1,16 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
+import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.FighterProjectile;
+import me.cade.vanabyte.Fighters.EntityMetadata;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
+import org.bukkit.event.entity.ProjectileHitEvent;
 
 public class W4_IgorsTrident extends WeaponHolder {
     final String weaponDrop = "Explosive Tridents";
@@ -73,6 +76,19 @@ public class W4_IgorsTrident extends WeaponHolder {
         super.deActivateSpecial();
     }
 
+    @Override
+    public boolean doProjectileHitBlock(ProjectileHitEvent e) {
+        if (!super.doProjectileHitBlock(e)) {
+            return false;
+        }
+        //trident hit ground
+        if (e.getEntity().getFireTicks() > 0) {
+            CreateExplosion.doAnExplosion(this.player, e.getHitBlock().getLocation(), 0.7, this.specialDamage, true, weapon.getWeaponType());
+        }
+        e.getEntity().remove();
+        return true;
+    }
+
     public boolean doThrowTrident(Trident trident) {
         if (player.getCooldown(this.getMaterial()) > 0) {
             return false;
@@ -83,7 +99,7 @@ public class W4_IgorsTrident extends WeaponHolder {
         if (super.getWeaponAbility().isAbilityActive()) {
             trident.setFireTicks(1000);
         }
-        FighterProjectile.addMetadataToProjectile(trident);
+        EntityMetadata.addWeaponTypeToEntity(trident, this.weapon.getWeaponType(), this.player.getUniqueId());
         this.player.getInventory().remove(this.getWeapon().getWeaponItem());
         player.getInventory().setItemInMainHand(this.getWeapon().getWeaponItem());
         trident.setShooter(player);
@@ -95,20 +111,13 @@ public class W4_IgorsTrident extends WeaponHolder {
         if (trident.getFireTicks() > 0) {
             Location local = victim.getLocation();
             local.setY(local.getY() - 0.5);
-            CreateExplosion.doAnExplosion(this.player, local, 0.7, this.specialDamage, true);
+            CreateExplosion.doAnExplosion(this.player, local, 0.7, this.specialDamage, true, this.weapon.getWeaponType());
             //explosion will deal special damage ^^
             return 0;
         }
         else{
             return this.getProjectileDamage();
         }
-    }
-
-    public void doTridentHitGround(Location location, Trident trident) {
-        if (trident.getFireTicks() > 0) {
-            CreateExplosion.doAnExplosion(this.player, location, 0.7, this.specialDamage, true);
-        }
-        trident.remove();
     }
 
     @Override

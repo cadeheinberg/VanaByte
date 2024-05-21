@@ -1,12 +1,18 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
+import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.Material;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -112,7 +118,9 @@ public class W0_AirbenderSword extends WeaponHolder {
                         return;
                     }
                 }
-                ((LivingEntity) entity).damage(15, this.player);
+                VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(player, entity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).build(), this.specialDamage), this.weapon.getWeaponType()));
+                //((CraftEntity) entity).getHandle().hurt(new net.minecraft.world.damagesource.DamageSource, 15f);
+                ((LivingEntity) entity).damage(this.specialDamage, this.player);
                 Vector currentDirection = playerLocation.getDirection().normalize();
                 currentDirection = currentDirection.multiply(new Vector(power, power, power));
                 entity.setVelocity(currentDirection);

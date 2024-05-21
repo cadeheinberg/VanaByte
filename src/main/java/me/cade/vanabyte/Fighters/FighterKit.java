@@ -36,14 +36,12 @@ public abstract class FighterKit {
 	}
 
 	public WeaponHolder getWeaponHolderWithType(WeaponType weaponType) {
-		for (WeaponHolder weaponHolder : weaponHolders) {
+		for (WeaponHolder weaponHolder : this.weaponHolders) {
 			if (weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null) {
 				continue;
 			}
-			for (WeaponHolder myWeaponHolders : this.weaponHolders) {
-				if (myWeaponHolders.getWeapon().getWeaponType() == weaponType) {
-					return weaponHolder;
-				}
+			if (weaponHolder.getWeapon().getWeaponType() == weaponType) {
+				return weaponHolder;
 			}
 		}
 		return null;

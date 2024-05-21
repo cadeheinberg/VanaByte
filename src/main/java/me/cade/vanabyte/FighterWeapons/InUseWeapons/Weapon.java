@@ -69,6 +69,7 @@ public class Weapon {
       meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
       meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
       meta.setLore(itemLore);
+      meta.setMaxStackSize(1);
       meta.setUnbreakable(true);
       PersistentDataContainer container = meta.getPersistentDataContainer();
       container.set(WEAPON_TYPE_KEY, PersistentDataType.STRING, this.weaponType.name());

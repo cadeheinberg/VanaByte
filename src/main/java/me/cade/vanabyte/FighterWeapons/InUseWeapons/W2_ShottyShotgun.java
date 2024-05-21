@@ -1,12 +1,12 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.FighterProjectile;
+import me.cade.vanabyte.Fighters.EntityMetadata;
 import org.bukkit.*;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Snowball;
+import org.bukkit.entity.*;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -37,7 +37,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 20 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.IRON_SHOVEL;
-        this.weapon = new Weapon(WeaponType.SHOTTY_SHOTGUN, this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(WeaponType.SHOTTY_SHOTGUN, this.getMaterial(), weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
@@ -53,6 +53,15 @@ public class W2_ShottyShotgun extends WeaponHolder {
         this.weapon = new Weapon(WeaponType.SHOTTY_SHOTGUN, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
+    }
+
+    @Override
+    public boolean doProjectileHitBlock(ProjectileHitEvent e){
+        if(!super.doProjectileHitBlock(e)){
+            return false;
+        }
+        //snowball hit ground
+        return true;
     }
 
     @Override
@@ -91,11 +100,6 @@ public class W2_ShottyShotgun extends WeaponHolder {
         return this.getProjectileDamage();
     }
 
-    public void doSnowballHitGround(Location location, Snowball snowball) {
-        if (snowball.getFireTicks() > 0) {
-
-        }
-    }
     private void doShotgunRecoil(Double power) {
         Vector currentDirection = this.player.getLocation().getDirection().normalize();
         currentDirection = currentDirection.multiply(new Vector(power, power, power));
@@ -109,7 +113,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
             snowBalls.add(this.player.launchProjectile(Snowball.class));
             Random random = new Random();
             snowBalls.get(i).setVelocity(snowBalls.get(i).getVelocity().add(new Vector(random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25))));
-            FighterProjectile.addMetadataToProjectile(snowBalls.get(i));
+            EntityMetadata.addWeaponTypeToEntity(snowBalls.get(i), this.weapon.getWeaponType(), this.player.getUniqueId());
             snowBalls.get(i).setShooter(this.player);
             if (super.getWeaponAbility().isAbilityActive()) {
                 snowBalls.get(i).setFireTicks(1000);

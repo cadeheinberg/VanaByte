@@ -311,9 +311,11 @@ public class FighterKitManager {
     }
 
     public void fighterDismountParachute() {
-        if(fKit.getSpecificWeaponHolderIfItExists(S0_Parachute.class) != null){
-            ((S0_Parachute) fKit.getSpecificWeaponHolderIfItExists(S0_Parachute.class)).getOff();
+        WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(WeaponType.PARACHUTE);
+        if(weaponHolder == null){
+            return;
         }
+        ((S0_Parachute) weaponHolder).getOff();
     }
 
     public FighterKit getFKit(){

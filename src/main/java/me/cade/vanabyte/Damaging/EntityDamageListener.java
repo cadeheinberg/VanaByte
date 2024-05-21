@@ -1,6 +1,7 @@
 package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
+import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageData;
 import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageEntry;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.*;
@@ -29,16 +30,19 @@ public class EntityDamageListener implements Listener {
 	public void onEntityDeath(EntityDeathEvent e) {
 		Entity victim = e.getEntity();
 		//ignore player deaths in this method
-		if(victim != null && (victim instanceof LivingEntity) && (!(victim instanceof Player))){
+		if(victim == null || victim instanceof Player){
 			return;
 		}
-
-		EntityDamageEntry damageEntry = VanaByte.getEntityDamageManger().get(victim.getUniqueId()).getLastAttacker();
+		EntityDamageData victimDamageData = VanaByte.getEntityDamageManger().getOrCreate(victim.getUniqueId());
+		EntityDamageEntry damageEntry = victimDamageData.getLastAttacker();
+		if(damageEntry == null){
+			//no entity responsible for this death
+			return;
+		}
 		EntityType killerType = damageEntry.getAttackerType();
 		UUID killerUUID = damageEntry.getAttackerUUID();
 		WeaponType weaponType = damageEntry.getWeaponType();
 		Entity killer = Bukkit.getServer().getEntity(killerUUID);
-
 		if(killer == null){
 
 		}else if(killer instanceof Player){
@@ -59,22 +63,22 @@ public class EntityDamageListener implements Listener {
 		Fighter fVictim = Fighter.get(victim);
 		fVictim.fighterDeath();
 
-		EntityDamageEntry damageEntry = VanaByte.getEntityDamageManger().get(victim.getUniqueId()).getLastAttacker();
+		EntityDamageEntry damageEntry = VanaByte.getEntityDamageManger().getOrCreate(victim.getUniqueId()).getLastAttacker();
 		EntityType killerType = damageEntry.getAttackerType();
 		UUID killerUUID = damageEntry.getAttackerUUID();
 		WeaponType weaponType = damageEntry.getWeaponType();
 		Entity killer = Bukkit.getServer().getEntity(killerUUID);
 
 		if(SafeZone.inAnarchy(victim.getWorld())){
-			List<ItemStack> drops = e.getDrops();
-			for(ItemStack drop : drops){
-				if(Weapon.getWeaponType(drop) != null || Weapon.getWeaponType(drop) != WeaponType.UNKNOWN_WEAPON){
-					e.getDrops().remove(drop);
-				}
-				if(FighterKitManager.getArmorType(drop) != null || FighterKitManager.getArmorType(drop) != ArmorType.UNKOWN_ARMOR){
-					e.getDrops().remove(drop);
-				}
-			}
+//			List<ItemStack> drops = e.getDrops();
+//			for(ItemStack drop : drops){
+//				if(Weapon.getWeaponType(drop) != null || Weapon.getWeaponType(drop) != WeaponType.UNKNOWN_WEAPON){
+//					e.getDrops().remove(drop);
+//				}
+//				if(FighterKitManager.getArmorType(drop) != null || FighterKitManager.getArmorType(drop) != ArmorType.UNKOWN_ARMOR){
+//					e.getDrops().remove(drop);
+//				}
+//			}
 		}
 
 		if(killer == null){
@@ -139,6 +143,7 @@ public class EntityDamageListener implements Listener {
 			return;
 		}
 		if (damagingEntity == null) {
+			e.getEntity().sendMessage("EntityDamage 7");
 			//ToDo
 		} else if (damagingEntity instanceof Player){
 			Player pkiller = (Player) e.getDamager();
@@ -146,7 +151,7 @@ public class EntityDamageListener implements Listener {
 				return;
 			}
 			Fighter fKiller = Fighter.get(pkiller);
-			if(fKiller != null){
+			if(fKiller == null){
 				return;
 			}
 			FighterKit fKitKiller = fKiller.getFKit();
@@ -195,7 +200,7 @@ public class EntityDamageListener implements Listener {
 				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
 			}else if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 				Projectile p = (Projectile) e.getDamager();
-				if (!FighterProjectile.projectileHasMetadata(e.getDamager())) {
+				if (EntityMetadata.getWeaponTypeFromEntity(e.getDamager()) == null) {
 					return;
 				}
 				if (!(p.getShooter() instanceof Player)) {

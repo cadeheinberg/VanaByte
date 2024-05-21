@@ -15,7 +15,7 @@ public class MyGUIListener implements Listener {
 
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
-        e.getWhoClicked().sendMessage("raw: " + e.getRawSlot() + "slot " + e.getSlot());
+        //e.getWhoClicked().sendMessage("raw: " + e.getRawSlot() + "slot " + e.getSlot());
         if(!(e.getWhoClicked() instanceof Player)){
             return;
         }

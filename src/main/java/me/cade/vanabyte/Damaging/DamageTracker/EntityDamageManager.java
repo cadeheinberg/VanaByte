@@ -13,9 +13,9 @@ public class EntityDamageManager {
         return data.computeIfAbsent(entityUUID, EntityDamageData::new);
     }
 
-    public EntityDamageData get(UUID entityUUID) {
-        return data.get(entityUUID);
-    }
+//    public EntityDamageData get(UUID entityUUID) {
+//        return data.get(entityUUID);
+//    }
 
 //    public EntityDamageData getOrDummy(UUID entityUUID) {
 //        return data.getOrDefault(entityUUID, new EntityDamageData(entityUUID));
@@ -39,7 +39,6 @@ public class EntityDamageManager {
         if (!(entity instanceof LivingEntity livingEntity)) {
             return;
         }
-
         EntityDamageData damageData = getOrCreate(livingEntity.getUniqueId());
         damageData.addEntry(new EntityDamageEntry(event));
     }
