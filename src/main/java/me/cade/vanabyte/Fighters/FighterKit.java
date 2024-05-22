@@ -12,6 +12,7 @@ public abstract class FighterKit {
 	Fighter fighter = null;
 	FighterKitManager fighterKitManager = null;
 	protected ArrayList<WeaponHolder> weaponHolders = new ArrayList<WeaponHolder>();
+	private boolean explosionImmune = false;
 
 	public FighterKit() {
 //		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "Creating FighterKit without player");
@@ -62,4 +63,11 @@ public abstract class FighterKit {
 		return null;
 	}
 
+	public boolean isExplosionImmune() {
+		return explosionImmune;
+	}
+
+	public void setExplosionImmune(boolean explosionImmune) {
+		this.explosionImmune = explosionImmune;
+	}
 }

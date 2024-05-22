@@ -16,6 +16,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Weapon {
 
@@ -26,7 +27,7 @@ public class Weapon {
   private static final ChatColor noColor = ChatColor.GRAY;
   private static final NamespacedKey WEAPON_TYPE_KEY = new NamespacedKey(VanaByte.getInstance(), "WeaponType");
 
-  public Weapon(WeaponType weaponType, Material material, String weaponName, double meleeDamage, double projectileDamage, double specialDamage, int cooldownTicks, int durationTicks, int rechargeTicks) {
+  public Weapon(WeaponType weaponType, Material material, String weaponName, double meleeDamage, double projectileDamage, double specialDamage, int cooldownTicks, int durationTicks, int rechargeTicks, String... extraLore) {
       ArrayList<String> itemLore = new ArrayList<String>();
       if(meleeDamage > 0) {
           itemLore.add(ChatColor.WHITE + "" + meleeDamage + ChatColor.YELLOW + " attack damage");
@@ -56,6 +57,9 @@ public class Weapon {
           itemLore.add(ChatColor.WHITE + "" + Math.round((rechargeTicks/20.0) * 10)/10.0 + "s" + ChatColor.AQUA + " Q recharge");
       }else {
           itemLore.add(noColor + "" + Math.round((rechargeTicks/20.0) * 10)/10.0 + "s" + noColor + " Q recharge");
+      }
+      for(String extraLine : extraLore){
+          itemLore.add(ChatColor.GRAY + "" + extraLine);
       }
       weaponMaterial = material;
       this.weaponType = weaponType;

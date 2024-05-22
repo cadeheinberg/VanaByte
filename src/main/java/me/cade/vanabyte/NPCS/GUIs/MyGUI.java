@@ -19,7 +19,7 @@ public class MyGUI {
 
     public MyGUI(Player player){
         this.player = player;
-        this.inv = Bukkit.createInventory(null, 45, "Unset");
+        this.inv = Bukkit.createInventory(null, 45, ChatColor.BLACK + "" + ChatColor.BOLD + "Weapon Upgrades:");
     }
 
     protected void clear(){

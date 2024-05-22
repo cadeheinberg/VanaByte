@@ -2,6 +2,7 @@ package me.cade.vanabyte.NPCS.GUIs;
 
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -20,16 +21,29 @@ public class QuestManager {
         this.addQuests();
     }
 
+    //square gui slots around weapon
+    //12, 13, 14, 21, 23, 30, 31, 32
     public void addQuests(){
-        for (WeaponType weaponType : WeaponType.values()){
-            for(int i = 0; i < numberOfQuestsPerItem; i++){
-                quests.add(new Quest("Kill 100 spiders in Anarchy with Airbender Sword",
-                        weaponType,
-                        UpgradeType.MELEE_DAMAGE,
-                        UpgradeAlgebraType.ADDITION,
-                        1, 100));
-            }
-        }
+//        for (WeaponType weaponType : WeaponType.values()){
+//            for(int i = 0; i < numberOfQuestsPerItem; i++){
+//                quests.add(new Quest(1,
+//                        "Kill 100 spiders in Anarchy with Airbender Sword",
+//                        weaponType,
+//                        UpgradeType.MELEE_DAMAGE,
+//                        UpgradeAlgebraType.ADDITION,
+//                        1, 100));
+//            }
+//        }
+        quests.add(new Quest(1,
+                12,
+                "Blast Suit",
+                "Kill 200 creepers before they explode with grief sword",
+                WeaponType.GRIEF_SWORD,
+                EntityType.CREEPER,
+                UpgradeType.EXPLOSION_IMMUNE_WHEN_SPECIAL_ACTIVATED,
+                UpgradeAlgebraType.BOOLEAN,
+                1,
+                5));
     }
 
     public ArrayList<Quest> getQuestsOfWeaponType(WeaponType weaponType) {

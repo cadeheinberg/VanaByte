@@ -2,6 +2,8 @@ package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.NPCS.GUIs.Quest;
+import me.cade.vanabyte.NPCS.GUIs.UpgradeType;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -23,21 +25,28 @@ public class W6_GriefSword extends WeaponHolder {
     private Fighter fighter = null;
     private Player player = null;
     private Weapon weapon = null;
+    private boolean explosionImmuneUpgrade = false;
+    private WeaponType weaponType = WeaponType.GRIEF_SWORD;
     public W6_GriefSword(Fighter fighter) {
         super(fighter);
+        for(Quest quest : fighter.getQuestManager().getQuestsOfWeaponType(weaponType)){
+            if(quest.getUpgradeType() == UpgradeType.EXPLOSION_IMMUNE_WHEN_SPECIAL_ACTIVATED){
+                this.explosionImmuneUpgrade = quest.isGoalMet();
+            }
+        }
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
         this.fighterKitManager = this.fighter.getFighterKitManager();
-        this.meleeDamage = 6 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
+        this.meleeDamage = 8 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 0);;
         this.projectileDamage = 0 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 1);;
-        this.specialDamage = 7 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
+        this.specialDamage = 8 + this.fighterKitManager.getKitUpgradesConvertedDamage(0, 2);
         this.abilityDurationTicks = 200 + this.fighterKitManager.getKitUpgradesConvertedTicks(0, 3);
         this.abilityRechargeTicks = 50 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 4);
         this.rightClickCooldownTicks = 0 - this.fighterKitManager.getKitUpgradesConvertedTicks(0, 5);
         this.material = Material.NETHERITE_SWORD;
-        this.weapon = new Weapon(WeaponType.GRIEF_SWORD, this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(weaponType, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
-                this.getAbilityRechargeTicks());
+                this.getAbilityRechargeTicks(), "Explosion Immune Upgrade: " + explosionImmuneUpgrade);
     }
     public W6_GriefSword(){
         super();
@@ -48,7 +57,7 @@ public class W6_GriefSword extends WeaponHolder {
         this.abilityRechargeTicks = 50;
         this.rightClickCooldownTicks = 0;
         this.material = Material.NETHERITE_SWORD;
-        this.weapon = new Weapon(WeaponType.GRIEF_SWORD, this.getMaterial(), this.weaponName, this.meleeDamage,
+        this.weapon = new Weapon(weaponType, this.getMaterial(), this.weaponName, this.meleeDamage,
                 this.getProjectileDamage(), this.getSpecialDamage(), this.getRightClickCooldownTicks(), this.getAbilityDurationTicks(),
                 this.getAbilityRechargeTicks());
     }
@@ -71,12 +80,14 @@ public class W6_GriefSword extends WeaponHolder {
         this.player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, this.abilityDurationTicks, 0));
         this.makeInvisible(this.player);
         this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+        this.fighterKitManager.getFKit().setExplosionImmune(explosionImmuneUpgrade);
         //VanaByte.getPpAPI().addActivePlayerParticle(player, ParticleEffect.HEART, ParticleStyle.fromName("swords"));
     }
     @Override
     public void deActivateSpecial() {
         super.deActivateSpecial();
         this.makeVisible(player);
+        this.fighterKitManager.getFKit().setExplosionImmune(false);
         //VanaByte.getPpAPI().removeActivePlayerParticles(player, ParticleEffect.HEART);
     }
     public void doStealHealth(double health) {

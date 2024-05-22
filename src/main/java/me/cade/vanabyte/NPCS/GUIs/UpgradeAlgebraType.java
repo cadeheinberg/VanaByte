@@ -4,7 +4,8 @@ public enum UpgradeAlgebraType {
     SUBTRACTION("-"),
     ADDITION("+"),
     MULTIPLICATION("*"),
-    DIVISION("/");
+    DIVISION("/"),
+    BOOLEAN("boolean");
 
     private final String name;
 

@@ -33,20 +33,16 @@ public class GUIManager {
                             return;
                         }
                         ArrayList<Quest> quests = Fighter.get(player).getQuestManager().getQuestsOfWeaponType(weaponType);
-                        if(quests.size() < 8){
-                            player.sendMessage(ChatColor.RED + "There are no quests for this special item");
+                        if(quests.size() < 1){
+                            player.sendMessage(ChatColor.RED + "There are no quests for this special item right now");
                             return;
                         }
                         upgradeLecturnGUI.clear();
-                        upgradeLecturnGUI.addItem(12, quests.get(0).getQuestItemStack());
-                        upgradeLecturnGUI.addItem(13, quests.get(1).getQuestItemStack());
-                        upgradeLecturnGUI.addItem(14, quests.get(2).getQuestItemStack());
-                        upgradeLecturnGUI.addItem(21, quests.get(3).getQuestItemStack());
+                        for(Quest quest : quests){
+                            upgradeLecturnGUI.addItem(quest.getGuiSlot(), quest.getQuestItemStack());
+                        }
+                        //put weapon to upgrade right in middle
                         upgradeLecturnGUI.addItem(22, toUpgrade);
-                        upgradeLecturnGUI.addItem(23, quests.get(4).getQuestItemStack());
-                        upgradeLecturnGUI.addItem(30, quests.get(5).getQuestItemStack());
-                        upgradeLecturnGUI.addItem(31, quests.get(6).getQuestItemStack());
-                        upgradeLecturnGUI.addItem(32, quests.get(7).getQuestItemStack());
 //                        kitLectern.addItem(15, () -> {
 //                                    KitUpgradeHandler.handleKitUpgradeIncreaseMeleeDamage(player, kitID);}, Material.EMERALD, "Upgrade", "Cost: 100");
                         upgradeLecturnGUI.open();

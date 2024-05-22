@@ -2,6 +2,8 @@ package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.NPCS.RealEntities.RealLivingEntity;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
@@ -31,24 +33,36 @@ public class CreateExplosion {
 			if (!(ent instanceof LivingEntity)) {
 				continue;
 			}
-			Location upShoot = ent.getLocation();
-			if (ent.isOnGround()) {
-				upShoot.setY(upShoot.getY() + 1);
-			}
 			if(ent instanceof Player) {
+				Player victimPlayer = (Player) ent;
+				Fighter fighter = Fighter.get(victimPlayer);
+				if (fighter == null){
+					return;
+				}
+				FighterKit fKit = fighter.getFKit();
+				if(fKit == null){
+					return;
+				}
+				if(fKit.isExplosionImmune()){
+					return;
+				}
 				if(((Player) ent).getGameMode() == GameMode.CREATIVE) {
 					return;
 				}
+			}
+			Location upShoot = ent.getLocation();
+			if (ent.isOnGround()) {
+				upShoot.setY(upShoot.getY() + 1);
 			}
 			Vector currentDirection = upShoot.toVector().subtract(location.toVector());
 			currentDirection = currentDirection.multiply(new Vector(power, power, power));
 			ent.setVelocity(currentDirection);
 			if (((LivingEntity) ent) != shooter) {
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(shooter, ent, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage), weaponType));
+				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(shooter, ent, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).build(), damage), weaponType));
 				((LivingEntity) ent).damage(damage);
 				if (confusion) {
-					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 2));
-					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 120, 2));
+//					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS, 120, 2));
+//					((LivingEntity) ent).addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, 120, 2));
 				}
 			}
 		}

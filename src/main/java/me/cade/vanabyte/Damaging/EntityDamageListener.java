@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.List;
 import java.util.UUID;
 
 public class EntityDamageListener implements Listener {
@@ -78,11 +79,10 @@ public class EntityDamageListener implements Listener {
 		if(SafeZone.inAnarchy(victim.getWorld())){
 //			List<ItemStack> drops = e.getDrops();
 //			for(ItemStack drop : drops){
-//				if(Weapon.getWeaponType(drop) != null || Weapon.getWeaponType(drop) != WeaponType.UNKNOWN_WEAPON){
+//				if((Weapon.getWeaponTypeFromItemStack(drop) != null && Weapon.getWeaponTypeFromItemStack(drop) != WeaponType.UNKNOWN_WEAPON)
+//						|| (FighterKitManager.getArmorType(drop) != null && FighterKitManager.getArmorType(drop) != ArmorType.UNKOWN_ARMOR)){
 //					e.getDrops().remove(drop);
-//				}
-//				if(FighterKitManager.getArmorType(drop) != null || FighterKitManager.getArmorType(drop) != ArmorType.UNKOWN_ARMOR){
-//					e.getDrops().remove(drop);
+//					continue;
 //				}
 //			}
 		}
