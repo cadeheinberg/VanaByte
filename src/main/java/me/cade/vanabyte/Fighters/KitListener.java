@@ -106,13 +106,18 @@ public class KitListener implements Listener {
 		weaponHolder.doDrop();
 	}
 
+	//used for getting block hit
+	//EntityDamageByEntityEvent is used for getting player hit
 	@EventHandler
 	public void onProjectileHit(ProjectileHitEvent e) {
-		if(SafeZone.safeZone(e.getEntity().getLocation())){
-			e.setCancelled(true);
+		if(e.getHitBlock() == null){
 			return;
 		}
 		if (!(e.getEntity().getShooter() instanceof Player)) {
+			return;
+		}
+		if(SafeZone.safeZone(e.getHitBlock().getLocation())){
+			e.setCancelled(true);
 			return;
 		}
 		Player pkiller = (Player) e.getEntity().getShooter();
@@ -121,10 +126,6 @@ public class KitListener implements Listener {
 				Fighter.get(pkiller) == null ||
 				Fighter.get(pkiller).getFKit() == null ||
 				e.getHitBlock() == null){
-			return;
-		}
-		if(SafeZone.safeZone(e.getHitBlock().getLocation())){
-			e.setCancelled(true);
 			return;
 		}
 		Fighter.get(pkiller).getFKit().getWeaponHolderWithType(weaponType).doProjectileHitBlock(e);
@@ -204,7 +205,7 @@ public class KitListener implements Listener {
 	@EventHandler
 	public void onExplode(EntityExplodeEvent e) {
 		if(SafeZone.inHub(e.getLocation().getWorld())){
-			e.setCancelled(true);
+			e.blockList().clear();
 			return;
 		}
 	}

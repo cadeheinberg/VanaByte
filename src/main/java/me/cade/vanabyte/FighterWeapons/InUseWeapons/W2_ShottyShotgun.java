@@ -1,5 +1,6 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
+import me.cade.vanabyte.Damaging.CreateExplosion;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.EntityMetadata;

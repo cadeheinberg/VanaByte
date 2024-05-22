@@ -95,7 +95,7 @@ public class W4_IgorsTrident extends WeaponHolder {
             player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
         }
         if (super.getWeaponAbility().isAbilityActive()) {
-            trident.setFireTicks(1000);
+            trident.setFireTicks(10000);
         }
         EntityMetadata.addWeaponTypeToEntity(trident, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
         this.player.getInventory().remove(this.getWeapon().getWeaponItem());

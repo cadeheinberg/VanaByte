@@ -19,11 +19,11 @@ import org.bukkit.util.Vector;
 
 public class CreateExplosion {
 
-	public static void doAnExplosion(Player shooter, Location location, double power, double damage, boolean confusion, WeaponType weaponType) {
-		if(!SafeZone.inHub(location.getWorld())){
-			location.getWorld().createExplosion(location, 4F, false, true, shooter);
-//			just create your own explosion to break blocks cause spigots is bad
-		}
+	public static void doAnExplosion(Player shooter,  Location location, double power, double damage, boolean confusion, WeaponType weaponType) {
+		//sends an EntityDamageByEntityEvent aswelll that we cancel
+		//we can cancel if Cause=Explosion and damager=Player
+		location.getWorld().createExplosion(location, 4F, false, true, shooter);
+		//just create your own explosion to break blocks cause spigots is bad
 		location.getWorld().spawnParticle(Particle.EXPLOSION, location.getX(), location.getY() + 2,
 				location.getZ(), 2);
 		location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 2, 1);

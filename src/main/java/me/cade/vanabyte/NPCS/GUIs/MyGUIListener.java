@@ -20,6 +20,10 @@ public class MyGUIListener implements Listener {
         if(e.getWhoClicked().getGameMode() == GameMode.CREATIVE){
             return;
         }
+        if(Fighter.get((Player) e.getWhoClicked()).getGUIManager().getMatchingGUI(e.getClickedInventory()) != null){
+            Fighter.get((Player) e.getWhoClicked()).getGUIManager().getMatchingGUI(e.getClickedInventory()).onInventoryClick(e);
+            return;
+        }
         if(e.getInventory() != null && e.getInventory().getType() == InventoryType.CRAFTING){
             if(e.getView() != null && e.getView().getTopInventory() != null && e.getView().getTopInventory().getType() == InventoryType.CRAFTING){
                 if(e.getView().getBottomInventory() != null && e.getView().getBottomInventory().getType() == InventoryType.PLAYER){
@@ -43,10 +47,6 @@ public class MyGUIListener implements Listener {
             }
             e.setCancelled(true);
         }
-        if(Fighter.get((Player) e.getWhoClicked()).getGUIManager().getMatchingGUI(e.getClickedInventory()) == null){
-            return;
-        }
-        Fighter.get((Player) e.getWhoClicked()).getGUIManager().getMatchingGUI(e.getClickedInventory()).onInventoryClick(e);
     }
 
     // Cancel dragging in our inventory

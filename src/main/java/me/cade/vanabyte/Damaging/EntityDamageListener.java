@@ -132,10 +132,9 @@ public class EntityDamageListener implements Listener {
 		}
 		if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
 			if(e.getDamager() instanceof Player){
-				//cancel if it was made using createExplosion()
 				e.setCancelled(true);
+				return;
 			}
-			return;
 		}
 		Entity damagingEntity = e.getDamager();
 		if (SafeZone.safeZone(e.getEntity().getLocation())) {
