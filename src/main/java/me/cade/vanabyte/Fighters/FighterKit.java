@@ -1,10 +1,8 @@
 package me.cade.vanabyte.Fighters;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
 
@@ -40,7 +38,7 @@ public abstract class FighterKit {
 			if (weaponHolder == null || weaponHolder.getWeapon() == null || weaponHolder.getWeapon().getWeaponItem() == null) {
 				continue;
 			}
-			if (weaponHolder.getWeapon().getWeaponType() == weaponType) {
+			if (weaponHolder.getWeapon().getWeaponTypeFromItemStack() == weaponType) {
 				return weaponHolder;
 			}
 		}

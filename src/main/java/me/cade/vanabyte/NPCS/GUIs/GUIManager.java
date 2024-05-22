@@ -3,18 +3,13 @@ package me.cade.vanabyte.NPCS.GUIs;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.plugin.Plugin;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GUIManager {
 
@@ -32,7 +27,7 @@ public class GUIManager {
                 if(upgradeLecternLocation.getY() == location.getY()){
                     if(upgradeLecternLocation.getZ() == location.getZ()){
                         ItemStack toUpgrade = player.getInventory().getItemInMainHand();
-                        WeaponType weaponType = Weapon.getWeaponType(toUpgrade);
+                        WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(toUpgrade);
                         if(weaponType == WeaponType.UNKNOWN_WEAPON){
                             player.sendMessage(ChatColor.RED + "Only special items can be upgrades");
                             return;

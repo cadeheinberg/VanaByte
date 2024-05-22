@@ -8,7 +8,6 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Trident;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -111,7 +110,7 @@ public class W3_GoblinBow extends WeaponHolder {
         if(this.getRightClickCooldownTicks() > 0){
             player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
         }
-        EntityMetadata.addWeaponTypeToEntity(arrow, this.weapon.getWeaponType(), this.player.getUniqueId());
+        EntityMetadata.addWeaponTypeToEntity(arrow, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
         if (super.getWeaponAbility().isAbilityActive()) {
             arrow.setFireTicks(1000);
             doArrowBarrage(this.player, arrow, force);
@@ -125,37 +124,37 @@ public class W3_GoblinBow extends WeaponHolder {
             arrow1.setVelocity(arrow.getVelocity().add(new Vector(0, 0.25, 0)));
             arrow1.setFireTicks(2000);
             arrow1.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow1, this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrow1, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
 
             Arrow arrow2 = player.launchProjectile(Arrow.class);
             arrow2.setVelocity(arrow.getVelocity().add(new Vector(0, -0.25, 0)));
             arrow2.setFireTicks(2000);
             arrow2.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow2, this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrow2, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
 
             Arrow arrow3 = player.launchProjectile(Arrow.class);
             arrow3.setVelocity(arrow.getVelocity().add(new Vector(0.25, 0, 0)));
             arrow3.setFireTicks(2000);
             arrow3.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow3, this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrow3, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
 
             Arrow arrow4 = player.launchProjectile(Arrow.class);
             arrow4.setVelocity(arrow.getVelocity().add(new Vector(-0.25, 0, 0)));
             arrow4.setFireTicks(2000);
             arrow4.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow4, this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrow4, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
 
             Arrow arrow5 = player.launchProjectile(Arrow.class);
             arrow5.setVelocity(arrow.getVelocity().add(new Vector(0, 0, 0.25)));
             arrow5.setFireTicks(2000);
             arrow5.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow5, this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrow5, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
 
             Arrow arrow6 = player.launchProjectile(Arrow.class);
             arrow6.setVelocity(arrow.getVelocity().add(new Vector(0, 0, -0.25)));
             arrow6.setFireTicks(2000);
             arrow6.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow6, this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrow6, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
             return;
         }
     }

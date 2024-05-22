@@ -56,7 +56,7 @@ public class KitListener implements Listener {
 		if (e.getItem() == null) {
 			return;
 		}
-		WeaponType weaponType = Weapon.getWeaponType(e.getItem());
+		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItem());
 		if(weaponType == null){
 			return;
 		}
@@ -87,7 +87,7 @@ public class KitListener implements Listener {
 		if(Fighter.get(e.getPlayer()).getFKit() == null){
 			return;
 		}
-		WeaponType weaponType = Weapon.getWeaponType(e.getItemDrop().getItemStack());
+		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItemDrop().getItemStack());
 		if(weaponType == null){
 			if(SafeZone.inAnarchy(e.getPlayer().getWorld())){
 				//The player is trying to drop the item in the survival world
@@ -130,6 +130,7 @@ public class KitListener implements Listener {
 		Fighter.get(pkiller).getFKit().getWeaponHolderWithType(weaponType).doProjectileHitBlock(e);
 	}
 
+
 	@EventHandler
 	public void onProjectileLaunch(ProjectileLaunchEvent e) {
 		if (SafeZone.safeZone(e.getLocation())) {
@@ -140,21 +141,23 @@ public class KitListener implements Listener {
 			return;
 		}
 		Player pkiller = (Player) e.getEntity().getShooter();
-		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(pkiller);
-		if(weaponType == null ||
-				Fighter.get(pkiller) == null ||
-				Fighter.get(pkiller).getFKit() == null){
-			return;
-		}
 		if (e.getEntity().getType() == EntityType.TRIDENT) {
+			WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(((Trident) e.getEntity()).getItem());
+			if(weaponType == null ||
+					Fighter.get(pkiller) == null ||
+					Fighter.get(pkiller).getFKit() == null){
+				return;
+			}
 			FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
-			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(WeaponType.IGORS_TRIDENT);
+			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(weaponType);
 			if(weaponHolder == null){
 				return;
 			}
-			if(!((W4_IgorsTrident) weaponHolder).doThrowTrident((Trident) e.getEntity())){
-				//Set canceled if there is a cooldown
-				e.setCancelled(true);
+			if(weaponType == WeaponType.IGORS_TRIDENT){
+				if(!((W4_IgorsTrident) weaponHolder).doThrowTrident((Trident) e.getEntity())){
+					//Set canceled if there is a cooldown
+					e.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -169,21 +172,23 @@ public class KitListener implements Listener {
 			return;
 		}
 		Player pkiller = (Player) e.getEntity();
-		WeaponType weaponType = Weapon.getWeaponType(e.getBow());
-		if(weaponType == null ||
-				Fighter.get(pkiller) == null ||
-				Fighter.get(pkiller).getFKit() == null){
-			return;
-		}
 		if (e.getProjectile().getType() == EntityType.ARROW) {
+			WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getBow());
+			if(weaponType == null ||
+					Fighter.get(pkiller) == null ||
+					Fighter.get(pkiller).getFKit() == null){
+				return;
+			}
 			FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
-			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(WeaponType.GOBLIN_BOW);
+			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(weaponType);
 			if(weaponHolder == null){
 				return;
 			}
-			if(!((W3_GoblinBow) weaponHolder).doArrowShoot((Arrow) e.getProjectile(), e.getForce())){
-				//Set canceled if there is a cooldown
-				e.setCancelled(true);
+			if(weaponHolder.getWeapon().getWeaponType() == WeaponType.GOBLIN_BOW){
+				if(!((W3_GoblinBow) weaponHolder).doArrowShoot((Arrow) e.getProjectile(), e.getForce())){
+					//Set canceled if there is a cooldown
+					e.setCancelled(true);
+				}
 			}
 		}
 	}
@@ -198,30 +203,10 @@ public class KitListener implements Listener {
 
 	@EventHandler
 	public void onExplode(EntityExplodeEvent e) {
-		e.setCancelled(true);
-//		if (e.getEntityType() != EntityType.PLAYER) {
-//			return;
-//		}
-//
-//		for (Block b : e.blockList()) {
-//				if (b.getType() == Material.TNT) {
-//					// Replace the TNT block with air
-//					b.setType(Material.AIR);
-//					// Spawn a primed TNT entity at the block's location
-//					TNTPrimed tntPrimed = (TNTPrimed) b.getWorld().spawnEntity(b.getLocation(), EntityType.TNT);
-//					tntPrimed.setFuseTicks(80); // Set fuse ticks (time before explosion)
-//				} else if (b.getType() == Material.TNT_MINECART) {
-//					// If it's a TNT minecart, you can just detonate it
-//					// This will require finding the TNT minecart entity at the block's location
-//					for (Entity entity : b.getWorld().getNearbyEntities(b.getLocation(), 1, 1, 1)) {
-//						if (entity instanceof MinecartTNT) {
-//							((MinecartTNT) entity).explode(0);
-//						}
-//					}
-//				} else {
-//					b.breakNaturally();
-//				}
-//		}
+		if(SafeZone.inHub(e.getLocation().getWorld())){
+			e.setCancelled(true);
+			return;
+		}
 	}
 
 	@EventHandler

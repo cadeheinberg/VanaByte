@@ -3,14 +3,12 @@ package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 import me.cade.vanabyte.Fighters.EntityMetadata;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
 public class S1_ThrowingTNT extends WeaponHolder {
@@ -82,7 +80,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 		TNTPrimed fuse = (TNTPrimed) tnt;
 		tnt.setCustomName(this.player.getName());
 		tnt.setCustomNameVisible(false);
-		EntityMetadata.addWeaponTypeToEntity(tnt, this.weapon.getWeaponType(), this.player.getUniqueId());
+		EntityMetadata.addWeaponTypeToEntity(tnt, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
 		fuse.setFuseTicks(15);
 		Vector currentDirection4 = player.getLocation().getDirection().normalize();
 		currentDirection4 = currentDirection4.multiply(new Vector(1, 1, 1));

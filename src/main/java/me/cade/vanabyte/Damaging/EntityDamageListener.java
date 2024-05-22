@@ -7,6 +7,7 @@ import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.NPCS.GUIs.QuestListener;
 import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
+import me.cade.vanabyte.NPCS.RealEntities.RealLivingEntity;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
@@ -23,7 +24,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.List;
 import java.util.UUID;
 
 public class EntityDamageListener implements Listener {
@@ -130,6 +130,13 @@ public class EntityDamageListener implements Listener {
 		}else{
 			return;
 		}
+		if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
+			if(e.getDamager() instanceof Player){
+				//cancel if it was made using createExplosion()
+				e.setCancelled(true);
+			}
+			return;
+		}
 		Entity damagingEntity = e.getDamager();
 		if (SafeZone.safeZone(e.getEntity().getLocation())) {
 			if(SafeZone.ladderZone(e.getEntity().getLocation()) && SafeZone.ladderZone(e.getDamager().getLocation())){
@@ -167,7 +174,7 @@ public class EntityDamageListener implements Listener {
 			ItemStack killerItem = pkiller.getEquipment().getItemInMainHand();
 			WeaponType weaponType = null;
 			if(killerItem != null){
-				weaponType = Weapon.getWeaponType(killerItem);
+				weaponType = Weapon.getWeaponTypeFromItemStack(killerItem);
 			}
 			////
 			//// Melee Damage

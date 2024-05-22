@@ -7,13 +7,12 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Item;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataHolder;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
@@ -108,7 +107,7 @@ public class Weapon {
     return weaponItem;
   }
 
-  public WeaponType getWeaponType(){
+  public WeaponType getWeaponTypeFromItemStack(){
       return weaponType;
   }
 
@@ -116,7 +115,11 @@ public class Weapon {
         player.setCooldown(this.weaponMaterial, 0);
   }
 
-  public static WeaponType getWeaponType(ItemStack itemStack) {
+  public WeaponType getWeaponType(){
+      return this.weaponType;
+  }
+
+  public static WeaponType getWeaponTypeFromItemStack(ItemStack itemStack) {
       ItemMeta meta = itemStack.getItemMeta();
       if(meta == null){
           return WeaponType.UNKNOWN_WEAPON;

@@ -146,7 +146,7 @@ public class W5_SumoStick extends WeaponHolder {
 
     // make this freeze players also
     public void doGroundHit(Player shooter, Location location, double power) {
-        CreateExplosion.doAnExplosion(shooter, location, 0.7, this.getSpecialDamage(), true, weapon.getWeaponType());
+        CreateExplosion.doAnExplosion(shooter, location, 0.7, this.getSpecialDamage(), true, weapon.getWeaponTypeFromItemStack());
     }
 
     public void doPickUp(LivingEntity rightClicked) {

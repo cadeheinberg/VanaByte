@@ -1,11 +1,9 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Damaging.CreateExplosion;
-import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.EntityMetadata;
-import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -83,7 +81,7 @@ public class W4_IgorsTrident extends WeaponHolder {
         }
         //trident hit ground
         if (e.getEntity().getFireTicks() > 0) {
-            CreateExplosion.doAnExplosion(this.player, e.getHitBlock().getLocation(), 0.7, this.specialDamage, true, weapon.getWeaponType());
+            CreateExplosion.doAnExplosion(this.player, e.getHitBlock().getLocation(), 0.7, this.specialDamage, true, weapon.getWeaponTypeFromItemStack());
         }
         e.getEntity().remove();
         return true;
@@ -99,7 +97,7 @@ public class W4_IgorsTrident extends WeaponHolder {
         if (super.getWeaponAbility().isAbilityActive()) {
             trident.setFireTicks(1000);
         }
-        EntityMetadata.addWeaponTypeToEntity(trident, this.weapon.getWeaponType(), this.player.getUniqueId());
+        EntityMetadata.addWeaponTypeToEntity(trident, this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
         this.player.getInventory().remove(this.getWeapon().getWeaponItem());
         player.getInventory().setItemInMainHand(this.getWeapon().getWeaponItem());
         trident.setShooter(player);
@@ -111,7 +109,7 @@ public class W4_IgorsTrident extends WeaponHolder {
         if (trident.getFireTicks() > 0) {
             Location local = victim.getLocation();
             local.setY(local.getY() - 0.5);
-            CreateExplosion.doAnExplosion(this.player, local, 0.7, this.specialDamage, true, this.weapon.getWeaponType());
+            CreateExplosion.doAnExplosion(this.player, local, 0.7, this.specialDamage, true, this.weapon.getWeaponTypeFromItemStack());
             //explosion will deal special damage ^^
             return 0;
         }

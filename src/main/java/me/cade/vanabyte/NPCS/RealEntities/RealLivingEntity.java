@@ -7,7 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.EntityType;
 
-public class LivingEntity {
+public class RealLivingEntity {
 
 	private static int spawnAmount = 2;
 
@@ -35,12 +35,12 @@ public class LivingEntity {
 			EntityType.VILLAGER,
 			EntityType.VILLAGER
     };
-	private static LivingEntity[] selectors = new LivingEntity[spawnAmount];
+	private static RealLivingEntity[] selectors = new RealLivingEntity[spawnAmount];
     private String name;
     private Location location;
     private EntityType type;
     private org.bukkit.entity.LivingEntity entity;
-    public LivingEntity(EntityType type, String name, Location location) {
+    public RealLivingEntity(EntityType type, String name, Location location) {
         this.name = name;
         this.location = location;
         this.type = type;
@@ -68,9 +68,13 @@ public class LivingEntity {
         return location;
     }
 
+    public static RealLivingEntity[] getSelectors() {
+        return selectors;
+    }
+
     public static void spawnAll() {
 		for (int i = 0; i < spawnAmount; i++) {
-			selectors[i] = new LivingEntity(types[i],
+			selectors[i] = new RealLivingEntity(types[i],
 					names[i], locations[i]);
 			if(i == 1){
 				//vana

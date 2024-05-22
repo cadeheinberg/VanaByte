@@ -1,7 +1,6 @@
 package me.cade.vanabyte.FighterWeapons.InUseWeapons;
 
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.EntityMetadata;
 import org.bukkit.*;
@@ -113,7 +112,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
             snowBalls.add(this.player.launchProjectile(Snowball.class));
             Random random = new Random();
             snowBalls.get(i).setVelocity(snowBalls.get(i).getVelocity().add(new Vector(random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25))));
-            EntityMetadata.addWeaponTypeToEntity(snowBalls.get(i), this.weapon.getWeaponType(), this.player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(snowBalls.get(i), this.weapon.getWeaponTypeFromItemStack(), this.player.getUniqueId());
             snowBalls.get(i).setShooter(this.player);
             if (super.getWeaponAbility().isAbilityActive()) {
                 snowBalls.get(i).setFireTicks(1000);

@@ -8,7 +8,7 @@ public class SpawnRealEntities {
 
   public static void spawnNPCS() {
     MyArmorStand.spawnAll();
-    LivingEntity.spawnAll();
+    RealLivingEntity.spawnAll();
     RealHologram.spawnAll();
   }
   

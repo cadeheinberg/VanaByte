@@ -2,6 +2,7 @@ package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.NPCS.RealEntities.RealLivingEntity;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
@@ -20,8 +21,8 @@ public class CreateExplosion {
 
 	public static void doAnExplosion(Player shooter, Location location, double power, double damage, boolean confusion, WeaponType weaponType) {
 		if(!SafeZone.inHub(location.getWorld())){
-			//location.getWorld().createExplosion(location, 4F, false, true, shooter);
-			//just create your own explosion to break blocks cause spigots is bad
+			location.getWorld().createExplosion(location, 4F, false, true, shooter);
+//			just create your own explosion to break blocks cause spigots is bad
 		}
 		location.getWorld().spawnParticle(Particle.EXPLOSION, location.getX(), location.getY() + 2,
 				location.getZ(), 2);
@@ -52,7 +53,4 @@ public class CreateExplosion {
 			}
 		}
 	}
-//	EntityDamageByEntityEvent damage =
-//			new EntityDamageByEntityEvent(killer, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, amount);
-//					Bukkit.getServer().getPluginManager().callEvent(damage);
 }
