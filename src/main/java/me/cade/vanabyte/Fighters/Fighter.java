@@ -3,7 +3,7 @@ package me.cade.vanabyte.Fighters;
 import me.cade.vanabyte.FighterWeapons.FighterAbilityManager;
 import me.cade.vanabyte.NPCS.GUIs.GUIManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestManager;
-import me.cade.vanabyte.NPCS.PacketHolograms.FighterPacketHologramsManager;
+import me.cade.vanabyte.NPCS.PacketHolograms.HologramManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
@@ -22,7 +22,7 @@ public class Fighter {
 	private static final int numberOfKits = 7;
 	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
 
-	protected FighterPacketHologramsManager fighterPacketHologramsManager = null;
+	protected HologramManager fighterPacketHologramsManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
 	protected FighterMYSQLManager fighterMYSQLManager = null;
 	protected FighterKitManager fighterKitManager = null;
@@ -35,7 +35,7 @@ public class Fighter {
 		this.player = player;
 		this.uuid = player.getUniqueId();
 		this.addToFightersHashMap();
-		this.fighterPacketHologramsManager = new FighterPacketHologramsManager(this.player, this);
+		this.fighterPacketHologramsManager = new HologramManager(this.player, this);
 		this.fighterTaskManager = new FighterTaskManager(this.player, this);
 		this.fighterKitManager = new FighterKitManager(this.player, this);
 		this.fighterMYSQLManager = new FighterMYSQLManager(this.player, this);
@@ -184,7 +184,7 @@ public class Fighter {
 	public static int getNumberOfKits() {return numberOfKits;}
 	public int getKitID(){return fighterKitManager.getKitID();}
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
-	public FighterPacketHologramsManager getFighterPacketHologramsManager() {return fighterPacketHologramsManager;}
+	public HologramManager getFighterPacketHologramsManager() {return fighterPacketHologramsManager;}
 
 	public FighterAbilityManager getWeaponAbilityManager(){
 		return fighterAbilityManager;

@@ -223,4 +223,8 @@ public class VanaByte extends JavaPlugin {
 		return entityDamageManager;
 	}
 
+	public static Plugin getVanaBytePlugin(){
+		return plugin;
+	}
+
 }
