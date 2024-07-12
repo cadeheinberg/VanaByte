@@ -5,19 +5,17 @@ import me.cade.vanabyte.NPCS.RealEntities.MyArmorStand;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.TextDisplay;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.Arrays;
 
 public class HologramManager {
 
     private Player player = null;
     private Fighter fighter = null;
-    private MyHologramDisplay[] kitHolograms = {null, null, null, null, null, null, null};
-    private MyHologramDisplay welcomeHologram = null;
+    private Hologram[] kitHolograms = {null, null, null, null, null, null, null};
+    private Hologram welcomeHologram = null;
 
     public HologramManager(Player player, Fighter fighter){
         this.player = player;
@@ -25,65 +23,98 @@ public class HologramManager {
     }
 
     public void fighterJoined(){
-        this.spawnKitHolograms();
-        this.spawnWelcomeHologram();
+        if(player.getWorld() == VanaByte.hub){
+            this.respawnKitHolograms();
+            this.respawnWelcomeHologram();
+        }
     }
 
-    public void fighterDied(){}
+    public void fighterDied(){
+        //updated with respawn?
+    }
 
     public void fighterKilled(){
-        this.spawnWelcomeHologram();
+        if(player.getWorld() == VanaByte.hub){
+            this.respawnWelcomeHologram();
+        }
     }
 
-    public void fighterLeftServer(){}
+    public void fighterLeftServer(){
+        this.despawnHubHolograms();
+    }
 
-    public void fighterChangedWorld(){
-        this.spawnKitHolograms();
-        this.spawnWelcomeHologram();
+    public void fighterChangedWorld(World from){
+        if(from == VanaByte.hub){
+            this.despawnHubHolograms();
+        }else{
+            this.respawnKitHolograms();
+            this.respawnWelcomeHologram();
+        }
     }
 
     public void fighterRespawned(){
-        this.spawnKitHolograms();
-        this.spawnWelcomeHologram();}
+        if(player.getWorld() == VanaByte.hub){
+            this.respawnKitHolograms();
+            this.respawnWelcomeHologram();
+        }
+    }
 
     public void fighterPurchasedKit(){
-        this.spawnKitHolograms();
-        this.spawnWelcomeHologram();
-    }
-
-    public void spawnKitHolograms(){
-        for (int kitID = 0; kitID < kitHolograms.length; kitID++) {
-            String locked = ChatColor.RED + "1 Kit Key Needed";
-            if (fighter.getFighterKitManager().getUnlockedKit(kitID) > 0) {
-                locked = ChatColor.GREEN + "Unlocked";
-            }
-            String q_special = "  Drop-Item: " + fighter.getFighterKitManager().getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponDrop() + "  ";
-            String rc_special = "  Right-Click: " + fighter.getFighterKitManager().getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponRightClick() + "  ";
-            if (kitHolograms[kitID] != null) {
-                kitHolograms[kitID].setDisplayText(locked + "\n" + q_special + "\n"  + rc_special);
-                kitHolograms[kitID].showTo(this.player);
-            }else{
-                kitHolograms[kitID] = new MyHologramDisplay(MyArmorStand.getLocationOfSelector(kitID).clone().add(0, 2.50, 0),
-                        locked + "\n" + q_special + "\n"  + rc_special,
-                        false);
-                kitHolograms[kitID].showTo(this.player);
-            }
+        if(player.getWorld() == VanaByte.hub){
+            this.respawnKitHolograms();
         }
     }
 
-    protected void spawnWelcomeHologram(){
+    private void despawnHubHolograms(){
+        Bukkit.getConsoleSender().sendMessage("despawning all holograms");
         if(welcomeHologram != null){
-            welcomeHologram.setDisplayText("You have " + fighter.getKills() + " kills!!! \n" +
-                    "\"You have \" + fighter.getDeaths() + \" deaths :(\"");
-            welcomeHologram.showTo(player);
+            welcomeHologram.removeFromServer();
+            welcomeHologram = null;
+        }
+        for(int kitID = 0; kitID < kitHolograms.length; kitID++){
+            if(kitHolograms[kitID] != null) {
+                kitHolograms[kitID].removeFromServer();
+                kitHolograms[kitID] = null;
+            }
+        }
+    }
+
+    private void respawnKitHolograms(){
+        Bukkit.getConsoleSender().sendMessage("respawning kit holograms");
+        for (int kitID = 0; kitID < kitHolograms.length; kitID++) {
+            if (kitHolograms[kitID] == null) {
+                kitHolograms[kitID] = new Hologram(MyArmorStand.getLocationOfSelector(kitID).clone().add(0, 2.50, 0),false);
+            }
+            if (kitHolograms[kitID] == null) {
+                player.sendMessage("HologramManager Error: kits");
+            }
+            else{
+                String locked = ChatColor.RED + " Free For Beta ";
+                if (fighter.getFighterKitManager().getUnlockedKit(kitID) > 0) {
+                    locked = ChatColor.GREEN + " Unlocked ";
+                }
+                kitHolograms[kitID].setDisplayText(locked + "\n"
+                        + ChatColor.WHITE + " Special: " + fighter.getFighterKitManager().getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponDrop()  + " \n"
+                        + ChatColor.WHITE + " Main: " + fighter.getFighterKitManager().getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponRightClick() + " ");
+                kitHolograms[kitID].showTo(this.player);
+            }
+        }
+    }
+
+    private void respawnWelcomeHologram(){
+        Bukkit.getConsoleSender().sendMessage("respawning welcome holograms");
+        if(welcomeHologram == null) {
+            welcomeHologram = new Hologram(VanaByte.hubSpawn.clone().add(0, 1.5, 0), false);
+        }
+        if(welcomeHologram == null){
+            player.sendMessage("HologramManager Error: welcome");
         }else{
-            welcomeHologram = new MyHologramDisplay(VanaByte.hubSpawn.clone().add(0 , 1.5, 0),
-                    ChatColor.AQUA + "" + ChatColor.BOLD + "Welcome " + player.getName() + "\n" +
-                            "\"You have \" + fighter.getKills() + \" kills!!!\" \n" +
-                            "\"You have \" + fighter.getDeaths() + \" deaths :(\"",
-                    false);
+            welcomeHologram.setDisplayText(ChatColor.AQUA + " Welcome " + player.getName() + " \n"
+                    + ChatColor.WHITE + " You have " + fighter.getKills() + " kills!!! \n"
+                    + ChatColor.WHITE + " You have " + fighter.getDeaths() + " deaths :( ");
             welcomeHologram.showTo(player);
         }
     }
+
 }
 

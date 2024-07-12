@@ -9,7 +9,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class W1_BeserkerAxe extends WeaponHolder {
-    final String weaponDrop = "Speed/Jump/Dig Boost";
+    final String weaponDrop = "Haste, Speed, Jump";
     final String weaponRightClick = "Super Leap";
     final ChatColor weaponNameColor = ChatColor.LIGHT_PURPLE;
     final String weaponName = weaponNameColor + "Beserker Axe";

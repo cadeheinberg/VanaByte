@@ -4,6 +4,8 @@ import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageEntry;
 import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
@@ -40,8 +42,12 @@ public class QuestListener implements Listener {
                 continue;
             }
             if(quest.getTargetEntityType() == e.getVictimType()){
-                pkiller.sendMessage("Quest Progress: you killed " + e.getVictimType() + " with " + e.getWeaponType().getName());
                 quest.setProgress(quest.getProgress()+1);
+                pkiller.sendMessage("Killed " + quest.getProgress() + "/" + quest.getGoal() + ": " + e.getVictimType() + " with " + e.getWeaponType().getName());
+                if(quest.isGoalMet()){
+                    pkiller.sendMessage("Quest " + ChatColor.YELLOW + "" + quest.getTitle() + ChatColor.WHITE + " complete, go to hub upgrade table to receive reward!");
+                    pkiller.playSound(pkiller.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
+                }
             }
         }
     }

@@ -37,13 +37,13 @@ public class QuestManager {
         quests.add(new Quest(1,
                 12,
                 "Blast Suit",
-                "Kill 200 creepers before they explode with grief sword",
+                "Kill 10 creepers before they explode with grief sword",
                 WeaponType.GRIEF_SWORD,
                 EntityType.CREEPER,
                 UpgradeType.EXPLOSION_IMMUNE_WHEN_SPECIAL_ACTIVATED,
                 UpgradeAlgebraType.BOOLEAN,
                 1,
-                5));
+                10));
     }
 
     public ArrayList<Quest> getQuestsOfWeaponType(WeaponType weaponType) {

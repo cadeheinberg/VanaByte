@@ -89,6 +89,7 @@ public class NPCListener implements Listener {
 					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
 					fighter.getFighterKitManager().setUnlockedKit(i, 1);
 					fighter.getFighterPacketHologramsManager().fighterPurchasedKit();
+					fighter.getFighterKitManager().giveKitWithID(i);
 				}
 			}
 		}

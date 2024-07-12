@@ -17,7 +17,7 @@ public class RealHologram {
     private static int spawnAmount = 1;
 
     private static String[] names = {
-            ChatColor.GREEN + "Upgrades",
+            ChatColor.YELLOW + "Upgrades",
     };
     private static Location[] locations = {
             new Location(VanaByte.hub, -1052.5, 195.2, -112.5, 0, 0)

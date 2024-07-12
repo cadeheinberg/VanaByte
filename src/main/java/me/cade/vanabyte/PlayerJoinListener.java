@@ -41,11 +41,9 @@ public class PlayerJoinListener implements Listener {
 
   @EventHandler
   public void onWorldChange(PlayerChangedWorldEvent e){
-    if(SafeZone.inHub(e.getPlayer().getWorld())){
       if(Fighter.get(e.getPlayer()) != null){
-        Fighter.get(e.getPlayer()).fighterChangeWorld();
+        Fighter.get(e.getPlayer()).fighterChangeWorld(e.getFrom());
       }
-    }
   }
   
 }

@@ -81,11 +81,11 @@ public class Fighter {
 		fighterMYSQLManager.fighterDied();
 	}
 
-	public void fighterChangeWorld(){
+	public void fighterChangeWorld(World from){
 		fighterAbilityManager.fighterChangedWorld();
 		fighterKitManager.fighterChangedWorld();
 		fighterTaskManager.fighterChangedWorld();
-		fighterPacketHologramsManager.fighterChangedWorld();
+		fighterPacketHologramsManager.fighterChangedWorld(from);
 		fighterMYSQLManager.fighterChangedWorld();
 	}
 
@@ -99,16 +99,31 @@ public class Fighter {
 		this.fighterLevel = fighterLevel;
 		fighterScoreBoardManager.updateLevel();
 	}
-	public void incPlayerLevel(int amount) {
+	public void setFighterXP(int fighterXP) {
+		this.fighterXP = fighterXP;
+		fighterScoreBoardManager.updateExp();
+	}
+
+	public void refreshLevel(){
+		this.fighterLevel = player.getLevel();
+		fighterScoreBoardManager.updateLevel();
+	}
+
+	public void refreshXP(){
+		this.fighterXP = (int) player.getExp() * 100;
+		fighterScoreBoardManager.updateLevel();
+	}
+
+	public void incFighterLevel(int amount) {
 		this.fighterLevel = this.fighterLevel + amount;
-		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
-		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled up to level " + fighterLevel + "!");
+//		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
+//		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled up to level " + fighterLevel + "!");
 		fighterScoreBoardManager.updateLevel();
 	}
 	public void decPlayerLevel(int amount) {
 		this.fighterLevel = this.fighterLevel - amount;
-		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
-		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled down to level " + fighterLevel + "!");
+//		player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 8, 1);
+//		player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "Leveled down to level " + fighterLevel + "!");
 		fighterScoreBoardManager.updateLevel();
 	}
 	public void setKills(int kills) {
@@ -196,10 +211,6 @@ public class Fighter {
 
 	public int getFighterXP() {
 		return fighterXP;
-	}
-
-	public void setFighterXP(int fighterXP) {
-		this.fighterXP = fighterXP;
 	}
 
 	public void deleteMeFromDatabase(){

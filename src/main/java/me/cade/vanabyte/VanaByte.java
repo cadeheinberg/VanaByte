@@ -19,7 +19,9 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.TextDisplay;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.Plugin;
@@ -69,6 +71,7 @@ public class VanaByte extends JavaPlugin {
 		// do last
 		addPlayersToFighters();
 		entityDamageManager = new EntityDamageManager();
+		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "SERVER STARTED SUCCESSFULLY");
 	}
 
 	private static void startMySQL() {

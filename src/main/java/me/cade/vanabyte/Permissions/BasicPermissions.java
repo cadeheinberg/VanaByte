@@ -36,16 +36,12 @@ public class BasicPermissions implements Listener {
 
 	@EventHandler
 	public void onPlayerLevelChange(PlayerLevelChangeEvent e){
-		if(e.getNewLevel() - e.getOldLevel() > 0){
-			Fighter.get(e.getPlayer()).incPlayerLevel(e.getNewLevel() - e.getOldLevel());
-		}else{
-			Fighter.get(e.getPlayer()).decPlayerLevel(Math.abs((e.getNewLevel() - e.getOldLevel())));
-		}
+		Fighter.get(e.getPlayer()).refreshLevel();
 	}
 
 	@EventHandler
 	public void onPlayerLevelChange(PlayerExpChangeEvent e){
-		Fighter.get(e.getPlayer()).getFighterScoreBoardManager().updateExp();
+		Fighter.get(e.getPlayer()).refreshXP();
 	}
 
 	//Triggered when a hanging entity is created in the world, ie item frame

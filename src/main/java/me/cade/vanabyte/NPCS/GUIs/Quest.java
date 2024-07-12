@@ -109,6 +109,14 @@ public class Quest {
         return progress;
     }
 
+    public double getGoal() {
+        return goal;
+    }
+
+    public String getTitle(){
+        return title;
+    }
+
     public void setProgress(double progress) {
         this.progress = progress;
     }
