@@ -20,7 +20,7 @@ public class RealLivingEntity {
 			ChatColor.AQUA + "" + ChatColor.BOLD + "Starting Packs",
 	};
     private static Location[] locations = {
-            new Location(VanaByte.hub, -1042.5, 195.1, -119.5, 45, 0),
+            new Location(VanaByte.hub, -1038.5, 195.1, -112.5, 110, 0),
 			new Location(VanaByte.hub, -1062.5, 195.1, -119.5, -45, 0),
 			new Location(VanaByte.hub, -1063.5, 195, -118.5, -45, 0),
 			new Location(VanaByte.hub, -1061.5, 195, -120.5, -45, 0),
@@ -28,7 +28,7 @@ public class RealLivingEntity {
 			new Location(VanaByte.hub, -1041.5, 195, -118.5, 45, 0),
     };
     private static EntityType[] types = {
-            EntityType.WOLF,
+            EntityType.PIGLIN,
 			EntityType.CAT,
 			EntityType.SNOW_GOLEM,
 			EntityType.VILLAGER,

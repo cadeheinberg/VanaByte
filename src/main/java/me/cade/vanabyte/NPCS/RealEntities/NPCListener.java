@@ -47,7 +47,7 @@ public class NPCListener implements Listener {
 				e.getPlayer().sendMessage(ChatColor.GREEN + "Coming soon!");
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_CAT_PURREOW, 8, 1);
 				return;
-			}else if (e.getRightClicked().getType() == EntityType.WOLF) {
+			}else if (e.getRightClicked().getType() == EntityType.PIGLIN) {
 				if(1+1 == 2){
 					e.getPlayer().teleport(VanaByte.anarchyWorldSpawn);
 				}else{

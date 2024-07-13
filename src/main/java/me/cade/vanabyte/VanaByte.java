@@ -112,12 +112,15 @@ public class VanaByte extends JavaPlugin {
 	public void setLocations() {
 		hub = Bukkit.getServer().getWorld("world");
 		hubSpawn = new Location(hub, -1052.5, 197.5, -131.5);
-		Bukkit.getServer().createWorld(new WorldCreator("world2"));
-		anarchyWorld = Bukkit.getServer().getWorld("world2");
-		anarchyWorldSpawn = new Location(anarchyWorld, -13, 200, -11);
-		Bukkit.getServer().createWorld(new WorldCreator("world3"));
-		thirdWorld = Bukkit.getServer().getWorld("world3");
-		thirdWorldSpawn = new Location(thirdWorld, -0, 200, -0);
+		anarchyWorld = Bukkit.getWorld("world_nether");
+		anarchyWorldSpawn = new Location(anarchyWorld, -55.5, 73, -132);
+		anarchyWorldSpawn.setYaw(90);
+//		Bukkit.getServer().createWorld(new WorldCreator("world3"));
+//		thirdWorld = Bukkit.getServer().getWorld("world3");
+//		thirdWorldSpawn = new Location(thirdWorld, -0, 200, -0);
+//		WorldCreator creator = WorldCreator.name("nether_world").environment(World.Environment.NETHER);
+//		Bukkit.createWorld(creator);
+//		player.teleport(Bukkit.getWorld("nether_world").getSpawnLocation());
 	}
 
 	private void addPlayersToFighters() {
@@ -144,10 +147,7 @@ public class VanaByte extends JavaPlugin {
 				toSend.teleport(hubSpawn);
 			}else if (input == 1){
 				toSend.teleport(anarchyWorldSpawn);
-			} else if (input == 2) {
-				toSend.teleport(thirdWorldSpawn);
 			}
-			return true;
 		} else if (label.equals("hidescoreboard")) {
 			if (!(player.isOp())) {
 				player.sendMessage(ChatColor.RED + "You are not an" + ChatColor.AQUA + "" + ChatColor.BOLD

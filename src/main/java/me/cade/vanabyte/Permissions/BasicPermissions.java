@@ -3,6 +3,8 @@ package me.cade.vanabyte.Permissions;
 import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.VanaByte;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -15,6 +17,7 @@ import org.bukkit.event.block.*;
 import org.bukkit.event.entity.EntityCombustEvent;
 import org.bukkit.event.entity.EntityPlaceEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
+import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.inventory.InventoryAction;
@@ -27,6 +30,30 @@ public class BasicPermissions implements Listener {
 	public static void youCantDoThatHere(Player player, String message){
 		player.sendMessage(ChatColor.RED + message);
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+	}
+
+	@EventHandler
+	public void onPlayerUsePortal(PlayerPortalEvent e){
+		Bukkit.getConsoleSender().sendMessage("using portal: " + e.getFrom().getWorld() + " " + e.getTo().getWorld());
+		e.setCanCreatePortal(false);
+		e.setCancelled(true);
+		if(e.getFrom().getWorld() == VanaByte.hub && e.getTo().getWorld() == VanaByte.anarchyWorld){
+			Bukkit.getConsoleSender().sendMessage("using portal:  1");
+			e.setTo(VanaByte.anarchyWorldSpawn);
+			e.getPlayer().teleport(VanaByte.anarchyWorldSpawn);
+		}else if(e.getFrom().getWorld() == VanaByte.anarchyWorld && e.getTo().getWorld() == VanaByte.hub){
+			Bukkit.getConsoleSender().sendMessage("using portal:  2");
+			e.setTo(VanaByte.hubSpawn);
+			e.getPlayer().teleport(VanaByte.hubSpawn);
+		}
+	}
+
+	@EventHandler
+	public void onEntityUsePortal(EntityPortalEvent e){
+		if(!(e.getEntity() instanceof Player)){
+			e.setCancelled(true);
+		}
+		return;
 	}
 
 	@EventHandler
@@ -163,7 +190,9 @@ public class BasicPermissions implements Listener {
 
 	@EventHandler
 	public void onFoodChange(FoodLevelChangeEvent e) {
-
+		if(!(e.getEntity() instanceof Player)){
+			return;
+		}
 		if(!SafeZone.inHub(e.getEntity().getWorld())){
 			return;
 		}
