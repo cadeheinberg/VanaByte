@@ -33,7 +33,7 @@ public enum WeaponType {
         return WeaponType.UNKNOWN_WEAPON;
     }
 
-    public String getName() {
+    private String getName() {
         return this.name;
     }
 

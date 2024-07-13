@@ -13,6 +13,7 @@ import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.*;
@@ -77,13 +78,30 @@ public class EntityDamageListener implements Listener {
 		WeaponType weaponType = damageEntry.getWeaponType();
 		Entity killer = Bukkit.getServer().getEntity(killerUUID);
 		if(SafeZone.inAnarchy(victim.getWorld())){
-//			List<ItemStack> drops = e.getDrops();
-//			for(ItemStack drop : drops){
-//				if((Weapon.getWeaponTypeFromItemStack(drop) != null && Weapon.getWeaponTypeFromItemStack(drop) != WeaponType.UNKNOWN_WEAPON)
-//						|| (FighterKitManager.getArmorType(drop) != null && FighterKitManager.getArmorType(drop) != ArmorType.UNKOWN_ARMOR)){
-//					e.getDrops().remove(drop);
-//					continue;
+			List<ItemStack> drops = e.getDrops();
+			//1) duplicate drops, cancel event, and drop ones you want manually?
+			//2) delayed removal, after 1 second?
+			//3) set them to air, working so far?
+//			List<ItemStack> toRemove = List.of();
+			for(int i = 0; i < drops.size(); i++){
+				Bukkit.getConsoleSender().sendMessage("LOOKING AT: " + drops.get(i).getType() + "\n");
+				if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
+					|| (FighterKitManager.getArmorType(drops.get(i)) != null && FighterKitManager.getArmorType(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
+					Bukkit.getConsoleSender().sendMessage("REMOVE: " + drops.get(i).getType() + "\n");
+					drops.get(i).setType(Material.AIR);
+				}
+			}
+//			if(drops.get(i).getType() == Material.LEATHER_BOOTS || drops.get(i).getType() == Material.LEATHER_LEGGINGS ||
+//					drops.get(i).getType() == Material.LEATHER_CHESTPLATE || drops.get(i).getType() == Material.LEATHER_HELMET){
+//				if((FighterKitManager.getArmorType(drops.get(i)) != null || FighterKitManager.getArmorType(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
+//
 //				}
+//			drops.removeAll(toRemove);
+//			for(ItemStack drop : drops){
+//			if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
+//					|| (FighterKitManager.getArmorType(drops.get(i)) != null && FighterKitManager.getArmorType(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
+//				Bukkit.getConsoleSender().sendMessage("REMOVE: " + drops.get(i).getType() + "\n");
+//			}
 //			}
 		}
 		if(killer == null){
@@ -304,7 +322,7 @@ public class EntityDamageListener implements Listener {
 	}
 
 	public void tellDeathMessage(LivingEntity killer, LivingEntity victim, WeaponType weaponType) {
-		String weaponName = weaponType.getName();
+		String weaponName = weaponType.name();
 
 		PlayerChat.tellPlayerMessageToAll(ChatColor.YELLOW + "" + ChatColor.ITALIC + killer.getName() + ChatColor.RESET
 				+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victim.getName() + ChatColor.RESET + " using " + ""

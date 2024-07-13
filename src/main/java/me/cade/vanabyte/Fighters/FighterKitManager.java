@@ -217,13 +217,13 @@ public class FighterKitManager {
         lbo.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
 
         PersistentDataContainer lheContainer = lhe.getPersistentDataContainer();
-        lheContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
-        PersistentDataContainer lchContainer = lhe.getPersistentDataContainer();
-        lchContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
-        PersistentDataContainer lleContainer = lhe.getPersistentDataContainer();
-        lleContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
-        PersistentDataContainer lboContainer = lhe.getPersistentDataContainer();
-        lboContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.getName());
+        lheContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.name());
+        PersistentDataContainer lchContainer = lch.getPersistentDataContainer();
+        lchContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.name());
+        PersistentDataContainer lleContainer = lle.getPersistentDataContainer();
+        lleContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.name());
+        PersistentDataContainer lboContainer = lbo.getPersistentDataContainer();
+        lboContainer.set(ARMOR_TYPE_KEY, PersistentDataType.STRING, ArmorType.SPECIAL_ARMOR.name());
 
         lhelmet.setItemMeta(lhe);
         lchest.setItemMeta(lch);

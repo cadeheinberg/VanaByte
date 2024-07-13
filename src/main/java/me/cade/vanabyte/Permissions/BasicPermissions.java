@@ -25,6 +25,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 
+import java.util.Random;
+
 public class BasicPermissions implements Listener {
 
 	public static void youCantDoThatHere(Player player, String message){
@@ -93,6 +95,21 @@ public class BasicPermissions implements Listener {
 	}
 	@EventHandler
 	public void onEntitySpawn(EntitySpawnEvent e){
+		if(!(e.getEntity() instanceof LivingEntity)){
+			return;
+		}
+		if(e.getLocation().getWorld() == VanaByte.anarchyWorld){
+			if(e.getEntityType() == EntityType.CREEPER || e.getEntityType() == EntityType.COW){
+				return;
+			}
+			Random rand = new Random();
+			int num = rand.nextInt(10 - 1 + 1) + 1;
+//			if(num <= 5){
+//				e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.CREEPER);
+//			}else{
+//				e.getLocation().getWorld().spawnEntity(e.getLocation(), EntityType.COW);
+//			}
+		}
 		if(e.getEntity().getType() == EntityType.ALLAY){
 			e.setCancelled(true);
 		} else if(e.getEntity().getType() == EntityType.PHANTOM){

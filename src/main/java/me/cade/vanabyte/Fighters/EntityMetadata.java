@@ -12,7 +12,7 @@ import java.util.UUID;
 public class EntityMetadata {
 
     public static void addWeaponTypeToEntity(Entity entity, WeaponType weaponType, UUID uuid){
-        entity.setMetadata("WeaponType", new FixedMetadataValue(VanaByte.getInstance(), weaponType.getName()));
+        entity.setMetadata("WeaponType", new FixedMetadataValue(VanaByte.getInstance(), weaponType.name()));
         entity.setMetadata("WeaponUUID", new FixedMetadataValue(VanaByte.getInstance(), uuid.toString()));
     }
 

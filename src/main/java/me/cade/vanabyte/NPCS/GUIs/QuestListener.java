@@ -43,7 +43,7 @@ public class QuestListener implements Listener {
             }
             if(quest.getTargetEntityType() == e.getVictimType()){
                 quest.setProgress(quest.getProgress()+1);
-                pkiller.sendMessage("Killed " + quest.getProgress() + "/" + quest.getGoal() + ": " + e.getVictimType() + " with " + e.getWeaponType().getName());
+                pkiller.sendMessage("Killed " + quest.getProgress() + "/" + quest.getGoal() + ": " + e.getVictimType() + " with " + e.getWeaponType().name());
                 if(quest.isGoalMet()){
                     pkiller.sendMessage("Quest " + ChatColor.YELLOW + "" + quest.getTitle() + ChatColor.WHITE + " complete, go to hub upgrade table to receive reward!");
                     pkiller.playSound(pkiller.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
