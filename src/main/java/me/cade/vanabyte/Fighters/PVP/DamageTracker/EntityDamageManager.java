@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Damaging.DamageTracker;
+package me.cade.vanabyte.Fighters.PVP.DamageTracker;
 
 import java.util.Map;
 import java.util.UUID;

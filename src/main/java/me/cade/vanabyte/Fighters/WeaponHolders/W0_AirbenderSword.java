@@ -1,6 +1,6 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
+import me.cade.vanabyte.Fighters.PVP.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;

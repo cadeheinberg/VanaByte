@@ -1,5 +1,5 @@
-package me.cade.vanabyte.Archive.UnusedWeapons;
-
-public class FireballItem {
-
-}
+//package me.cade.vanabyte.Archive.UnusedWeapons;
+//
+//public class FireballItem {
+//
+//}

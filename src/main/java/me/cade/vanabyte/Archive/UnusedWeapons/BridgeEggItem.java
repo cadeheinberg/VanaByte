@@ -1,6 +1,6 @@
-package me.cade.vanabyte.Archive.UnusedWeapons;
-
-public class BridgeEggItem {
-	
-
-}
+//package me.cade.vanabyte.Archive.UnusedWeapons;
+//
+//public class BridgeEggItem {
+//
+//
+//}

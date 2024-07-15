@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Damaging.DamageTracker;
+package me.cade.vanabyte.Fighters.PVP.DamageTracker;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;

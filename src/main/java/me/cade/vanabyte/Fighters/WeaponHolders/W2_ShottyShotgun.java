@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Damaging.EntityMetadata;
+import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -49,15 +49,19 @@ public class W2_ShottyShotgun extends WeaponHolder {
 
     @Override
     public boolean doProjectileHitBlock(ProjectileHitEvent e){
-        if(!super.doProjectileHitBlock(e)){
-            return false;
+        if(super.doProjectileHitBlock(e)){
+            //snowball hit ground
+            return true;
         }
-        //snowball hit ground
-        return true;
+        return false;
     }
 
     @Override
     public boolean doProjectileHitEntity(EntityDamageByEntityEvent e){
+        if(super.doProjectileHitEntity(e)){
+            //snowball hit entity
+            return true;
+        }
         return true;
     }
 

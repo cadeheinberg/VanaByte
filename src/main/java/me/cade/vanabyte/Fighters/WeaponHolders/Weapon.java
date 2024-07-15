@@ -119,6 +119,9 @@ public class Weapon {
   }
 
   public static WeaponType getWeaponTypeFromItemStack(ItemStack itemStack) {
+      if(itemStack == null){
+          return WeaponType.UNKNOWN_WEAPON;
+      }
       ItemMeta meta = itemStack.getItemMeta();
       if(meta == null){
           return WeaponType.UNKNOWN_WEAPON;
@@ -136,6 +139,9 @@ public class Weapon {
 
     public static WeaponType getWeaponTypeFromMainHand(Player player) {
         ItemStack itemStack = player.getEquipment().getItemInMainHand();
+        if(itemStack == null){
+            return null;
+        }
         ItemMeta meta = itemStack.getItemMeta();
         if(meta == null){
             return WeaponType.UNKNOWN_WEAPON;

@@ -180,7 +180,7 @@ public class Fighter {
 		fighterScoreBoardManager.updateCookies();
 	}
 
-	public int getKitID() {return kitID};
+	public int getKitID() {return kitID;};
 	public int getFighterLevel() {return fighterLevel;}
 	public int getCakes() {return cakes;}
 	public int getDeaths() {return deaths;}

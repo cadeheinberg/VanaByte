@@ -12,11 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
-import org.bukkit.event.entity.EntityCombustEvent;
-import org.bukkit.event.entity.EntityPlaceEvent;
-import org.bukkit.event.entity.EntitySpawnEvent;
-import org.bukkit.event.entity.EntityPortalEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.hanging.HangingPlaceEvent;
 import org.bukkit.event.player.*;
 
@@ -27,6 +23,13 @@ public class BasicPermissions implements Listener {
 	public static void youCantDoThatHere(Player player, String message){
 		player.sendMessage(ChatColor.RED + message);
 		player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+	}
+
+	@EventHandler
+	public void onExplode(EntityExplodeEvent e) {
+		if(SafeZone.inHub(e.getLocation().getWorld())){
+			e.blockList().clear();
+		}
 	}
 
 	@EventHandler

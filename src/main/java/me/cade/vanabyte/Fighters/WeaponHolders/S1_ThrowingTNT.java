@@ -1,11 +1,16 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.Damaging.EntityMetadata;
+import me.cade.vanabyte.Fighters.PVP.CreateExplosion;
+import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.entity.ExplosionPrimeEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 public class S1_ThrowingTNT extends WeaponHolder {
@@ -15,8 +20,8 @@ public class S1_ThrowingTNT extends WeaponHolder {
 	}
 
 	@Override
-	public boolean doRightClick() {
-		if(!super.doRightClick()) {
+	public boolean doRightClick(PlayerInteractEvent e) {
+		if(!super.doRightClick(e)) {
 			return false;
 		}
 		Entity tnt = super.getPlayer().getWorld().spawnEntity(super.getPlayer().getEyeLocation(), EntityType.TNT);
@@ -31,11 +36,19 @@ public class S1_ThrowingTNT extends WeaponHolder {
 		return true;
 	}
 	@Override
-	public boolean doDrop() {
-		if(!super.doDrop()){
+	public boolean doDrop(PlayerDropItemEvent e) {
+		if(!super.doDrop(e)){
 			return false;
 		}
-		return this.doRightClick();
+		return this.doRightClick(new PlayerInteractEvent(null, null, null, null, null));
+	}
+
+	@Override
+	public boolean doExplosion(ExplosionPrimeEvent e, Player killer){
+		if(super.doExplosion(e, killer)){
+			return true;
+		}
+		return false;
 	}
 
 

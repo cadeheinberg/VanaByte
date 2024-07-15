@@ -1,6 +1,7 @@
-package me.cade.vanabyte.Damaging;
+package me.cade.vanabyte.Fighters.PVP;
 
-import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
+import me.cade.vanabyte.Fighters.FighterKitManager;
+import me.cade.vanabyte.Fighters.PVP.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
@@ -34,7 +35,7 @@ public class CreateExplosion {
 				if (fighter == null){
 					return;
 				}
-				FighterKit fKit = fighter.getFKit();
+				FighterKitManager fKit = fighter.getFighterKitManager();
 				if(fKit == null){
 					return;
 				}

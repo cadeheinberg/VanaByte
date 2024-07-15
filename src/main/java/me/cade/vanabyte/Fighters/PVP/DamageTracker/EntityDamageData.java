@@ -1,6 +1,4 @@
-package me.cade.vanabyte.Damaging.DamageTracker;
-
-import org.bukkit.Bukkit;
+package me.cade.vanabyte.Fighters.PVP.DamageTracker;
 
 import java.util.ArrayList;
 import java.util.List;

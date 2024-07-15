@@ -2,7 +2,7 @@ package me.cade.vanabyte.Fighters.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Damaging.EntityMetadata;
+import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import org.bukkit.*;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LivingEntity;
@@ -59,7 +59,13 @@ public class W3_GoblinBow extends WeaponHolder {
 
     @Override
     public boolean doBowShootEvent(EntityShootBowEvent e){
-        return true;
+        if(super.doBowShootEvent(e)){
+            this.doArrowShoot((Arrow) e.getProjectile(), e.getForce());
+            return true;
+        }
+        //cooldown
+        e.setCancelled(true);
+        return false;
     }
 
     public double doArrowHitEntity(LivingEntity victim, Arrow arrow) {
@@ -76,12 +82,6 @@ public class W3_GoblinBow extends WeaponHolder {
     }
 
     public boolean doArrowShoot(Arrow arrow, double force) {
-        if (this.player.getCooldown(this.getMaterial()) > 0) {
-            return false;
-        }
-        if(this.getRightClickCooldownTicks() > 0){
-            player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
-        }
         EntityMetadata.addWeaponTypeToEntity(arrow, this.weaponType, this.player.getUniqueId());
         if (super.getWeaponAbility().isAbilityActive()) {
             arrow.setFireTicks(1000);

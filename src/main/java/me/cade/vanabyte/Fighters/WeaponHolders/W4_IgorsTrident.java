@@ -1,11 +1,12 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.Damaging.CreateExplosion;
+import me.cade.vanabyte.Fighters.PVP.CreateExplosion;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Damaging.EntityMetadata;
+import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
@@ -13,30 +14,42 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 
 public class W4_IgorsTrident extends WeaponHolder {
 
+    private final Player player;
+
     public W4_IgorsTrident(Fighter fighter, WeaponType weaponType) {
         super(fighter, weaponType);
+        this.player = fighter.getPlayer();
     }
 
     @Override
     public boolean doRightClick() {
-        return false;
-    }
-    @Override
-    public boolean doDrop() {
-        if (!super.doDrop()){
-            return false;
-        }
-        this.activateSpecial();
         return true;
     }
+
     @Override
-    public void activateSpecial() {
-        super.activateSpecial();
-        this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
+    public boolean doDrop() {
+        if (super.doDrop()){
+            this.activateSpecial();
+            return true;
+        }
+        return false;
     }
+
     @Override
-    public void deActivateSpecial() {
-        super.deActivateSpecial();
+    public boolean activateSpecial() {
+        if(super.activateSpecial()){
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deActivateSpecial() {
+        if(super.deActivateSpecial()){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -59,20 +72,17 @@ public class W4_IgorsTrident extends WeaponHolder {
 
     @Override
     public boolean doProjectileLaunch(ProjectileLaunchEvent e) {
-        return true;
+        if(super.doProjectileLaunch(e)){
+            this.doThrowTrident((Trident) e.getEntity());
+            return true;
+        }
+        return false;
     }
 
     public boolean doThrowTrident(Trident trident) {
-        if (player.getCooldown(this.getMaterial()) > 0) {
-            return false;
-        }
-        if(this.getRightClickCooldownTicks() > 0){
-            player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
-        }
         if (super.getWeaponAbility().isAbilityActive()) {
             trident.setFireTicks(10000);
         }
-        EntityMetadata.addWeaponTypeToEntity(trident, this.weapon.getWeaponType(), this.player.getUniqueId());
         this.player.getInventory().remove(this.getWeapon().getWeaponItem());
         player.getInventory().setItemInMainHand(this.getWeapon().getWeaponItem());
         trident.setShooter(player);

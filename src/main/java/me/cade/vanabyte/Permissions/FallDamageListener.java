@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Damaging;
+package me.cade.vanabyte.Permissions;
 
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

@@ -1,12 +1,17 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.Damaging.CreateExplosion;
+import me.cade.vanabyte.Fighters.PVP.CreateExplosion;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -14,39 +19,107 @@ import org.bukkit.util.Vector;
 
 public class W5_SumoStick extends WeaponHolder {
 
+    private final Player player;
+
     public W5_SumoStick(Fighter fighter, WeaponType weaponType) {
         super(fighter, weaponType);
+        player = fighter.getPlayer();
     }
 
     @Override
-    public boolean doRightClick() {
-        return true;
-    }
-
-    @Override
-    public boolean doDrop() {
-        if (!super.doDrop()){
-            return false;
+    public boolean doLeftClick(PlayerInteractEvent e){
+        if(super.doLeftClick(e)){
+            if (e.getPlayer().getPassengers() != null && e.getPlayer().getPassengers().size() > 1) {
+                this.doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
+                return true;
+            }
         }
-        if(fighter.getFighterTaskManager().getGroundPoundTask() != 0){
-            return false;
-        }
-        this.activateSpecial();
-        return true;
-    }
-    @Override
-    public void activateSpecial() {
-        super.activateSpecial();
-        doJump(this.player, 1.4, Fighter.get(this.player));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, this.abilityDurationTicks, 0));
-        this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, this.abilityDurationTicks, 1));
-        this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+        return false;
     }
 
     @Override
-    public void deActivateSpecial() {
-        super.deActivateSpecial();
-        stopListening(fighter);
+    public boolean doRightClick(PlayerInteractEvent e) {
+        // super checks if there is a cooldown on material,
+        if(super.doRightClick(e)){
+            //do specific stuff here, apply cooldown?
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean doRightClickEntity(PlayerInteractEntityEvent e) {
+        // super checks if there is a cooldown on material
+        if(super.doRightClickEntity(e)){
+            //do specific stuff here
+            if(e.getRightClicked() instanceof LivingEntity){
+                if (player.getPassengers() == null) {
+                    return false;
+                }
+                if (player.getPassengers().size() >= 1) {
+                    return false;
+                }
+                if (e.getRightClicked() instanceof Player) {
+                    if (((Player) e.getRightClicked()).isSneaking()) {
+                        return false;
+                    }
+                }
+                this.doPickUp((LivingEntity) e.getRightClicked());
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public boolean doDrop(PlayerDropItemEvent e) {
+        if (super.doDrop(e)){
+            if(Fighter.get(player).getFighterTaskManager().getGroundPoundTask() != 0){
+                return false;
+            }
+            this.activateSpecial();
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+        if(super.doMeleeAttack(e, killer, victim)){
+            if (killer.getPassengers() == null) {
+                return false;
+            }
+            if (killer.getPassengers().size() < 1) {
+                return false;
+            }
+            if (!(killer.getPassengers().get(0).equals(victim))) {
+                return false;
+            }
+            this.doThrow((Player) e.getDamager(), (LivingEntity) e.getEntity());
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean activateSpecial() {
+        if(super.activateSpecial()){
+            doJump(player, 1.4, Fighter.get(this.player));
+            this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, super.getAbilityDurationTicks(), 0));
+            this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, super.getAbilityDurationTicks(), 1));
+            this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deActivateSpecial() {
+        if(super.deActivateSpecial()){
+            this.stopListening(player);
+            return true;
+        }
+        return false;
     }
 
     public void doJump(Player player, Double power, Fighter pFight) {
@@ -69,19 +142,19 @@ public class W5_SumoStick extends WeaponHolder {
             @Override
             public void run() {
                 if (player == null) {
-                    stopListening(fighter);
+                    stopListening(player);
                     return;
                 }
                 if (!player.isOnline()) {
-                    stopListening(fighter);
+                    stopListening(player);
                     return;
                 }
                 if (player.isDead()) {
-                    stopListening(fighter);
+                    stopListening(player);
                     return;
                 }
                 if (player.isOnGround()) {
-                    stopListening(fighter);
+                    stopListening(player);
                     doGroundHit(player, player.getLocation(), 0.3);
                     return;
                 }
@@ -92,7 +165,7 @@ public class W5_SumoStick extends WeaponHolder {
         }.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId());
     }
 
-    public static void launchPlayerDown(Player player, Double power, Fighter pFight) {
+    public void launchPlayerDown(Player player, Double power, Fighter pFight) {
         Location local = player.getLocation();
         local.setPitch(80);
         Vector currentDirection = local.getDirection().normalize();
@@ -100,32 +173,17 @@ public class W5_SumoStick extends WeaponHolder {
         player.setVelocity(currentDirection);
     }
 
-    public static void stopListening(Fighter fighter) {
-        Bukkit.getScheduler().cancelTask(fighter.getFighterTaskManager().getGroundPoundTask());
-        fighter.getFighterTaskManager().setGroundPoundTask(0);
+    public void stopListening(Player player) {
+        Bukkit.getScheduler().cancelTask(Fighter.get(player).getFighterTaskManager().getGroundPoundTask());
+        Fighter.get(player).getFighterTaskManager().setGroundPoundTask(0);
     }
 
     // make this freeze players also
     public void doGroundHit(Player shooter, Location location, double power) {
-        CreateExplosion.doAnExplosion(shooter, location, 0.7, this.getSpecialDamage(), true, this.weaponType);
+        CreateExplosion.doAnExplosion(shooter, location, 0.7, this.getSpecialDamage(), true, super.getWeaponType());
     }
 
     public void doPickUp(LivingEntity rightClicked) {
-        if (player.getPassengers() == null) {
-            return;
-        }
-        if (player.getPassengers().size() >= 1) {
-            return;
-        }
-        if (rightClicked instanceof Player) {
-            if (((Player) rightClicked).isSneaking()) {
-                return;
-            }
-        }
-        if (player.getCooldown(this.getMaterial()) > 0) {
-            return;
-        }
-        player.setCooldown(this.getMaterial(), this.getRightClickCooldownTicks());
         player.addPassenger(rightClicked);
     }
 

@@ -1,6 +1,6 @@
 package me.cade.vanabyte.NPCS.GUIs;
 
-import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageEntry;
+import me.cade.vanabyte.Fighters.PVP.DamageTracker.EntityDamageEntry;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;

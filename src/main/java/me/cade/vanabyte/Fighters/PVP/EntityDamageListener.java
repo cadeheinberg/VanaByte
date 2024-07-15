@@ -1,15 +1,14 @@
-package me.cade.vanabyte.Damaging;
+package me.cade.vanabyte.Fighters.PVP;
 
-import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
-import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageData;
-import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageEntry;
+import me.cade.vanabyte.Fighters.PVP.DamageTracker.CustomDamageWrapper;
+import me.cade.vanabyte.Fighters.PVP.DamageTracker.EntityDamageData;
+import me.cade.vanabyte.Fighters.PVP.DamageTracker.EntityDamageEntry;
 import me.cade.vanabyte.Fighters.Enums.ArmorType;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.WeaponHolders.*;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestListener;
-import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
@@ -186,7 +185,7 @@ public class EntityDamageListener implements Listener {
 			if(fKiller == null){
 				return;
 			}
-			FighterKit fKitKiller = fKiller.getFKit();
+			FighterKitManager fKitKiller = fKiller.getFighterKitManager();
 			if(fKitKiller == null){
 				return;
 			}
@@ -201,28 +200,9 @@ public class EntityDamageListener implements Listener {
 			if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
 				//fists or non special weapon
 				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
-			} else if(weaponType == WeaponType.SUMO_STICK){
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, weaponType));
-				if (pkiller.getPassengers() == null) {
-					return;
-				}
-				if (pkiller.getPassengers().size() < 1) {
-					return;
-				}
-				if (!(pkiller.getPassengers().get(0).equals(victim))) {
-					return;
-				}
-				if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
-					((W5_SumoStick) fKitKiller.getWeaponHolderWithType(weaponType)).doThrow(pkiller, victim);
-				}
-			} else if(weaponType == WeaponType.GRIEF_SWORD){
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, weaponType));
-				if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
-					((W6_GriefSword) fKitKiller.getWeaponHolderWithType(weaponType)).doStealHealth(e.getFinalDamage());
-				}
 			} else{
-				// Other special weapons with no interesting melee effects
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, weaponType));
+				FighterKitManager fKit = Fighter.get((Player) damagingEntity).getFighterKitManager();
+				fKit.getWeaponHolderWithType(weaponType).doMeleeAttack(e, pkiller, victim);
 			}
 		}else if (!(damagingEntity instanceof Player)) {
 			double damage_amount = 0;

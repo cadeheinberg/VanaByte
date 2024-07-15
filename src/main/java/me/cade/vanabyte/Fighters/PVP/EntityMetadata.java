@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Damaging;
+package me.cade.vanabyte.Fighters.PVP;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.VanaByte;
