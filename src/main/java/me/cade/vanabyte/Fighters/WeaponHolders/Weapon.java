@@ -1,5 +1,6 @@
-package me.cade.vanabyte.FighterWeapons.InUseWeapons;
+package me.cade.vanabyte.Fighters.WeaponHolders;
 
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -7,7 +8,6 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +16,6 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 public class Weapon {
 
@@ -109,10 +108,6 @@ public class Weapon {
 
   public ItemStack getWeaponItem() {
     return weaponItem;
-  }
-
-  public WeaponType getWeaponTypeFromItemStack(){
-      return weaponType;
   }
 
   public void resetCooldown(Player player) {

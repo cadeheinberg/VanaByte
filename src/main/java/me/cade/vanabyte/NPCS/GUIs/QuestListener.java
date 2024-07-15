@@ -1,14 +1,13 @@
 package me.cade.vanabyte.NPCS.GUIs;
 
 import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageEntry;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDeathEvent;
 
 import java.util.ArrayList;
 

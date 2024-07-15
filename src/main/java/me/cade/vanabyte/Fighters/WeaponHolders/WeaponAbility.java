@@ -1,7 +1,7 @@
-package me.cade.vanabyte.FighterWeapons;
+package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.FighterAbilityManager;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
 import net.md_5.bungee.api.ChatMessageType;

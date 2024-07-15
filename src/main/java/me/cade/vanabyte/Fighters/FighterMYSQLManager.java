@@ -9,6 +9,7 @@ public class FighterMYSQLManager {
 
     private Player player = null;
     private Fighter fighter = null;
+    private int[] unlockedKits = new int[7];
 
     protected FighterMYSQLManager(Player player, Fighter fighter){
         this.player = player;
@@ -81,7 +82,7 @@ public class FighterMYSQLManager {
         fighter.setCakes(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[2]));
         fighter.setFighterLevel(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[3]));
         fighter.setFighterXP(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[4]));
-        fighter.fighterKitManager.setKitID(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[5]));
+        fighter.setKitID(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[5]));
         fighter.setKills(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[6]));
         fighter.setKillStreak(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[7]));
         fighter.setDeaths(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[8]));

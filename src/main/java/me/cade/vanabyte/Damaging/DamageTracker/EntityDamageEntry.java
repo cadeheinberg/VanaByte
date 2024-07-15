@@ -1,7 +1,6 @@
 package me.cade.vanabyte.Damaging.DamageTracker;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
-import org.bukkit.Bukkit;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import org.bukkit.entity.EntityType;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import java.util.UUID;

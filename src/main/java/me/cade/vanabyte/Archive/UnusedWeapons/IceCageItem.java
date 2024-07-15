@@ -1,4 +1,4 @@
-package me.cade.vanabyte.FighterWeapons.UnusedWeapons;
+package me.cade.vanabyte.Archive.UnusedWeapons;
 
 public class IceCageItem {
 

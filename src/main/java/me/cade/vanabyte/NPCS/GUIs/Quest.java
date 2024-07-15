@@ -1,6 +1,6 @@
 package me.cade.vanabyte.NPCS.GUIs;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;

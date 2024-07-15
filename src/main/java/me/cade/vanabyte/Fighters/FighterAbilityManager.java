@@ -1,9 +1,7 @@
-package me.cade.vanabyte.FighterWeapons;
+package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.W6_GriefSword;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponHolder;
-import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.VanaByte;
+import me.cade.vanabyte.Fighters.WeaponHolders.W6_GriefSword;
+import me.cade.vanabyte.Fighters.WeaponHolders.WeaponHolder;
 import org.bukkit.entity.Player;
 
 public class FighterAbilityManager {

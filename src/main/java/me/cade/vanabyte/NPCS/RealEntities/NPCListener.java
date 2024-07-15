@@ -1,9 +1,9 @@
 package me.cade.vanabyte.NPCS.RealEntities;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.W5_SumoStick;
+import me.cade.vanabyte.Fighters.WeaponHolders.W5_SumoStick;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;

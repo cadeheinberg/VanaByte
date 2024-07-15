@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Fighters.Enums;
 
 public enum ArmorType {
     SPECIAL_ARMOR("special armor"),
@@ -8,10 +8,6 @@ public enum ArmorType {
 
     private ArmorType(String name){
         this.name = name;
-    }
-
-    private String getName() {
-        return this.name;
     }
 
 }

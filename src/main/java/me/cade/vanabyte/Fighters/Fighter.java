@@ -1,6 +1,5 @@
 package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.FighterWeapons.FighterAbilityManager;
 import me.cade.vanabyte.NPCS.GUIs.GUIManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestManager;
 import me.cade.vanabyte.NPCS.PacketHolograms.HologramManager;
@@ -20,7 +19,7 @@ public class Fighter {
 	private Player player = null;
 	private UUID uuid = null;
 	private static final int numberOfKits = 7;
-	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
+	private int kitID, fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
 
 	protected HologramManager fighterPacketHologramsManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
@@ -35,10 +34,10 @@ public class Fighter {
 		this.player = player;
 		this.uuid = player.getUniqueId();
 		this.addToFightersHashMap();
+		this.fighterMYSQLManager = new FighterMYSQLManager(this.player, this);
 		this.fighterPacketHologramsManager = new HologramManager(this.player, this);
 		this.fighterTaskManager = new FighterTaskManager(this.player, this);
 		this.fighterKitManager = new FighterKitManager(this.player, this);
-		this.fighterMYSQLManager = new FighterMYSQLManager(this.player, this);
 		this.fighterAbilityManager = new FighterAbilityManager(this);
 		this.fighterScoreBoardManager = new FighterScoreBoardManager(player);
 		this.guiManager = new GUIManager(player);
@@ -47,12 +46,12 @@ public class Fighter {
 	}
 
 	public void fighterJoined(){
-		fighterKitManager.fighterJoined();
 		fighterMYSQLManager.fighterJoined();
+		fighterKitManager.fighterJoined();
 		fighterTaskManager.fighterJoined();
 		fighterPacketHologramsManager.fighterJoined();
 		//Need to do this after everything has been setup
-		fighterKitManager.giveKit();
+		fighterKitManager.fighterJoined();
 		fighterAbilityManager.fighterJoined();
 	}
 
@@ -89,11 +88,13 @@ public class Fighter {
 		fighterMYSQLManager.fighterChangedWorld();
 	}
 
-	public void giveKit(){
-		fighterKitManager.giveKit();
+	public void fighterGotNewKit(){
+		fighterAbilityManager.fighterGotNewKit();
 	}
 
-	public void dropFighterKitSoul(){}
+	public void setKitID(int kitID){
+		this.kitID = kitID;
+	}
 
 	protected void setFighterLevel(int fighterLevel) {
 		this.fighterLevel = fighterLevel;
@@ -178,6 +179,8 @@ public class Fighter {
 		this.cakes = this.cakes - inc;
 		fighterScoreBoardManager.updateCookies();
 	}
+
+	public int getKitID() {return kitID};
 	public int getFighterLevel() {return fighterLevel;}
 	public int getCakes() {return cakes;}
 	public int getDeaths() {return deaths;}
@@ -194,10 +197,7 @@ public class Fighter {
 	public void setCooldownTask(int cooldownTask) {fighterTaskManager.cooldownTask = cooldownTask;}
 	public void setRechargeTask(int rechargeTask) {fighterTaskManager.rechargeTask = rechargeTask;}
 	public FighterScoreBoardManager getFighterScoreBoardManager() {return this.fighterScoreBoardManager;}
-	public FighterKit getFKit() {return fighterKitManager.getFKit();}
-	public static FighterKit getFighterFKit(Player player) {return Fighter.get(player).getFKit();}
 	public static int getNumberOfKits() {return numberOfKits;}
-	public int getKitID(){return fighterKitManager.getKitID();}
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
 	public HologramManager getFighterPacketHologramsManager() {return fighterPacketHologramsManager;}
 

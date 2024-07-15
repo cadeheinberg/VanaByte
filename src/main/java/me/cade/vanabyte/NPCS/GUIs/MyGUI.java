@@ -1,6 +1,5 @@
 package me.cade.vanabyte.NPCS.GUIs;
 
-import me.cade.vanabyte.Fighters.FighterKitManager;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.*;

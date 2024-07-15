@@ -3,11 +3,13 @@ package me.cade.vanabyte.Damaging;
 import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageData;
 import me.cade.vanabyte.Damaging.DamageTracker.EntityDamageEntry;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
+import me.cade.vanabyte.Fighters.Enums.ArmorType;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
+import me.cade.vanabyte.Fighters.WeaponHolders.*;
 import me.cade.vanabyte.Fighters.*;
+import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestListener;
 import me.cade.vanabyte.NPCS.RealEntities.NPCListener;
-import me.cade.vanabyte.NPCS.RealEntities.RealLivingEntity;
 import me.cade.vanabyte.Permissions.PlayerChat;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
@@ -86,7 +88,7 @@ public class EntityDamageListener implements Listener {
 			for(int i = 0; i < drops.size(); i++){
 				Bukkit.getConsoleSender().sendMessage("LOOKING AT: " + drops.get(i).getType() + "\n");
 				if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
-					|| (FighterKitManager.getArmorType(drops.get(i)) != null && FighterKitManager.getArmorType(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
+					|| (FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null && FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
 					Bukkit.getConsoleSender().sendMessage("REMOVE: " + drops.get(i).getType() + "\n");
 					drops.get(i).setType(Material.AIR);
 				}
@@ -322,11 +324,11 @@ public class EntityDamageListener implements Listener {
 	}
 
 	public void tellDeathMessage(LivingEntity killer, LivingEntity victim, WeaponType weaponType) {
-		String weaponName = weaponType.name();
+		String weaponName = weaponType.getWeaponNameUncolored();
 
 		PlayerChat.tellPlayerMessageToAll(ChatColor.YELLOW + "" + ChatColor.ITALIC + killer.getName() + ChatColor.RESET
-				+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victim.getName() + ChatColor.RESET + " using " + ""
-				+ "[" + weaponName + ChatColor.RESET + "" + ChatColor.WHITE + "]");
+				+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victim.getName() + ChatColor.RESET + " with "
+				+ ChatColor.YELLOW + "" + ChatColor.ITALIC + weaponName);
 	}
 
 }

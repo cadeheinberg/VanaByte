@@ -1,8 +1,6 @@
 package me.cade.vanabyte.Permissions;
 
-import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -20,9 +18,6 @@ import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityPortalEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.hanging.HangingPlaceEvent;
-import org.bukkit.event.inventory.InventoryAction;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.*;
 
 import java.util.Random;

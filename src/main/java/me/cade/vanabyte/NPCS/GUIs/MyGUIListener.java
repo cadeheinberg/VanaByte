@@ -1,7 +1,7 @@
 package me.cade.vanabyte.NPCS.GUIs;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.Weapon;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.WeaponHolders.Weapon;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;

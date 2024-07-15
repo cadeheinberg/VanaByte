@@ -1,7 +1,6 @@
 package me.cade.vanabyte.NPCS.RealEntities;
 
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKit;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;

@@ -1,6 +1,6 @@
-package me.cade.vanabyte.Fighters;
+package me.cade.vanabyte.Damaging;
 
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.FixedMetadataValue;
@@ -21,7 +21,7 @@ public class EntityMetadata {
             List<MetadataValue> metadataValues = entity.getMetadata("WeaponType");
             if (metadataValues != null && !metadataValues.isEmpty()) {
                 MetadataValue value = metadataValues.get(0);
-                return WeaponType.fromName(value.asString()); // Cast the value to string
+                return WeaponType.valueOf(value.asString()); // Cast the value to string
             }
         }
         return null; // or you can return a default value

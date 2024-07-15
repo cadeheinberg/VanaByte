@@ -1,7 +1,9 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.Damaging.EntityMetadata;
 import me.cade.vanabyte.Damaging.CreateExplosion;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.*;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
+import me.cade.vanabyte.Fighters.WeaponHolders.*;
 import me.cade.vanabyte.Permissions.SafeZone;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -39,28 +41,28 @@ public class KitListener implements Listener {
 		if(Fighter.get(e.getPlayer()) == null){
 			return;
 		}
-		if(Fighter.get(e.getPlayer()).getFKit() == null){
+		if(Fighter.get(e.getPlayer()).getFighterKitManager() == null){
 			return;
 		}
 		if (!(e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK))) {
 			if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
 				if (e.getPlayer().getPassengers() != null && e.getPlayer().getPassengers().size() > 1) {
-					if(Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(WeaponType.SUMO_STICK) != null) {
-						((W5_SumoStick) Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(WeaponType.SUMO_STICK)).doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
+					if(Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(WeaponType.SUMO_STICK) != null) {
+						((W5_SumoStick) Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(WeaponType.SUMO_STICK)).doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
 						return;
 					}
 				}
 			}
 			return;
 		}
-		if (e.getItem() == null) {
+		if(e.getItem() == null){
 			return;
 		}
 		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItem());
-		if(weaponType == null){
+		if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
 			return;
 		}
-		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(weaponType);
+		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).fighterKitManager.getWeaponHolderWithType(weaponType);
 		if(weaponHolder != null){
 			weaponHolder.doRightClick();
 		}
@@ -84,7 +86,7 @@ public class KitListener implements Listener {
 		if(Fighter.get(e.getPlayer()) == null){
 			return;
 		}
-		if(Fighter.get(e.getPlayer()).getFKit() == null){
+		if(Fighter.get(e.getPlayer()).getFighterKitManager() == null){
 			return;
 		}
 		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItemDrop().getItemStack());
@@ -95,7 +97,7 @@ public class KitListener implements Listener {
 			}
 			return;
 		}
-		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFKit().getWeaponHolderWithType(weaponType);
+		WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(weaponType);
 		if(weaponHolder == null){
 			if(SafeZone.inAnarchy(e.getPlayer().getWorld())){
 				//The player is trying to drop the item in the survival world
@@ -124,11 +126,11 @@ public class KitListener implements Listener {
 		WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(e.getEntity());
 		if(weaponType == null ||
 				Fighter.get(pkiller) == null ||
-				Fighter.get(pkiller).getFKit() == null ||
+				Fighter.get(pkiller).getFighterKitManager() == null ||
 				e.getHitBlock() == null){
 			return;
 		}
-		Fighter.get(pkiller).getFKit().getWeaponHolderWithType(weaponType).doProjectileHitBlock(e);
+		Fighter.get(pkiller).getFighterKitManager().getWeaponHolderWithType(weaponType).doProjectileHitBlock(e);
 	}
 
 
@@ -146,10 +148,10 @@ public class KitListener implements Listener {
 			WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(((Trident) e.getEntity()).getItem());
 			if(weaponType == null ||
 					Fighter.get(pkiller) == null ||
-					Fighter.get(pkiller).getFKit() == null){
+					Fighter.get(pkiller).getFighterKitManager() == null){
 				return;
 			}
-			FighterKit fKit = Fighter.get((Player) e.getEntity().getShooter()).getFKit();
+			FighterKitManager fKit = Fighter.get((Player) e.getEntity().getShooter()).getFighterKitManager();
 			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(weaponType);
 			if(weaponHolder == null){
 				return;
@@ -177,11 +179,10 @@ public class KitListener implements Listener {
 			WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getBow());
 			if(weaponType == null ||
 					Fighter.get(pkiller) == null ||
-					Fighter.get(pkiller).getFKit() == null){
+					Fighter.get(pkiller).getFighterKitManager() == null){
 				return;
 			}
-			FighterKit fKit = Fighter.get((Player) e.getEntity()).getFKit();
-			WeaponHolder weaponHolder = fKit.getWeaponHolderWithType(weaponType);
+			WeaponHolder weaponHolder = Fighter.get((Player) e.getEntity()).getFighterKitManager().getWeaponHolderWithType(weaponType);
 			if(weaponHolder == null){
 				return;
 			}
@@ -196,8 +197,8 @@ public class KitListener implements Listener {
 	@EventHandler
 	public void onDismount(EntityDismountEvent e) {
 		if (e.getEntity() instanceof Player) {
-			if (e.getDismounted().getType() == EntityType.CHICKEN) {
-				Fighter.get((Player) e.getEntity()).fighterDismountParachute();
+			for (WeaponHolder weaponHolder : Fighter.get((Player) e.getEntity()).getFighterKitManager().weaponHolders) {
+				weaponHolder.doDismount(e);
 			}
 		}
 	}
@@ -240,7 +241,7 @@ public class KitListener implements Listener {
 		if(pFighter == null){
 			return;
 		}
-		FighterKit fKit = pFighter.getFKit();
+		FighterKitManager fKit = pFighter.getFighterKitManager();
 		if(fKit == null){
 			return;
 		}

@@ -1,11 +1,8 @@
 package me.cade.vanabyte.Damaging;
 
 import me.cade.vanabyte.Damaging.DamageTracker.CustomDamageWrapper;
-import me.cade.vanabyte.FighterWeapons.InUseWeapons.WeaponType;
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKit;
-import me.cade.vanabyte.NPCS.RealEntities.RealLivingEntity;
-import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.damage.DamageSource;
@@ -15,8 +12,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 public class CreateExplosion {
