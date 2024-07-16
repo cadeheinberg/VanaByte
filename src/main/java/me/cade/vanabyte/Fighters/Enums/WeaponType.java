@@ -21,6 +21,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| sword damage
+    //baseProjectileDamage|
+    //baseExplosonDamage|
+    //----baseDamage1| gust of wind enemy damage
+    //specialMeleeDamage|
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //----specialDamage1| gust of wind enemy damage
+    //baseMainCoolDown|
+    //baseExplosionPower|
+    //----basePower1| gust of wind enemy power
+    //----basePower2| gust of wind self power
+    //specialMainCooldown|
+    //specialExplosionPower|
+    //specialPower1|
+    //specialPower2|
+    //----abilityDuration| strength/regen potions
+    //----abilityRecharge| strength/regen potions
+    //upgrade1| power to gust wind self up when looking down?
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     BESERKER_AXE("Beserker Axe",
             W1_BeserkerAxe.class,
             ChatColor.LIGHT_PURPLE,
@@ -35,6 +57,28 @@ public enum WeaponType {
                     0, 0, 1.8, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| axe damage
+    //baseProjectileDamage|
+    //baseExplosonDamage|
+    //baseDamage1|
+    //specialMeleeDamage|
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //specialDamage1|
+    //----baseMainCoolDown| axe leap
+    //baseExplosionPower|
+    //----basePower1| axe leap power
+    //basePower2|
+    //----specialMainCooldown| axe leap
+    //specialExplosionPower|
+    //----specialPower1| axe leap power
+    //specialPower2|
+    //----abilityDuration| potions
+    //----abilityRecharge| potions
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     SHOTTY_SHOTGUN("Shotty Shotgun",
             W2_ShottyShotgun.class,
             ChatColor.YELLOW,
@@ -49,6 +93,28 @@ public enum WeaponType {
                     0, 0, -0.60, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| shovel damage
+    //----baseProjectileDamage| snowball damage
+    //baseExplosonDamage|
+    //baseDamage1|
+    //specialMeleeDamage|
+    //----specialProjectileDamage| snowball damage
+    //specialExplosionDamage|
+    //specialDamage1|
+    //----baseMainCoolDown| shotgun cooldown
+    //baseExplosionPower|
+    //----basePower1| shotgun recoil
+    //basePower2|
+    //----specialMainCooldown| shotgun cooldown
+    //specialExplosionPower|
+    //----specialPower1| shotgun recoil
+    //specialPower2|
+    //----abilityDuration| potions
+    //----abilityRecharge| potions
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     GOBLIN_BOW("Goblin Bow",
             W3_GoblinArrow.class,
             ChatColor.GREEN,
@@ -63,6 +129,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| bow melee damage
+    //----baseProjectileDamage| arrow damage
+    //baseExplosonDamage|
+    //baseDamage1|
+    //specialMeleeDamage|
+    //----specialProjectileDamage| arrow damage
+    //specialExplosionDamage|
+    //specialDamage1|
+    //----baseMainCoolDown| bow cooldown, prevent hacking/spamming
+    //baseExplosionPower|
+    //basePower1|
+    //basePower2|
+    //----specialMainCooldown| bow cooldown, prevent hacking/spamming
+    //specialExplosionPower|
+    //----specialPower1| number of arrows in barrage
+    //specialPower2|
+    //----abilityDuration| potions
+    //----abilityRecharge| potions
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     GOBLIN_SWORD("Goblin Sword",
             W3_GoblinBow.class,
             ChatColor.GREEN,
@@ -105,6 +193,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| trident melee damage
+    //----baseProjectileDamage| trident projectile damage
+    //baseExplosonDamage|
+    //baseDamage1|
+    //specialMeleeDamage|
+    //----specialProjectileDamage| trident projectile damage
+    //specialExplosionDamage| trident explosion damage
+    //specialDamage1|
+    //----baseMainCoolDown| trident cooldown, prevent hacking/spamming
+    //baseExplosionPower|
+    //basePower1|
+    //basePower2|
+    //----specialMainCooldown| trident cooldown, prevent hacking/spamming
+    //----specialExplosionPower| trident explosion power
+    //specialPower1|
+    //specialPower2|
+    //----abilityDuration| potions
+    //----abilityRecharge| potions
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     SUMO_STICK("Sumo Stick",
             W5_SumoStick.class,
             ChatColor.LIGHT_PURPLE,

@@ -128,9 +128,7 @@ public abstract class WeaponHolder {
         return true;
     }
 
-    public void createAnExplosion(Player shooter, Location location) {
-        double power = statBundle.getBaseExplosionPower();
-        double damage = statBundle.getBaseExplosionDamage();
+    public void createAnExplosion(Player shooter, Location location, double power, double damage) {
         //sends an EntityDamageByEntityEvent aswelll that we cancel
         //we can cancel if Cause=Explosion and damager=Player
         location.getWorld().createExplosion(location, 4F, false, true, shooter);
