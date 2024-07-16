@@ -1,13 +1,11 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.Fighters.PVP.CreateExplosion;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -84,7 +82,7 @@ public class W5_SumoStick extends WeaponHolder {
     }
 
     @Override
-    public boolean doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+    public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
         if(super.doMeleeAttack(e, killer, victim)){
             if (killer.getPassengers() == null) {
                 return false;

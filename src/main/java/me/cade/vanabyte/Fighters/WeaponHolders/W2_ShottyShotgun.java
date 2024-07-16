@@ -9,6 +9,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -24,81 +26,67 @@ public class W2_ShottyShotgun extends WeaponHolder {
     }
 
     @Override
-    public boolean doRightClick(PlayerInteractEvent e) {
-        if (super.doRightClick(e)) {
-            this.shootSnowballs();
-            this.doShotgunRecoil(-0.42);
-            return true;
-        }
-        return false;
+    public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+        super.trackWeaponDamage(victim);
     }
 
     @Override
-    public boolean doDrop(PlayerDropItemEvent e) {
-        if (super.doDrop(e)){
-            this.activateSpecial();
-            return true;
+    public void doRightClick(PlayerInteractEvent e) {
+        if(!super.checkAndSetMainCooldown()){
+            return;
         }
-        return true;
-    }
-
-
-    @Override
-    public boolean activateSpecial() {
-        if(super.activateSpecial()){
-            // instant reload shotgun
-            player.setCooldown(super.getWeaponType().getMaterial(), 0);
-            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
-            return true;
-        }
-        return false;
-    }
-    @Override
-    public boolean deActivateSpecial() {
-        if(super.deActivateSpecial()){
-            return true;
-        }
-        return false;
+        this.shootSnowballs();
+        this.doShotgunRecoil();
     }
 
     @Override
-    public boolean doProjectileHitBlock(ProjectileHitEvent e){
-        if(super.doProjectileHitBlock(e)){
-            //snowball hit ground
-            return true;
+    public void doDrop(PlayerDropItemEvent e) {
+        if(!super.checkAndSetSpecialCooldown()){
+            return;
         }
-        return false;
+        // instant reload shotgun
+        player.setCooldown(weaponType.getMaterial(), 0);
+        player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
     }
 
     @Override
-    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
-        if(super.doProjectileHitEntity(e, shooter, victim, damagingEntity)){
-            if (damagingEntity.getFireTicks() > 0) {
-                victim.setFireTicks(50);
-            }
-            e.setDamage(super.getProjectileDamage());
-            e.getDamager().remove();
-            return true;
-        }
-        return true;
+    public void doProjectileHitBlock(ProjectileHitEvent e){
+        //snowball hit ground
+        e.getEntity().remove();
     }
 
-    private void doShotgunRecoil(Double power) {
-        Vector currentDirection = super.getPlayer().getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(power, power, power));
-        super.getPlayer().setVelocity(currentDirection);
+    @Override
+    public void doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
+        super.trackWeaponDamage(victim);
+        if (damagingEntity.getFireTicks() > 0) {
+            victim.setFireTicks(50);
+            e.setDamage(statBundle.getSpecialProjectileDamage());
+        }else{
+            e.setDamage(statBundle.getBaseProjectileDamage());
+        }
+        e.getDamager().remove();
+    }
+
+    private void doShotgunRecoil() {
+        Vector currentDirection = player.getLocation().getDirection().normalize();
+        if(weaponAbility.isAbilityActive()){
+            currentDirection = currentDirection.multiply(new Vector(statBundle.getBasePower1(), statBundle.getBasePower1(), statBundle.getBasePower1()));
+        }else{
+            currentDirection = currentDirection.multiply(new Vector(statBundle.getSpecialPower1(), statBundle.getSpecialPower1(), statBundle.getSpecialPower1()));
+        }
+        player.setVelocity(currentDirection);
     }
 
     public void shootSnowballs() {
-        super.getPlayer().playSound(super.getPlayer().getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 8, 1);
+        player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 8, 1);
         ArrayList<Snowball> snowBalls = new ArrayList<Snowball>();
         for (int i = 0; i < 6; i++){
-            snowBalls.add(super.getPlayer().launchProjectile(Snowball.class));
+            snowBalls.add(player.launchProjectile(Snowball.class));
             Random random = new Random();
             snowBalls.get(i).setVelocity(snowBalls.get(i).getVelocity().add(new Vector(random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25))));
-            EntityMetadata.addWeaponTypeToEntity(snowBalls.get(i), super.getWeaponType(), super.getPlayer().getUniqueId());
-            snowBalls.get(i).setShooter(super.getPlayer());
-            if (super.getWeaponAbility().isAbilityActive()) {
+            EntityMetadata.addWeaponTypeToEntity(snowBalls.get(i), weaponType, player.getUniqueId());
+            snowBalls.get(i).setShooter(player);
+            if (weaponAbility.isAbilityActive()) {
                 snowBalls.get(i).setFireTicks(1000);
             }
         }

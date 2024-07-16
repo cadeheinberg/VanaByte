@@ -38,7 +38,7 @@ public class WeaponAbility {
     public void startAbilityDuration() {
         this.setAbilityActive(true);
         this.setAbilityRecharged(false);
-        int durationTicks = this.weaponHolder.getAbilityDurationTicks();
+        int durationTicks = this.weaponHolder.abilityDurationTicks;
         player.setCooldown(FighterKitManager.cooldownMaterial, durationTicks);
         int cooldownTask = new BukkitRunnable() {
             @Override

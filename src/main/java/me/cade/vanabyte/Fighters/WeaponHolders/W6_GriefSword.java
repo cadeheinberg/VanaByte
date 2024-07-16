@@ -52,22 +52,15 @@ public class W6_GriefSword extends WeaponHolder {
         return false;
     }
     @Override
-    public boolean deActivateSpecial() {
-        if(super.deActivateSpecial()){
-            this.makeVisible();
-            super.getFighter().getFighterKitManager().setExplosionImmune(false);
-            return true;
-        }
-        return false;
+    public void deActivateSpecial() {
+        this.makeVisible();
+        fighter.getFighterKitManager().setExplosionImmune(false);
     }
 
     @Override
-    public boolean doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        if(super.doMeleeAttack(e, killer, victim)){
-            this.doStealHealth(e.getFinalDamage());
-            return true;
-        }
-        return false;
+    public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+        super.trackWeaponDamage(victim);
+        this.doStealHealth(e.getFinalDamage());
     }
 
     public void doStealHealth(double health) {

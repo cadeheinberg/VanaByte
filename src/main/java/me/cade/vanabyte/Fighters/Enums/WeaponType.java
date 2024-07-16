@@ -15,12 +15,12 @@ public enum WeaponType {
             Material.IRON_SWORD,
             null,
             null,
-            200,
-            50,
-            0,
-            15,
-            6,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     BESERKER_AXE("Beserker Axe",
             W1_BeserkerAxe.class,
             ChatColor.LIGHT_PURPLE,
@@ -29,12 +29,12 @@ public enum WeaponType {
             Material.IRON_AXE,
             null,
             null,
-            200,
-            50,
-            80,
-            7,
-            6,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 1.6, 0,
+                    0, 0, 1.8, 0,
+                    0, 0,
+                    false, false, false, false)),
     SHOTTY_SHOTGUN("Shotty Shotgun",
             W2_ShottyShotgun.class,
             ChatColor.YELLOW,
@@ -43,12 +43,12 @@ public enum WeaponType {
             Material.IRON_SHOVEL,
             null,
             null,
-            200,
-            50,
-            20,
-            15,
-            6,
-            15),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, -0.42, 0,
+                    0, 0, -0.60, 0,
+                    0, 0,
+                    false, false, false, false)),
     GOBLIN_BOW("Goblin Bow",
             W3_GoblinArrow.class,
             ChatColor.GREEN,
@@ -57,12 +57,12 @@ public enum WeaponType {
             Material.BOW,
             new Enchantment[]{Enchantment.INFINITY},
             new Integer[]{1},
-            200,
-            50,
-            0,
-            7,
-            6,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     GOBLIN_SWORD("Goblin Sword",
             W3_GoblinBow.class,
             ChatColor.GREEN,
@@ -71,12 +71,12 @@ public enum WeaponType {
             Material.WOODEN_SWORD,
             new Enchantment[]{Enchantment.FIRE_ASPECT},
             new Integer[]{1},
-            0,
-            0,
-            0,
-            0,
-            6,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     GOBLIN_ARROW("Goblin Arrow",
             W3_GoblinSword.class,
             ChatColor.GREEN,
@@ -85,12 +85,12 @@ public enum WeaponType {
             Material.ARROW,
             null,
             null,
-            0,
-            0,
-            0,
-            0,
-            100,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     IGORS_TRIDENT("Igors Trident",
             W4_IgorsTrident.class,
             ChatColor.RED,
@@ -99,12 +99,12 @@ public enum WeaponType {
             Material.TRIDENT,
             null,
             null,
-            200,
-            50,
-            5,
-            10,
-            6,
-            10),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     SUMO_STICK("Sumo Stick",
             W5_SumoStick.class,
             ChatColor.LIGHT_PURPLE,
@@ -113,12 +113,12 @@ public enum WeaponType {
             Material.STICK,
             new Enchantment[]{Enchantment.KNOCKBACK},
             new Integer[]{2},
-            200,
-            50,
-            50,
-            15,
-            6,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     GRIEF_SWORD("Grief Sword",
             W6_GriefSword.class,
             ChatColor.AQUA,
@@ -127,12 +127,12 @@ public enum WeaponType {
             Material.NETHERITE_SWORD,
             null,
             null,
-            200,
-            50,
-            0,
-            8,
-            8,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     PARACHUTE("Parachute",
             S0_Parachute.class,
             ChatColor.YELLOW,
@@ -141,12 +141,12 @@ public enum WeaponType {
             Material.PHANTOM_MEMBRANE,
             null,
             null,
-            200,
-            50,
-            5,
-            12,
-            5,
-            10),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0.6, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     THROWING_TNT("Throwing TNT",
             S1_ThrowingTNT.class,
             ChatColor.YELLOW,
@@ -155,12 +155,12 @@ public enum WeaponType {
             Material.COAL,
             null,
             null,
-            200,
-            50,
-            50,
-            10,
-            3,
-            0),
+            new StatBundle(0, 0 ,0, 0,
+                    0, 0, 0, 0,
+                    0,0, 0, 0,
+                    0, 0, 0, 0,
+                    0, 0,
+                    false, false, false, false)),
     UNKNOWN_WEAPON(null,
             null,
             null,
@@ -169,25 +169,19 @@ public enum WeaponType {
             null,
             null,
             null,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1,
-            -1);
+            null);
 
     private final String name;
     private final ChatColor textColor;
     private final String weaponDrop;
     private final String weaponRightClick;
     private final Material material;
-    private final int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks;
-    private final double specialDamage, meleeDamage, projectileDamage;
     private final Class<? extends WeaponHolder> weaponClass;
     private final Enchantment[] enchantments;
     private final Integer[] enchantmentPowers;
+    private final StatBundle statBundle;
 
-    private WeaponType(String name, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, int abilityDurationTicks, int abilityRechargeTicks, int rightClickCooldownTicks, double specialDamage, double meleeDamage, double projectileDamage){
+    private WeaponType(String name, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, StatBundle statBundle){
         this.name = name;
         this.weaponClass = weaponClass;
         this.textColor = textColor;
@@ -195,13 +189,8 @@ public enum WeaponType {
         this.weaponRightClick = weaponRightClick;
         this.material = material;
         this.enchantments = enchantments;
-        this.abilityDurationTicks = abilityDurationTicks;
-        this.abilityRechargeTicks = abilityRechargeTicks;
-        this.rightClickCooldownTicks = rightClickCooldownTicks;
-        this.specialDamage = specialDamage;
-        this.meleeDamage = meleeDamage;
-        this.projectileDamage = projectileDamage;
         this.enchantmentPowers = enchantmentPowers;
+        this.statBundle = statBundle;
     }
 
     public String getWeaponNameUncolored(){
@@ -210,10 +199,6 @@ public enum WeaponType {
 
     public String getWeaponNameColored(){
         return this.textColor + this.name;
-    }
-
-    public int getAbilityDurationTicks() {
-        return abilityDurationTicks;
     }
 
     public String getWeaponDrop() {
@@ -232,26 +217,6 @@ public enum WeaponType {
         return material;
     }
 
-    public int getAbilityRechargeTicks() {
-        return abilityRechargeTicks;
-    }
-
-    public int getRightClickCooldownTicks() {
-        return rightClickCooldownTicks;
-    }
-
-    public double getSpecialDamage() {
-        return specialDamage;
-    }
-
-    public double getMeleeDamage() {
-        return meleeDamage;
-    }
-
-    public double getProjectileDamage() {
-        return projectileDamage;
-    }
-
     public Class<? extends WeaponHolder> getWeaponClass(){
         return weaponClass;
     }
@@ -264,4 +229,7 @@ public enum WeaponType {
         return enchantmentPowers;
     }
 
+    public StatBundle getStatBundle() {
+        return statBundle;
+    }
 }

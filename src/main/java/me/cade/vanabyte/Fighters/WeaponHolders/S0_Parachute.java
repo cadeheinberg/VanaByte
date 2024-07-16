@@ -5,6 +5,7 @@ import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.*;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDismountEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -14,67 +15,50 @@ import org.bukkit.util.Vector;
 
 public class S0_Parachute extends WeaponHolder {
 
-	private final Player player;
-	private final Fighter fighter;
 	private Chicken chicken = null;
 
 	public S0_Parachute(Fighter fighter, WeaponType weaponType) {
 		super(fighter, weaponType);
-		this.fighter = fighter;
-		this.player = fighter.getPlayer();
 	}
 
-	@SuppressWarnings("deprecation")
 	@Override
-	public boolean doRightClick(PlayerInteractEvent e) {
-		if(super.doRightClick(e)){
-			if (player.isOnGround()) {
-				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-				return false;
-			}
-			if (fighter.getFighterTaskManager().getParachuteTask() != 0) {
-				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-				return false;
-			}
-			if(this.chicken != null){
-				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-				return false;
-			}
-			this.doParachute(player);
-			return true;
+	public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+		super.trackWeaponDamage(victim);
+	}
+
+	@Override
+	public void doRightClick(PlayerInteractEvent e) {
+		if(!super.checkAndSetMainCooldown()){
+			return;
 		}
-		return false;
-	}
-	@Override
-	public boolean doDrop(PlayerDropItemEvent e) {
-		return this.doRightClick(new PlayerInteractEvent(null, null, null, null, null));
+		openParachute();
 	}
 
 	@Override
-	public boolean activateSpecial() {
-		if(super.activateSpecial()){
-			return true;
+	public void doDrop(PlayerDropItemEvent e) {
+		if(!super.checkAndSetMainCooldown()){
+			return;
 		}
-		return false;
+		openParachute();
 	}
 
 	@Override
-	public boolean deActivateSpecial() {
-		if(super.deActivateSpecial()){
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public boolean doDismount(EntityDismountEvent e) {
+	public void doDismount(EntityDismountEvent e) {
 		if(e.getDismounted().getType() == EntityType.CHICKEN){
-			super.getFighter().fighterDismountParachute();
+			fighter.fighterDismountParachute();
 		}
-		return true;
 	}
 
-	private void doParachute(Player player) {
+	private void openParachute() {
+		if (player.isOnGround()) {
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+		}
+		if (fighter.getFighterTaskManager().getParachuteTask() != 0) {
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+		}
+		if(this.chicken != null){
+			player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+		}
 		player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_FLAP, 8, 1);
 		Chicken chicken = (Chicken) player.getWorld().spawnEntity(player.getLocation(), EntityType.CHICKEN);
 		chicken.addPassenger(player);
@@ -84,7 +68,8 @@ public class S0_Parachute extends WeaponHolder {
 	}
 
 	private void doGliding(Chicken chicken, Player player) {
-		super.getFighter().getFighterTaskManager().setParachuteTask(new BukkitRunnable() {
+		double multiplier = statBundle.basePower1;
+		fighter.getFighterTaskManager().setParachuteTask(new BukkitRunnable() {
 			@Override
 			public void run() {
 //				Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Parachute Task Running");
@@ -100,13 +85,13 @@ public class S0_Parachute extends WeaponHolder {
 					loc.setPitch(75);
 				}
 				Vector vector = loc.getDirection();
-				chicken.setVelocity(vector.multiply(0.6));
+				chicken.setVelocity(vector.multiply(multiplier));
 			}
 		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId());
 	}
 
 	public void getOffChicken() {
-		super.getFighter().getFighterTaskManager().cancelParachuteTask();
+		fighter.getFighterTaskManager().cancelParachuteTask();
 		if(chicken != null) {
 			chicken.remove();
 			this.chicken = null;

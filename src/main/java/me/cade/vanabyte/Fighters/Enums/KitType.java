@@ -16,7 +16,7 @@ public enum KitType {
             Color.fromRGB(150, 0, 255)),
     SCORCH("Scorch",
             2,
-            new WeaponType[]{WeaponType.SHOTTY_SHOTGUN},
+            new WeaponType[]{WeaponType.SHOTTY_SHOTGUN, WeaponType.THROWING_TNT},
             ChatColor.YELLOW,
             Color.fromRGB(255, 255, 0)),
     GOBLIN("Goblin",

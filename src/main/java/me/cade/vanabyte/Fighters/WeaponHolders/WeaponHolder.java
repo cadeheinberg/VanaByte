@@ -1,35 +1,33 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
+import com.google.errorprone.annotations.ForOverride;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.PVP.CreateExplosion;
 import me.cade.vanabyte.Fighters.PVP.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import me.cade.vanabyte.VanaByte;
-import org.bukkit.ChatColor;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.util.Vector;
 
-public class WeaponHolder {
+public abstract class WeaponHolder {
 
-    private final WeaponType weaponType;
-    private int abilityDurationTicks, abilityRechargeTicks, rightClickCooldownTicks = -1;
-    private double specialDamage, meleeDamage, projectileDamage = -1;
-    private Fighter fighter = null;
-    private Player player = null;
-    private Weapon weapon = null;
-    private WeaponAbility weaponAbility = null;
+    protected final WeaponType weaponType;
+    protected Fighter fighter = null;
+    protected Player player = null;
+    protected Weapon weapon = null;
+    protected WeaponAbility weaponAbility = null;
+    protected StatBundle statBundle;
 
     public WeaponHolder(Fighter fighter, WeaponType weaponType){
         this.weaponType = weaponType;
@@ -37,172 +35,141 @@ public class WeaponHolder {
         this.weaponAbility = new WeaponAbility(fighter, this);
         this.fighter = fighter;
         this.player = this.fighter.getPlayer();
-
-        //        for(Quest quest : fighter.getQuestManager().getQuestsOfWeaponType(weaponType)){
-//            if(quest.getUpgradeType() == UpgradeType.EXPLOSION_IMMUNE_WHEN_SPECIAL_ACTIVATED){
-//                this.explosionImmuneUpgrade = quest.isGoalMet();
-//            }
-//        }
-        this.meleeDamage = this.weaponType.getMeleeDamage();
-        this.projectileDamage = this.weaponType.getProjectileDamage();
-        this.specialDamage = this.weaponType.getSpecialDamage();
-        this.abilityDurationTicks = this.weaponType.getAbilityDurationTicks();
-        this.abilityRechargeTicks = this.weaponType.getAbilityRechargeTicks();
-        this.rightClickCooldownTicks = this.weaponType.getRightClickCooldownTicks();
-
+        this.statBundle = weaponType.getStatBundle();
         this.weapon = new Weapon(this.weaponType, this.weaponType.getMaterial(), this.weaponType.getWeaponNameColored(),
-                this.meleeDamage,
-                this.projectileDamage,
-                this.specialDamage,
-                this.rightClickCooldownTicks,
-                this.abilityDurationTicks,
-                this.abilityRechargeTicks);
+                this.statBundle.getBaseMeleeDamage(),
+                this.statBundle.getBaseProjectileDamage(),
+                this.statBundle.getBaseExplosionDamage(),
+                this.statBundle.getBaseMainCoolDown(),
+                this.statBundle.getAbilityDuration(),
+                this.statBundle.getAbilityRecharge());
         if(weaponType.getEnchantments() != null && weaponType.getEnchantmentPowers() != null &&
                 weaponType.getEnchantments().length == weaponType.getEnchantmentPowers().length){
             for(int i = 0; i < weaponType.getEnchantments().length; i++){
                 this.weapon.applyWeaponUnsafeEnchantment(weaponType.getEnchantments()[i], weaponType.getEnchantmentPowers()[i]);
             }
         }
+        //MODIFY THE STAT BUNDLE TO DO UPGRADES
+        //        for(Quest quest : fighter.getQuestManager().getQuestsOfWeaponType(weaponType)){
+//            if(quest.getUpgradeType() == UpgradeType.EXPLOSION_IMMUNE_WHEN_SPECIAL_ACTIVATED){
+//                this.explosionImmuneUpgrade = quest.isGoalMet();
+//            }
+//        }
     }
 
-    //Return False - when not primary weapon and when cooldown is on primary weapon
-    //Return True  - when it is primary weapon and cooldown successfully set
-    public boolean doRightClick(PlayerInteractEvent e) {
-        if (player.getCooldown(this.weaponType.getMaterial()) > 0) {
-            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-            return false;
-        }
-        player.setCooldown(this.weaponType.getMaterial(), this.getRightClickCooldownTicks());
-        return true;
-    }
+    @ForOverride
+    public void doRightClick(PlayerInteractEvent e) {}
+    @ForOverride
+    public void doLeftClick(PlayerInteractEvent e) {}
+    @ForOverride
+    public void doDrop(PlayerDropItemEvent e) {}
+    @ForOverride
+    public void deActivateSpecial() {}
+    @ForOverride
+    public void doRightClickEntity(PlayerInteractEntityEvent e) {}
+    @ForOverride
+    public void doProjectileHitBlock(ProjectileHitEvent e) {}
+    @ForOverride
+    public void doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {}
+    @ForOverride
+    public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {}
 
-    public boolean doLeftClick(PlayerInteractEvent e){
-        return true;
-    }
-
-    public boolean doRightClickEntity(PlayerInteractEntityEvent e) {
-        if(e.getRightClicked().getType() == EntityType.ITEM_FRAME || e.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME || e.getRightClicked().getType() == EntityType.ITEM_DISPLAY){
-            e.setCancelled(true);
-            e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
-            ((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-        }
-        if (player.getCooldown(this.weaponType.getMaterial()) > 0) {
-            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-            return false;
-        }
-        player.setCooldown(this.weaponType.getMaterial(), this.getRightClickCooldownTicks());
-        return true;
-    }
-
-    //Returns True if there is no cooldown and ability for either
-    // the Fighter Kit or special item can be activated
-    //
-    //Returns False if there is a cooldown or not a Fighter Kits item
-    public boolean doDrop(PlayerDropItemEvent e) {
-            if (this.player.getCooldown(FighterKitManager.cooldownMaterial) > 0 || Fighter.get(player).getWeaponAbilityManager().isSomeWeaponAbilityActive() != null) {
-                this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-                return false;
-            }
-            return true;
-    }
-
-    public boolean doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, this.weaponType));
-        return true;
-    }
-
-    public boolean activateSpecial() {
-        this.getWeaponAbility().startAbilityDuration();
-        return true;
-    }
-
-    public boolean deActivateSpecial() {
-        //pass
-        return true;
-    }
-
-    public boolean doProjectileHitBlock(ProjectileHitEvent e) {
-        return true;
-    }
-
-    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
-        VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) shooter, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), projectileDamage), weaponType));
-        return true;
-    }
-
+    @ForOverride
     public boolean doBowShootEvent(EntityShootBowEvent e){
-        if (this.player.getCooldown(this.weaponType.getMaterial()) > 0) {
-            return false;
-        }
-        if(this.getRightClickCooldownTicks() > 0){
-            player.setCooldown(this.weaponType.getMaterial(), this.rightClickCooldownTicks);
-        }
+        checkAndSetMainCooldown();
         EntityMetadata.addWeaponTypeToEntity(e.getProjectile(), this.weapon.getWeaponType(), this.player.getUniqueId());
         return true;
     }
 
+    @ForOverride
     public boolean doProjectileLaunch(ProjectileLaunchEvent e) {
-        if (player.getCooldown(weaponType.getMaterial()) > 0) {
-            return false;
-        }
-        if(this.getRightClickCooldownTicks() > 0){
-            player.setCooldown(weaponType.getMaterial(), this.rightClickCooldownTicks);
-        }
+        checkAndSetMainCooldown();
         EntityMetadata.addWeaponTypeToEntity(e.getEntity(), this.weapon.getWeaponType(), this.player.getUniqueId());
         return true;
     }
+    @ForOverride
+    public void doDismount(EntityDismountEvent e) {}
+    @ForOverride
+    public void doExplosion(ExplosionPrimeEvent e, Player killer) {}
 
-    public boolean doDismount(EntityDismountEvent e) {
+    public void trackWeaponDamage(LivingEntity victim){
+        VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(this.player, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.PLAYER_ATTACK).build(), 1), this.weaponType));
+    }
+
+    public boolean checkAndSetMainCooldown(){
+        if (player.getCooldown(this.weaponType.getMaterial()) > 0) {
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+            return false;
+        }
+        if(weaponAbility.isAbilityActive()){
+            player.setCooldown(this.weaponType.getMaterial(), statBundle.getSpecialMainCoolDown());
+        }else{
+            player.setCooldown(this.weaponType.getMaterial(), statBundle.getBaseMainCoolDown());
+        }
         return true;
     }
 
-    public boolean doExplosion(ExplosionPrimeEvent e, Player killer) {
-        CreateExplosion.doAnExplosion(killer, e.getEntity().getLocation(), 1.6, this.projectileDamage, false, weaponType);
+    public boolean checkAndSetSpecialCooldown(){
+        if (this.player.getCooldown(FighterKitManager.cooldownMaterial) > 0 || Fighter.get(player).getWeaponAbilityManager().isSomeWeaponAbilityActive() != null) {
+            this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+            return false;
+        }
+        weaponAbility.startAbilityDuration();
         return true;
     }
 
-    public int getRightClickCooldownTicks() {
-        return rightClickCooldownTicks;
+    public boolean checkRightClickEntity(PlayerInteractEntityEvent e){
+        if(e.getRightClicked().getType() == EntityType.ITEM_FRAME || e.getRightClicked().getType() == EntityType.GLOW_ITEM_FRAME || e.getRightClicked().getType() == EntityType.ITEM_DISPLAY){
+            e.setCancelled(true);
+            e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
+            ((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+            return false;
+        }
+        return true;
     }
 
-
-    public int getAbilityDurationTicks() {
-        return abilityDurationTicks;
-    }
-
-    public int getAbilityRechargeTicks() {
-        return abilityRechargeTicks;
-    }
-
-    public double getProjectileDamage() {
-        return projectileDamage;
-    }
-
-    public double getMeleeDamage() {
-        return meleeDamage;
-    }
-
-    public double getSpecialDamage() {
-        return specialDamage;
-    }
-
-    public Weapon getWeapon(){
-        return weapon;
-    }
-
-    public WeaponAbility getWeaponAbility() {
-        return weaponAbility;
-    }
-
-    public Player getPlayer(){
-        return player;
-    }
-
-    public WeaponType getWeaponType(){
-        return weaponType;
-    }
-
-    public Fighter getFighter(){
-        return fighter;
+    public void createAnExplosion(Player shooter, Location location) {
+        double power = statBundle.getBaseExplosionPower();
+        double damage = statBundle.getBaseExplosionDamage();
+        //sends an EntityDamageByEntityEvent aswelll that we cancel
+        //we can cancel if Cause=Explosion and damager=Player
+        location.getWorld().createExplosion(location, 4F, false, true, shooter);
+        //just create your own explosion to break blocks cause spigots is bad
+        location.getWorld().spawnParticle(Particle.EXPLOSION, location.getX(), location.getY() + 2,
+                location.getZ(), 2);
+        location.getWorld().playSound(location, Sound.ENTITY_GENERIC_EXPLODE, 2, 1);
+        for (Entity ent : location.getWorld().getNearbyEntities(location, 4, 4, 4)) {
+            if (!(ent instanceof LivingEntity)) {
+                continue;
+            }
+            if(ent instanceof Player) {
+                Player victimPlayer = (Player) ent;
+                Fighter fighter = Fighter.get(victimPlayer);
+                if (fighter == null){
+                    return;
+                }
+                FighterKitManager fKit = fighter.getFighterKitManager();
+                if(fKit == null){
+                    return;
+                }
+                if(fKit.isExplosionImmune()){
+                    return;
+                }
+                if(((Player) ent).getGameMode() == GameMode.CREATIVE) {
+                    return;
+                }
+            }
+            Location upShoot = ent.getLocation();
+            if (ent.isOnGround()) {
+                upShoot.setY(upShoot.getY() + 1);
+            }
+            Vector currentDirection = upShoot.toVector().subtract(location.toVector());
+            currentDirection = currentDirection.multiply(new Vector(power, power, power));
+            ent.setVelocity(currentDirection);
+            if (((LivingEntity) ent) != shooter) {
+                this.trackWeaponDamage((LivingEntity) ent);
+                ((LivingEntity) ent).damage(damage);
+            }
+        }
     }
 }

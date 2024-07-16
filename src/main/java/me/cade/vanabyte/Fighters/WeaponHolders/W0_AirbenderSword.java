@@ -1,17 +1,12 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
-import me.cade.vanabyte.Fighters.PVP.DamageTracker.CustomDamageWrapper;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
-import org.bukkit.damage.DamageSource;
-import org.bukkit.damage.DamageType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
@@ -30,61 +25,47 @@ public class W0_AirbenderSword extends WeaponHolder {
     }
 
     @Override
-    public boolean doRightClick(PlayerInteractEvent e) {
-        if(super.doRightClick(e)){
-            return true;
-        }
-        return false;
+    public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+        super.trackWeaponDamage(victim);
     }
 
     @Override
-    public boolean doDrop(PlayerDropItemEvent e) {
-        if (super.doDrop(e)){
-            this.activateSpecial();
-            return true;
+    public void doRightClick(PlayerInteractEvent e) {
+        if(!super.checkAndSetMainCooldown()){
+            return;
         }
-        return true;
     }
 
     @Override
-    public boolean activateSpecial() {
-        if(super.activateSpecial()){
-            this.gustOfWindSpell();
-            player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, super.getAbilityDurationTicks(), 1));
-            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, super.getAbilityDurationTicks(), 1));
-            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
-            return true;
+    public void doDrop(PlayerDropItemEvent e) {
+        if(!super.checkAndSetSpecialCooldown()){
+            return;
         }
-        return false;
-    }
-
-    @Override
-    public boolean deActivateSpecial() {
-        if(super.deActivateSpecial()){
-            return true;
-        }
-        return false;
+        this.gustOfWindSpell();
+        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, statBundle.getAbilityDuration(), 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, statBundle.getAbilityDuration(), 1));
+        player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
     }
 
     public void gustOfWindSpell() {
-        Location playerLocation = super.getPlayer().getLocation();
+        Location playerLocation = super.player.getLocation();
         if (playerLocation.getPitch() > 49) {
-            launchPlayer(super.getPlayer(), -1.5);
+            launchPlayer(super.player, statBundle.getBasePower2());
             return;
         }
-        Location origin = super.getPlayer().getEyeLocation();
-        Vector direction = super.getPlayer().getLocation().getDirection();
+        Location origin = super.player.getEyeLocation();
+        Vector direction = super.player.getLocation().getDirection();
         double dX = direction.getX();
         double dY = direction.getY();
         double dZ = direction.getZ();
         playerLocation.setPitch((float) -30.0);
-        int range = 13;
-        double power = 2.8;
+        double power = statBundle.getBasePower1();
+        int range = 3;
         ArrayList<Integer> hitList = new ArrayList<Integer>();
         for (int j = 2; j < range; j++) {
             origin = origin.add(dX * j, dY * j, dZ * j);
-            super.getPlayer().spawnParticle(Particle.DUST, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-            ArrayList<Entity> entityList = (ArrayList<Entity>) super.getPlayer().getWorld().getNearbyEntities(origin, 2.5, 2.5,
+            super.player.spawnParticle(Particle.DUST, origin, 100, 0.5, 0.75, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
+            ArrayList<Entity> entityList = (ArrayList<Entity>) super.player.getWorld().getNearbyEntities(origin, 2.5, 2.5,
                     2.5);
             for (Entity entity : entityList) {
                 //Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + "1 Living Entity Found");
@@ -92,7 +73,7 @@ public class W0_AirbenderSword extends WeaponHolder {
                     continue;
                 } else if (hitList.contains(((LivingEntity) entity).getEntityId())) {
                     continue;
-                } else if (super.getPlayer().getName().equals(((LivingEntity) entity).getName())) {
+                } else if (super.player.getName().equals(((LivingEntity) entity).getName())) {
                     continue;
                 }
                 if(entity instanceof Player) {
@@ -100,8 +81,8 @@ public class W0_AirbenderSword extends WeaponHolder {
                         return;
                     }
                 }
-                VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(super.getPlayer(), entity, EntityDamageEvent.DamageCause.ENTITY_EXPLOSION, DamageSource.builder(DamageType.EXPLOSION).build(), super.getSpecialDamage()), super.getWeaponType()));
-                ((LivingEntity) entity).damage(super.getSpecialDamage());
+                super.trackWeaponDamage((LivingEntity) entity);
+                ((LivingEntity) entity).damage(statBundle.getBaseDamage1());
                 Vector currentDirection = playerLocation.getDirection().normalize();
                 currentDirection = currentDirection.multiply(new Vector(power, power, power));
                 entity.setVelocity(currentDirection);
