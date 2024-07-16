@@ -9,7 +9,7 @@ public class FighterMYSQLManager {
 
     private Player player = null;
     private Fighter fighter = null;
-    private int[] unlockedKits = new int[7];
+    private final int[] unlockedKits = new int[7];
 
     protected FighterMYSQLManager(Player player, Fighter fighter){
         this.player = player;
@@ -41,12 +41,12 @@ public class FighterMYSQLManager {
         if (!VanaByte.mySQL_Hub.playerExists(player)) {
             VanaByte.mySQL_Hub.addScore(player);
         }
-        if (!VanaByte.mySQL_upgrades.playerExists(player)) {
-            VanaByte.mySQL_upgrades.addScore(player);
-        }
-        if (!VanaByte.mySQL_royale.playerExists(player)) {
-            VanaByte.mySQL_royale.addScore(player);
-        }
+//        if (!VanaByte.mySQL_upgrades.playerExists(player)) {
+//            VanaByte.mySQL_upgrades.addScore(player);
+//        }
+//        if (!VanaByte.mySQL_royale.playerExists(player)) {
+//            VanaByte.mySQL_royale.addScore(player);
+//        }
         initiateMySQLDownloads();
     }
     protected void initiateMySQLDownloads() {
@@ -59,22 +59,22 @@ public class FighterMYSQLManager {
             player.kickPlayer("MySQL error, contact server owners");
             return;
         }
-        if (VanaByte.mySQL_upgrades.playerExists(player)) {
-            this.downloadFighter_Upgrades();
-        } else {
-            //error has occurred, player should have been added
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Upgrades download");
-            player.kickPlayer("MySQL error, contact server owners");
-            return;
-        }
-        if (VanaByte.mySQL_royale.playerExists(player)) {
-            this.downloadFighter_Royale();
-        } else {
-            //error has occurred, player should have been added
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Royale download");
-            player.kickPlayer("MySQL error, contact server owners");
-            return;
-        }
+//        if (VanaByte.mySQL_upgrades.playerExists(player)) {
+//            this.downloadFighter_Upgrades();
+//        } else {
+//            //error has occurred, player should have been added
+//            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Upgrades download");
+//            player.kickPlayer("MySQL error, contact server owners");
+//            return;
+//        }
+//        if (VanaByte.mySQL_royale.playerExists(player)) {
+//            this.downloadFighter_Royale();
+//        } else {
+//            //error has occurred, player should have been added
+//            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Royale download");
+//            player.kickPlayer("MySQL error, contact server owners");
+//            return;
+//        }
     }
 
     //Downloads negative -1s if it couldnt get the stat
@@ -87,20 +87,9 @@ public class FighterMYSQLManager {
         fighter.setKillStreak(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[7]));
         fighter.setDeaths(VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[8]));
 
-        for(int i = 0; i < fighter.fighterKitManager.getUnlockedKits().length; i++){
-            fighter.fighterKitManager.setUnlockedKit(i, VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[9 + i]));
+        for(int i = 0; i < this.unlockedKits.length; i++){
+            this.unlockedKits[i] = VanaByte.mySQL_Hub.getStat(player, VanaByte.mySQL_Hub.column[9 + i]);
         }
-    }
-
-    //Downloads negative -1s if it couldnt get the stat
-    protected void downloadFighter_Upgrades(){
-        for(int i = 1; i <= fighter.fighterKitManager.getKitUpgrades().length; i++){
-            fighter.fighterKitManager.setKitUpgradesRaw(i-1, VanaByte.mySQL_upgrades.getStat(player, VanaByte.mySQL_upgrades.column[i]));
-        }
-    }
-
-    protected void downloadFighter_Royale(){
-        //pass
     }
 
     //If the stat is a -1 it wont upload anything
@@ -108,12 +97,12 @@ public class FighterMYSQLManager {
         if (VanaByte.mySQL_Hub.playerExists(player)) {
             this.uploadFighter_Hub();
         }
-        if (VanaByte.mySQL_upgrades.playerExists(player)) {
-            this.UploadFighter_Upgrades();
-        }
-        if (VanaByte.mySQL_royale.playerExists(player)) {
-            this.uploadFighter_Royale();
-        }
+//        if (VanaByte.mySQL_upgrades.playerExists(player)) {
+//            this.UploadFighter_Upgrades();
+//        }
+//        if (VanaByte.mySQL_royale.playerExists(player)) {
+//            this.uploadFighter_Royale();
+//        }
     }
 
     protected void deleteMeFromDatabase(){
@@ -149,37 +138,46 @@ public class FighterMYSQLManager {
         if(fighter.getDeaths() != -1){
             VanaByte.mySQL_Hub.setStat(player.getUniqueId().toString(), VanaByte.mySQL_Hub.column[8], fighter.getDeaths());
         }
-        for(int i = 0; i < fighter.fighterKitManager.getUnlockedKits().length; i++){
-            if(fighter.fighterKitManager.getUnlockedKit(0 + i) == -1){
+        for(int i = 0; i < this.unlockedKits.length; i++){
+            if(this.unlockedKits[i] == -1){
                 continue;
             }
-            VanaByte.mySQL_Hub.setStat(player.getUniqueId().toString(), VanaByte.mySQL_Hub.column[9 + i], fighter.fighterKitManager.getUnlockedKit(0 + i));
+            VanaByte.mySQL_Hub.setStat(player.getUniqueId().toString(), VanaByte.mySQL_Hub.column[9 + i], this.unlockedKits[i]);
         }
     }
 
-    private void uploadFighter_Royale(){
-        if (VanaByte.mySQL_royale == null){
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Royale upload");
-            player.kickPlayer("MySQL error, contact server owners");
-        }
-        //pass
-    }
-
-    private void UploadFighter_Upgrades(){
-        if (VanaByte.mySQL_upgrades == null){
-            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Upgrades upload");
-            player.kickPlayer("MySQL error, contact server owners");
-        }
-        for(int i = 1; i <= fighter.fighterKitManager.getKitUpgrades().length; i++){
-            if(fighter.fighterKitManager.getKitUpgradesRaw(i-1) == -1){
-                continue;
-            }
-            VanaByte.mySQL_upgrades.setStat(player.getUniqueId().toString(), VanaByte.mySQL_upgrades.column[i], fighter.fighterKitManager.getKitUpgradesRaw(i-1));
-        }
-    }
+//    private void uploadFighter_Royale(){
+//        if (VanaByte.mySQL_royale == null){
+//            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Royale upload");
+//            player.kickPlayer("MySQL error, contact server owners");
+//        }
+//        //pass
+//    }
+//
+//    private void UploadFighter_Upgrades(){
+//        if (VanaByte.mySQL_upgrades == null){
+//            Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "Something wrong with MySQL_Upgrades upload");
+//            player.kickPlayer("MySQL error, contact server owners");
+//        }
+//        for(int i = 1; i <= fighter.fighterKitManager.getKitUpgrades().length; i++){
+//            if(fighter.fighterKitManager.getKitUpgradesRaw(i-1) == -1){
+//                continue;
+//            }
+//            VanaByte.mySQL_upgrades.setStat(player.getUniqueId().toString(), VanaByte.mySQL_upgrades.column[i], fighter.fighterKitManager.getKitUpgradesRaw(i-1));
+//        }
+//    }
 
     private void updateName() {
         VanaByte.mySQL_Hub.updateName(player, VanaByte.mySQL_Hub.column[1], player.getName());
+    }
+
+    public boolean getUnlockedKit(int kitID) {
+        return unlockedKits[kitID] == 1;
+    }
+
+    public void setUnlockedKit(int kitID) {
+        fighter.fighterPurchasedKit();
+        unlockedKits[kitID] = 1;
     }
 
 }

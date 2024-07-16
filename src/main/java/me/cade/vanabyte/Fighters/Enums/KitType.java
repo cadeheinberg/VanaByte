@@ -55,11 +55,11 @@ public enum KitType {
         this.armorColor = armorColor;
     }
 
-    private String getKitNameUncolored() {
+    public String getKitNameUncolored() {
         return this.name;
     }
 
-    private String getKitNameColored() {
+    public String getKitNameColored() {
         return this.name;
     }
 

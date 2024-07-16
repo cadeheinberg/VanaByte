@@ -9,6 +9,9 @@ import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
+import org.bukkit.damage.DamageSource;
+import org.bukkit.damage.DamageType;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -55,9 +58,9 @@ public class WeaponHolder {
                 this.abilityDurationTicks,
                 this.abilityRechargeTicks);
         if(weaponType.getEnchantments() != null && weaponType.getEnchantmentPowers() != null &&
-                weaponType.getEnchantments().length != weaponType.getEnchantmentPowers().length){
+                weaponType.getEnchantments().length == weaponType.getEnchantmentPowers().length){
             for(int i = 0; i < weaponType.getEnchantments().length; i++){
-                this.weapon.applyWeaponEnchantment(weaponType.getEnchantments()[i], weaponType.getEnchantmentPowers()[i]);
+                this.weapon.applyWeaponUnsafeEnchantment(weaponType.getEnchantments()[i], weaponType.getEnchantmentPowers()[i]);
             }
         }
     }
@@ -122,7 +125,8 @@ public class WeaponHolder {
         return true;
     }
 
-    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e) {
+    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
+        VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) shooter, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), projectileDamage), weaponType));
         return true;
     }
 
@@ -133,6 +137,7 @@ public class WeaponHolder {
         if(this.getRightClickCooldownTicks() > 0){
             player.setCooldown(this.weaponType.getMaterial(), this.rightClickCooldownTicks);
         }
+        EntityMetadata.addWeaponTypeToEntity(e.getProjectile(), this.weapon.getWeaponType(), this.player.getUniqueId());
         return true;
     }
 

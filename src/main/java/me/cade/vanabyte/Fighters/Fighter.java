@@ -92,6 +92,10 @@ public class Fighter {
 		fighterAbilityManager.fighterGotNewKit();
 	}
 
+	public void fighterPurchasedKit() {
+		fighterPacketHologramsManager.fighterPurchasedKit();
+	}
+
 	public void setKitID(int kitID){
 		this.kitID = kitID;
 	}
@@ -200,32 +204,28 @@ public class Fighter {
 	public static int getNumberOfKits() {return numberOfKits;}
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
 	public HologramManager getFighterPacketHologramsManager() {return fighterPacketHologramsManager;}
-
 	public FighterAbilityManager getWeaponAbilityManager(){
 		return fighterAbilityManager;
 	}
-
 	public FighterTaskManager getFighterTaskManager() {
 		return fighterTaskManager;
 	}
-
 	public int getFighterXP() {
 		return fighterXP;
 	}
-
 	public void deleteMeFromDatabase(){
 		this.fighterMYSQLManager.deleteMeFromDatabase();
 	}
-
 	public void incFighterXP(int amount){
 		this.fighterXP = fighterXP + amount;
 	}
-
 	public GUIManager getGUIManager() {
 		return guiManager;
 	}
-
 	public QuestManager getQuestManager() {
 		return questManager;
+	}
+	public FighterMYSQLManager getFighterMYSQLManager(){
+		return fighterMYSQLManager;
 	}
 }

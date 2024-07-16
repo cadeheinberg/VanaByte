@@ -85,25 +85,11 @@ public class EntityDamageListener implements Listener {
 			//3) set them to air, working so far?
 //			List<ItemStack> toRemove = List.of();
 			for(int i = 0; i < drops.size(); i++){
-				Bukkit.getConsoleSender().sendMessage("LOOKING AT: " + drops.get(i).getType() + "\n");
 				if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
 					|| (FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null && FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
-					Bukkit.getConsoleSender().sendMessage("REMOVE: " + drops.get(i).getType() + "\n");
 					drops.get(i).setType(Material.AIR);
 				}
 			}
-//			if(drops.get(i).getType() == Material.LEATHER_BOOTS || drops.get(i).getType() == Material.LEATHER_LEGGINGS ||
-//					drops.get(i).getType() == Material.LEATHER_CHESTPLATE || drops.get(i).getType() == Material.LEATHER_HELMET){
-//				if((FighterKitManager.getArmorType(drops.get(i)) != null || FighterKitManager.getArmorType(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
-//
-//				}
-//			drops.removeAll(toRemove);
-//			for(ItemStack drop : drops){
-//			if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
-//					|| (FighterKitManager.getArmorType(drops.get(i)) != null && FighterKitManager.getArmorType(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
-//				Bukkit.getConsoleSender().sendMessage("REMOVE: " + drops.get(i).getType() + "\n");
-//			}
-//			}
 		}
 		if(killer == null){
 			e.setDeathMessage("");
@@ -143,126 +129,87 @@ public class EntityDamageListener implements Listener {
 	// do grief give back health special
 	@EventHandler
 	public void onDamage(EntityDamageByEntityEvent e) {
-		LivingEntity victim = null;
-		if(e.getEntity() instanceof LivingEntity){
-			victim = (LivingEntity) e.getEntity();
-		}else{
+		if((!(e.getEntity() instanceof LivingEntity)) || e.getDamager() == null){
 			return;
 		}
-		if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
-			if(e.getDamager() instanceof Player){
-				e.setCancelled(true);
-				return;
-			}
-		}
 		Entity damagingEntity = e.getDamager();
-		if (SafeZone.safeZone(e.getEntity().getLocation())) {
-			if(SafeZone.ladderZone(e.getEntity().getLocation()) && SafeZone.ladderZone(e.getDamager().getLocation())){
-				//inside ladder match
-				e.setDamage(0);
+		LivingEntity victim = (LivingEntity) e.getEntity();
+
+		////
+		// Hub Spawn
+		////
+		if (SafeZone.safeZone(victim.getLocation()) || SafeZone.safeZone(damagingEntity.getLocation())) {
+			if(SafeZone.ladderZone(victim.getLocation()) && SafeZone.ladderZone(damagingEntity.getLocation())){
+				e.setDamage(0); //inside ladder match
 				return;
 			}
 			e.setCancelled(true);
-			if (e.getDamager() instanceof Player) {
-				if (e.getEntity().getType() != EntityType.ARMOR_STAND) {
+			if (damagingEntity instanceof Player) {
+				if (victim.getType() != EntityType.ARMOR_STAND) {
 					return;
 				}
-				int x = e.getEntity().getLocation().getBlockX();
-				NPCListener.handleKitSelection((Player) e.getDamager(), x);
+				int x = victim.getLocation().getBlockX();
+				NPCListener.handleKitSelection((Player) damagingEntity, x);
 			}
 			return;
 		}
-		if (damagingEntity == null) {
-			Bukkit.getServer().broadcastMessage("EntityDamageEntity 5");
-			e.getEntity().sendMessage("EntityDamage 7");
-			//ToDo
-		} else if (damagingEntity instanceof Player){
+
+		////
+		// Player Melee Sources
+		////
+		if (damagingEntity instanceof Player){
+			if(e.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
+				//created by CreateExplosion(), where DamageTracking is accounted for.
+				e.setCancelled(true);
+				return;
+			}
 			Player pkiller = (Player) e.getDamager();
 			if(pkiller == null){
 				return;
 			}
-			Fighter fKiller = Fighter.get(pkiller);
-			if(fKiller == null){
-				return;
-			}
-			FighterKitManager fKitKiller = fKiller.getFighterKitManager();
-			if(fKitKiller == null){
-				return;
-			}
-			ItemStack killerItem = pkiller.getEquipment().getItemInMainHand();
-			WeaponType weaponType = null;
-			if(killerItem != null){
-				weaponType = Weapon.getWeaponTypeFromItemStack(killerItem);
-			}
-			////
-			//// Melee Damage
-			////
+			WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(pkiller);
 			if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
 				//fists or non special weapon
 				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
-			} else{
-				FighterKitManager fKit = Fighter.get((Player) damagingEntity).getFighterKitManager();
-				fKit.getWeaponHolderWithType(weaponType).doMeleeAttack(e, pkiller, victim);
+				return;
 			}
-		}else if (!(damagingEntity instanceof Player)) {
+			WeaponHolder weaponHolder = Fighter.get((Player) damagingEntity).getFighterKitManager().getWeaponHolderWithType(weaponType);
+			weaponHolder.doMeleeAttack(e, pkiller, victim);
+			return;
+		}
+
+		////
+		// Player Projectile Sources
+		////
+		if (!(damagingEntity instanceof Player)) {
 			double damage_amount = 0;
 			if(damagingEntity instanceof LivingEntity){
 				//damager is some living entity
 				//victim is a player or any living entity
 				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
 			}else if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
-				Projectile p = (Projectile) e.getDamager();
+				Projectile projectile = (Projectile) e.getDamager();
 				if (EntityMetadata.getWeaponTypeFromEntity(e.getDamager()) == null) {
 					return;
 				}
-				if (!(p.getShooter() instanceof Player)) {
+
+				if (projectile.getShooter() == null || (!(projectile.getShooter() instanceof Player))) {
 					return;
 				}
-				Player pkiller = (Player) p.getShooter();
-				if(pkiller == null){
+				Player pkiller = (Player) projectile.getShooter();
+				WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(damagingEntity);
+				if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+					//some other projectile
+					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
 					return;
 				}
-				Fighter fKiller = Fighter.get(pkiller);
-				if(fKiller == null){
+				WeaponHolder weaponHolder = Fighter.get(pkiller).getFighterKitManager().getWeaponHolderWithType(weaponType);
+				if(weaponHolder == null){
+					//some other projectile
+					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
 					return;
 				}
-				FighterKit fKitKiller = fKiller.getFKit();
-				if(fKitKiller == null){
-					return;
-				}
-				//damager is a player
-				//victim is player or any living entity
-				if (damagingEntity instanceof Snowball){
-					//eventually just use the metadata to store weapon type
-					//cause you might add multiple weapons that shoot snowballs
-					WeaponType weaponType = WeaponType.SHOTTY_SHOTGUN;
-					if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
-						damage_amount = ((W2_ShottyShotgun) fKitKiller.getWeaponHolderWithType(weaponType)).doSnowballHitEntity((LivingEntity) e.getEntity(), (Snowball) e.getDamager());
-						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) pkiller, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage_amount), weaponType));
-						e.setDamage(damage_amount);
-						e.getDamager().remove();
-					}
-				} else if (damagingEntity instanceof Arrow){
-					WeaponType weaponType = WeaponType.GOBLIN_BOW;
-					if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
-						damage_amount = ((W3_GoblinBow) fKitKiller.getWeaponHolderWithType(weaponType)).doArrowHitEntity((LivingEntity) e.getEntity(), (Arrow) e.getDamager());
-						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) pkiller, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage_amount), weaponType));
-						e.setDamage(damage_amount);
-						e.getDamager().remove();
-					}
-				}else if (damagingEntity instanceof Trident) {
-					WeaponType weaponType = WeaponType.IGORS_TRIDENT;
-					if(fKitKiller.getWeaponHolderWithType(weaponType) != null){
-						damage_amount = ((W4_IgorsTrident) fKitKiller.getWeaponHolderWithType(weaponType)).doTridentHitEntity((LivingEntity) e.getEntity(), (Trident) e.getDamager());
-						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent((Entity) pkiller, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.EXPLOSION).build(), damage_amount), weaponType));
-						e.setDamage(damage_amount);
-						e.getDamager().remove();
-					}
-				} else {
-						//some other projectile
-						VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
-						return;
-				}
+				weaponHolder.doProjectileHitEntity(e, pkiller, victim, damagingEntity);
 			}
 		}
 	}

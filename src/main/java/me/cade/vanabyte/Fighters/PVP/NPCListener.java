@@ -50,14 +50,15 @@ public class NPCListener implements Listener {
 		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
 			if (MyArmorStand.getLocationOfSelector(i).getBlockX() == x) {
 				Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-				if (fighter.getFighterKitManager().getUnlockedKit(i) > 0) {
-					fighter.getFighterKitManager().giveKitWithID(i);
+				if (fighter.getFighterMYSQLManager().getUnlockedKit(i) == true) {
+					fighter.getFighterKitManager().setKitType(i);
+					fighter.getFighterKitManager().giveKit();
 				} else {
 					player.sendMessage(ChatColor.GREEN + "Server in beta, you have unlocked this kit for free!");
 					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
-					fighter.getFighterKitManager().setUnlockedKit(i, 1);
-					fighter.getFighterPacketHologramsManager().fighterPurchasedKit();
-					fighter.getFighterKitManager().giveKitWithID(i);
+					fighter.getFighterMYSQLManager().setUnlockedKit(i);
+					fighter.getFighterKitManager().setKitType(i);
+					fighter.getFighterKitManager().giveKit();
 				}
 			}
 		}
@@ -74,14 +75,23 @@ public class NPCListener implements Listener {
 				handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
 			}
 		} else{
-			if(e.getPlayer().getInventory().getItemInMainHand() != null && FighterKitManager.hasNameOfWeapon(e.getPlayer().getInventory().getItemInMainHand())){
+			if (e.getHand() == EquipmentSlot.OFF_HAND) {
+				e.setCancelled(true);
+				return; // off hand packet, ignore.
+			}
+			WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getPlayer().getInventory().getItemInMainHand());
+			WeaponType weaponType2 = Weapon.getWeaponTypeFromItemStack(e.getPlayer().getInventory().getItemInOffHand());
+			if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
-				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
-			}else if(e.getPlayer().getInventory().getItemInOffHand() != null && FighterKitManager.hasNameOfWeapon(e.getPlayer().getInventory().getItemInOffHand())){
+				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+				return;
+			}
+			if(weaponType2 != null && weaponType2 != WeaponType.UNKNOWN_WEAPON){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
-				((Player) e.getPlayer()).playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
+				return;
 			}
 		}
 	}

@@ -1,5 +1,6 @@
 package me.cade.vanabyte.NPCS.PacketHolograms;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.NPCS.RealEntities.MyArmorStand;
 import me.cade.vanabyte.VanaByte;
@@ -90,12 +91,12 @@ public class HologramManager {
             }
             else{
                 String locked = ChatColor.RED + " Free For Beta ";
-                if (fighter.getFighterKitManager().getUnlockedKit(kitID) > 0) {
+                if (fighter.getFighterMYSQLManager().getUnlockedKit(kitID) == true) {
                     locked = ChatColor.GREEN + " Unlocked ";
                 }
                 kitHolograms[kitID].setDisplayText(locked + "\n"
-                        + ChatColor.WHITE + " Special: " + fighter.getFighterKitManager().getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponDrop()  + " \n"
-                        + ChatColor.WHITE + " Main: " + fighter.getFighterKitManager().getFkitsNoPlayer()[kitID].getWeaponHolders().get(0).getWeaponRightClick() + " ");
+                        + ChatColor.WHITE + " Special: " + KitType.getKitTypeFromKitID(kitID).getWeaponTypes()[0].getWeaponDrop() + " \n"
+                        + ChatColor.WHITE + " Main: " + KitType.getKitTypeFromKitID(kitID).getWeaponTypes()[0].getWeaponRightClick() + " ");
                 kitHolograms[kitID].showTo(this.player);
             }
         }

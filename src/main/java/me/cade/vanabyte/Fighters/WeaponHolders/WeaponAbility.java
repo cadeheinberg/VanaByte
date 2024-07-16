@@ -134,7 +134,7 @@ public class WeaponAbility {
             message.setColor(net.md_5.bungee.api.ChatColor.of(Color.GREEN));
         }else{
 //            message.setColor(net.md_5.bungee.api.ChatColor.of("#FF99CC"));
-            message.setColor(weaponHolder.getWeaponNameColor().asBungee());
+            message.setColor(weaponHolder.getWeaponType().getTextColor().asBungee());
         }
         message.setBold(true);
         this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);

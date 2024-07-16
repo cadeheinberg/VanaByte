@@ -7,6 +7,8 @@ import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
@@ -14,37 +16,49 @@ import java.util.Random;
 
 public class W2_ShottyShotgun extends WeaponHolder {
 
+    private final Player player;
 
     public W2_ShottyShotgun(Fighter fighter, WeaponType weaponType) {
         super(fighter, weaponType);
+        this.player = fighter.getPlayer();
     }
 
     @Override
-    public boolean doRightClick() {
-        if (!super.doRightClick()) {
-            return false;
+    public boolean doRightClick(PlayerInteractEvent e) {
+        if (super.doRightClick(e)) {
+            this.shootSnowballs();
+            this.doShotgunRecoil(-0.42);
+            return true;
         }
-        this.shootSnowballs();
-        this.doShotgunRecoil(-0.42);
+        return false;
+    }
+
+    @Override
+    public boolean doDrop(PlayerDropItemEvent e) {
+        if (super.doDrop(e)){
+            this.activateSpecial();
+            return true;
+        }
         return true;
     }
+
+
     @Override
-    public boolean doDrop() {
-        if (!super.doDrop()){
-            return false;
+    public boolean activateSpecial() {
+        if(super.activateSpecial()){
+            // instant reload shotgun
+            player.setCooldown(super.getWeaponType().getMaterial(), 0);
+            player.playSound(player.getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
+            return true;
         }
-        this.activateSpecial();
-        return true;
+        return false;
     }
     @Override
-    public void activateSpecial() {
-        super.activateSpecial();
-        super.getPlayer().setCooldown(this.getMaterial(), 0);
-        super.getPlayer().playSound(super.getPlayer().getLocation(), Sound.ENTITY_ENDERMAN_SCREAM, 8, 1);
-    }
-    @Override
-    public void deActivateSpecial() {
-        super.deActivateSpecial();
+    public boolean deActivateSpecial() {
+        if(super.deActivateSpecial()){
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -57,20 +71,16 @@ public class W2_ShottyShotgun extends WeaponHolder {
     }
 
     @Override
-    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e){
-        if(super.doProjectileHitEntity(e)){
-            //snowball hit entity
+    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
+        if(super.doProjectileHitEntity(e, shooter, victim, damagingEntity)){
+            if (damagingEntity.getFireTicks() > 0) {
+                victim.setFireTicks(50);
+            }
+            e.setDamage(super.getProjectileDamage());
+            e.getDamager().remove();
             return true;
         }
         return true;
-    }
-
-    public double doSnowballHitEntity(LivingEntity victim, Snowball snowball) {
-        if (snowball.getFireTicks() > 0) {
-            victim.setFireTicks(50);
-            return this.getSpecialDamage();
-        }
-        return this.getProjectileDamage();
     }
 
     private void doShotgunRecoil(Double power) {

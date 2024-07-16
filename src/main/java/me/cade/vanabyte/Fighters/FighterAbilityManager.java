@@ -53,7 +53,7 @@ public class FighterAbilityManager {
     }
 
     public void resetAllWeaponAbilities() {
-        for (WeaponHolder weaponHolder : fighter.getFKit().getWeaponHolders()) {
+        for (WeaponHolder weaponHolder : fighter.getFighterKitManager().getWeaponHolders()) {
             if (weaponHolder == null) {
                 continue;
             }
@@ -65,7 +65,7 @@ public class FighterAbilityManager {
     }
 
     public WeaponHolder isSomeWeaponAbilityActive() {
-        for (WeaponHolder weaponHolder : fighter.getFKit().getWeaponHolders()) {
+        for (WeaponHolder weaponHolder : fighter.getFighterKitManager().getWeaponHolders()) {
             if (weaponHolder == null) {
                 continue;
             }
@@ -121,13 +121,13 @@ public class FighterAbilityManager {
             return;
         }
         if (weaponHolder.getWeaponAbility().isAbilityActive()) {
-            this.setAbilityParticles(FighterParticlesEnum.ACTIVATED, weaponHolder.getWeaponNameColor().asBungee().getColor());
+            this.setAbilityParticles(FighterParticlesEnum.ACTIVATED, weaponHolder.getWeaponType().getTextColor().asBungee().getColor());
             return;
         }else if(weaponHolder.getWeaponAbility().isAbilityRecharged()){
-            this.setAbilityParticles(FighterParticlesEnum.RECHARGED, weaponHolder.getWeaponNameColor().asBungee().getColor());
+            this.setAbilityParticles(FighterParticlesEnum.RECHARGED, weaponHolder.getWeaponType().getTextColor().asBungee().getColor());
             return;
         }
-        this.setAbilityParticles(FighterParticlesEnum.NONE, weaponHolder.getWeaponNameColor().asBungee().getColor());
+        this.setAbilityParticles(FighterParticlesEnum.NONE, weaponHolder.getWeaponType().getTextColor().asBungee().getColor());
     }
 
 }

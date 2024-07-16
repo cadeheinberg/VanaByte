@@ -69,6 +69,7 @@ public class FighterKitManager {
 
     public void setKitType(int kitID){
         this.kitType = KitType.getKitTypeFromKitID(kitID);
+        fighter.setKitID(kitID);
     }
 
     public void giveKit() {
@@ -86,8 +87,9 @@ public class FighterKitManager {
         for(WeaponType weaponType : kitType.getWeaponTypes()){
             if(weaponType.getWeaponClass() != null){
                 try {
-                    WeaponHolder weaponHolder = weaponType.getWeaponClass().getDeclaredConstructor(Fighter.class).newInstance(fighter);
+                    WeaponHolder weaponHolder = weaponType.getWeaponClass().getDeclaredConstructor(Fighter.class, WeaponType.class).newInstance(fighter, weaponType);
                     this.player.getInventory().addItem(weaponHolder.getWeapon().getWeaponItem());
+                    this.weaponHolders.add(weaponHolder);
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }

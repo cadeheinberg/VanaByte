@@ -37,9 +37,6 @@ public class S1_ThrowingTNT extends WeaponHolder {
 	}
 	@Override
 	public boolean doDrop(PlayerDropItemEvent e) {
-		if(!super.doDrop(e)){
-			return false;
-		}
 		return this.doRightClick(new PlayerInteractEvent(null, null, null, null, null));
 	}
 

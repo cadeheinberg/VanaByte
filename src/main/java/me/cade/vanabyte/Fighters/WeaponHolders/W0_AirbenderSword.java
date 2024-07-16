@@ -12,6 +12,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -20,36 +22,48 @@ import java.util.ArrayList;
 
 public class W0_AirbenderSword extends WeaponHolder {
 
+    private final Player player;
+
     public W0_AirbenderSword(Fighter fighter, WeaponType weaponType) {
         super(fighter, weaponType);
+        this.player = fighter.getPlayer();
     }
 
     @Override
-    public boolean doRightClick() {
+    public boolean doRightClick(PlayerInteractEvent e) {
+        if(super.doRightClick(e)){
+            return true;
+        }
         return false;
     }
 
     @Override
-    public boolean doDrop() {
-        if (!super.doDrop()){
-            return false;
+    public boolean doDrop(PlayerDropItemEvent e) {
+        if (super.doDrop(e)){
+            this.activateSpecial();
+            return true;
         }
-        this.activateSpecial();
         return true;
     }
 
     @Override
-    public void activateSpecial() {
-        super.activateSpecial();
-        this.gustOfWindSpell();
-        super.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, super.getAbilityDurationTicks(), 1));
-        super.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, super.getAbilityDurationTicks(), 1));
-        super.getPlayer().playSound(super.getPlayer().getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
+    public boolean activateSpecial() {
+        if(super.activateSpecial()){
+            this.gustOfWindSpell();
+            player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, super.getAbilityDurationTicks(), 1));
+            player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, super.getAbilityDurationTicks(), 1));
+            player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
+            return true;
+        }
+        return false;
     }
 
     @Override
-    public void deActivateSpecial() {
-        super.deActivateSpecial();
+    public boolean deActivateSpecial() {
+        if(super.deActivateSpecial()){
+            return true;
+        }
+        return false;
     }
 
     public void gustOfWindSpell() {

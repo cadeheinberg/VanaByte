@@ -28,9 +28,6 @@ public class KitListener implements Listener {
 		if(e.getPlayer().getGameMode() != GameMode.SURVIVAL){
 			return;
 		}
-		if(Fighter.get(e.getPlayer()) == null){
-			return;
-		}
 		if (SafeZone.safeZone(e.getPlayer().getLocation())) {
 			if(e.getClickedBlock() != null){
 				if(e.getClickedBlock().getType() == Material.ENCHANTING_TABLE){
@@ -43,13 +40,18 @@ public class KitListener implements Listener {
 		if(e.getItem() == null){
 			return;
 		}
+		if(e.getAction() != Action.LEFT_CLICK_AIR && e.getAction() != Action.LEFT_CLICK_BLOCK &&
+				e.getAction() != Action.RIGHT_CLICK_AIR && e.getAction() != Action.RIGHT_CLICK_BLOCK){
+			return;
+		}
 		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItem());
 		if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
 			WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(weaponType);
 			if(weaponHolder != null){
-				if (e.getAction().equals(Action.LEFT_CLICK_AIR) || e.getAction().equals(Action.LEFT_CLICK_BLOCK)) {
+				if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
 					weaponHolder.doLeftClick(e);
-				}else if (e.getAction().equals(Action.RIGHT_CLICK_AIR) || e.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+				}else if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
+					e.getPlayer().sendMessage("oops");
 					weaponHolder.doRightClick(e);
 				}
 			}
@@ -129,6 +131,7 @@ public class KitListener implements Listener {
 		if(weaponHolder == null){
 			return;
 		}
+		((Player) e.getEntity().getShooter()).sendMessage("1: " + weaponType);
 		weaponHolder.doProjectileLaunch(e);
 	}
 
@@ -154,6 +157,7 @@ public class KitListener implements Listener {
 		if(weaponHolder == null){
 			return;
 		}
+		((Player) e.getEntity()).sendMessage("2: " + weaponType);
 		weaponHolder.doBowShootEvent(e);
 	}
 	@EventHandler

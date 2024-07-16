@@ -6,52 +6,64 @@ import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDismountEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 public class S0_Parachute extends WeaponHolder {
 
+	private final Player player;
+	private final Fighter fighter;
 	private Chicken chicken = null;
 
 	public S0_Parachute(Fighter fighter, WeaponType weaponType) {
 		super(fighter, weaponType);
+		this.fighter = fighter;
+		this.player = fighter.getPlayer();
 	}
 
 	@SuppressWarnings("deprecation")
 	@Override
-	public boolean doRightClick() {
-		if (super.getPlayer().isOnGround()) {
-			super.getPlayer().playSound(super.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-			return false;
+	public boolean doRightClick(PlayerInteractEvent e) {
+		if(super.doRightClick(e)){
+			if (player.isOnGround()) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+				return false;
+			}
+			if (fighter.getFighterTaskManager().getParachuteTask() != 0) {
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+				return false;
+			}
+			if(this.chicken != null){
+				player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
+				return false;
+			}
+			this.doParachute(player);
+			return true;
 		}
-		if (super.getFighter().getFighterTaskManager().getParachuteTask() != 0) {
-			super.getPlayer().playSound(super.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-			return false;
-		}
-		if(this.chicken != null){
-			super.getPlayer().playSound(super.getPlayer().getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
-			return false;
-		}
-		if(!super.doRightClick()){
-			return false;
-		}
-		this.doParachute(super.getPlayer());
-		return true;
+		return false;
 	}
 	@Override
-	public boolean doDrop() {
-		return this.doRightClick();
-	}
-
-	@Override
-	public void activateSpecial() {
-		super.activateSpecial();
+	public boolean doDrop(PlayerDropItemEvent e) {
+		return this.doRightClick(new PlayerInteractEvent(null, null, null, null, null));
 	}
 
 	@Override
-	public void deActivateSpecial() {
-		super.deActivateSpecial();
+	public boolean activateSpecial() {
+		if(super.activateSpecial()){
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean deActivateSpecial() {
+		if(super.deActivateSpecial()){
+			return true;
+		}
+		return false;
 	}
 
 	@Override

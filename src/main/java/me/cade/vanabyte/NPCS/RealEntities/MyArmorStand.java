@@ -1,5 +1,6 @@
 package me.cade.vanabyte.NPCS.RealEntities;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.VanaByte;
@@ -14,7 +15,6 @@ public class MyArmorStand {
   private Location location;
   private org.bukkit.entity.ArmorStand stand;
   private static MyArmorStand[] kits;
-  private static FighterKit[] fKits = FighterKitManager.getFkitsNoPlayer();
   private static Location[] locations = {
           new Location(VanaByte.hub, -1043.5, 195.3, -111.5, 135, 0),
           new Location(VanaByte.hub, -1045.5, 195.3, -108.5, 135, 0),
@@ -125,9 +125,9 @@ public class MyArmorStand {
     String p = y + "" + b + "";
     kits = new MyArmorStand[Fighter.getNumberOfKits()];
     for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-      kits[i] = new MyArmorStand(p + fKits[i].getKitName(), locations[i], locations[i].getYaw(), false, false, true);
-      kits[i].equipColoredArmor(fKits[i].getArmorColor());
-      kits[i].getStand().setItemInHand(fKits[i].getWeaponHolders().get(0).getWeapon().getWeaponItem());
+      kits[i] = new MyArmorStand(p + KitType.getKitTypeFromKitID(i).getKitNameUncolored(), locations[i], locations[i].getYaw(), false, false, true);
+      kits[i].equipColoredArmor(KitType.getKitTypeFromKitID(i).getArmorColor());
+      kits[i].getStand().setItemInHand(new ItemStack(KitType.getKitTypeFromKitID(i).getWeaponTypes()[0].getMaterial(), 1));
     }
   }
 

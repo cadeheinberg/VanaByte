@@ -9,21 +9,4 @@ public class W3_GoblinSword extends WeaponHolder {
         super(fighter, weaponType);
     }
 
-    @Override
-    public boolean doRightClick() {
-        return false;
-    }
-    @Override
-    public boolean doDrop() {
-        return false;
-    }
-    @Override
-    public void activateSpecial() {
-        //pass
-    }
-    @Override
-    public void deActivateSpecial() {
-        //pass
-    }
-
 }

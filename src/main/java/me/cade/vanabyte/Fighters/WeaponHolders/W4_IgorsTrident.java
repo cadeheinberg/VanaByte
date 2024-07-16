@@ -3,14 +3,16 @@ package me.cade.vanabyte.Fighters.WeaponHolders;
 import me.cade.vanabyte.Fighters.PVP.CreateExplosion;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class W4_IgorsTrident extends WeaponHolder {
 
@@ -22,17 +24,20 @@ public class W4_IgorsTrident extends WeaponHolder {
     }
 
     @Override
-    public boolean doRightClick() {
-        return true;
-    }
-
-    @Override
-    public boolean doDrop() {
-        if (super.doDrop()){
-            this.activateSpecial();
+    public boolean doRightClick(PlayerInteractEvent e) {
+        if(super.doRightClick(e)){
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean doDrop(PlayerDropItemEvent e) {
+        if (super.doDrop(e)){
+            this.activateSpecial();
+            return true;
+        }
+        return true;
     }
 
     @Override
@@ -59,14 +64,24 @@ public class W4_IgorsTrident extends WeaponHolder {
         }
         //trident hit ground
         if (e.getEntity().getFireTicks() > 0) {
-            CreateExplosion.doAnExplosion(this.player, e.getHitBlock().getLocation(), 0.7, this.specialDamage, true, this.weapon.getWeaponType());
+            CreateExplosion.doAnExplosion(this.player, e.getHitBlock().getLocation(), 0.7, super.getSpecialDamage(), true, super.getWeaponType());
         }
         e.getEntity().remove();
         return true;
     }
 
     @Override
-    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e) {
+    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
+        if(super.doProjectileHitEntity(e, shooter, victim, damagingEntity)){
+            if (damagingEntity.getFireTicks() > 0) {
+                Location local = victim.getLocation();
+                local.setY(local.getY() - 0.5);
+                CreateExplosion.doAnExplosion(this.player, local, 0.7, super.getSpecialDamage(), true, super.getWeaponType());
+            }
+            e.setDamage(super.getProjectileDamage());
+            e.getDamager().remove();
+            return true;
+        }
         return true;
     }
 
@@ -89,17 +104,4 @@ public class W4_IgorsTrident extends WeaponHolder {
         return true;
     }
 
-    //Returns the amount of damage to do to the player
-    public double doTridentHitEntity(LivingEntity victim, Trident trident) {
-        if (trident.getFireTicks() > 0) {
-            Location local = victim.getLocation();
-            local.setY(local.getY() - 0.5);
-            CreateExplosion.doAnExplosion(this.player, local, 0.7, this.specialDamage, true, this.weapon.getWeaponType());
-            //explosion will deal special damage ^^
-            return 0;
-        }
-        else{
-            return this.getProjectileDamage();
-        }
-    }
 }
