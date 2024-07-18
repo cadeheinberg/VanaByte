@@ -42,8 +42,8 @@ public class W0_AirbenderSword extends WeaponHolder {
             return;
         }
         this.gustOfWindSpell();
-        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, statBundle.getAbilityDuration(), 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, statBundle.getAbilityDuration(), 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, statBundle.abilityDuration, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, statBundle.abilityDuration, 1));
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
     }
 

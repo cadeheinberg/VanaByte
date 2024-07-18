@@ -202,7 +202,7 @@ public enum WeaponType {
     //specialExplosionDamage| trident explosion damage
     //specialDamage1|
     //----baseMainCoolDown| trident cooldown, prevent hacking/spamming
-    //baseExplosionPower|
+    //----baseExplosionPower| trident explosion power
     //basePower1|
     //basePower2|
     //----specialMainCooldown| trident cooldown, prevent hacking/spamming
@@ -229,6 +229,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| stick melee damage
+    //baseProjectileDamage|
+    //----baseExplosionDamage| summo slam damage
+    //----baseDamage1| knockback power
+    //specialMeleeDamage|
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //specialDamage1|
+    //baseMainCoolDown|
+    //----baseExplosionPower| summo explosion power
+    //----basePower1| summo jump height
+    //basePower2|
+    //specialMainCooldown|
+    //specialExplosionPower|
+    //specialPower1|
+    //specialPower2|
+    //----abilityDuration| summo slam + potions
+    //----abilityRecharge| summo slam + potions
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     GRIEF_SWORD("Grief Sword",
             W6_GriefSword.class,
             ChatColor.AQUA,
@@ -243,6 +265,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| grief melee damage
+    //baseProjectileDamage|
+    //baseExplosionDamage|
+    //baseDamage1|
+    //specialMeleeDamage| grief melee steal health amount
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //specialDamage1|
+    //baseMainCoolDown|
+    //baseExplosionPower|
+    //basePower1|
+    //basePower2|
+    //specialMainCooldown|
+    //specialExplosionPower|
+    //specialPower1|
+    //specialPower2|
+    //----abilityDuration| potions
+    //----abilityRecharge| potions
+    //upgrade1| explosive immune (blast shield)
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     PARACHUTE("Parachute",
             S0_Parachute.class,
             ChatColor.YELLOW,
@@ -257,6 +301,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| item melee damage
+    //baseProjectileDamage|
+    //baseExplosionDamage|
+    //baseDamage1|
+    //specialMeleeDamage|
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //specialDamage1|
+    //----baseMainCoolDown| parachute cooldown
+    //baseExplosionPower
+    //----basePower1| chicken speed
+    //basePower2|
+    //specialMainCooldown|
+    //specialExplosionPower|
+    //specialPower1|
+    //specialPower2|
+    //abilityDuration|
+    //abilityRecharge|
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     THROWING_TNT("Throwing TNT",
             S1_ThrowingTNT.class,
             ChatColor.YELLOW,
@@ -271,6 +337,28 @@ public enum WeaponType {
                     0, 0, 0, 0,
                     0, 0,
                     false, false, false, false)),
+    //----baseMeleeDamage| item melee damage
+    //baseProjectileDamage|
+    //----baseExplosionDamage| TNT explode damage
+    //baseDamage1|
+    //specialMeleeDamage|
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //specialDamage1|
+    //----baseMainCoolDown| TNT cooldown
+    //----baseExplosionPower| TNT explode power
+    //basePower1|
+    //basePower2|
+    //specialMainCooldown|
+    //specialExplosionPower|
+    //specialPower1|
+    //specialPower2|
+    //abilityDuration|
+    //abilityRecharge|
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
     UNKNOWN_WEAPON(null,
             null,
             null,
@@ -280,6 +368,28 @@ public enum WeaponType {
             null,
             null,
             null);
+    //baseMeleeDamage|
+    //baseProjectileDamage|
+    //baseExplosionDamage|
+    //baseDamage1|
+    //specialMeleeDamage|
+    //specialProjectileDamage|
+    //specialExplosionDamage|
+    //specialDamage1|
+    //baseMainCoolDown|
+    //baseExplosionPower|
+    //basePower1|
+    //basePower2|
+    //specialMainCooldown|
+    //specialExplosionPower|
+    //specialPower1|
+    //specialPower2|
+    //abilityDuration|
+    //abilityRecharge|
+    //upgrade1|
+    //upgrade2|
+    //upgrade3|
+    //upgrade4|
 
     private final String name;
     private final ChatColor textColor;
