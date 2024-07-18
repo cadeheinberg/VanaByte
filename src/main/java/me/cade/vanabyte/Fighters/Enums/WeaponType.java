@@ -16,22 +16,25 @@ public enum WeaponType {
             Material.IRON_SWORD,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] sword melee
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] gust of wind power
-                    {6.0, 1.8, -1.0, -1.0, -1.0}, //[4][0] gust of wind damage
-                    {1.6, 8.0, -1.0, -1.0, -1.0}, //[5][0] gust of wind self power
-            },
-            //Integer[X] = Y means that upgrade Double[X][Y] has been unlocked. First level of each unlocked here.
-            new Integer[]{
-                    1,
-                    1,
-                    1,
-                    1,
-                    1,
-                    1}),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "sword_melee", //[2]
+                            "gust_enemy_power", //[3]
+                            "gust_enemy_damage", //[4]
+                            "gust_self_power" //[5]
+                    },
+                    new Integer[]{0, 0, 0, 0, 0, 0},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
+                            {6.0, 1.8, -1.0, -1.0, -1.0}, //[4]
+                            {1.6, 8.0, -1.0, -1.0, -1.0}  //[5]
+                    }
+            )),
     BESERKER_AXE("Beserker Axe",
             W1_BeserkerAxe.class,
             ChatColor.LIGHT_PURPLE,
@@ -40,30 +43,33 @@ public enum WeaponType {
             Material.IRON_AXE,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] axe melee
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] leap power
-                    {1.7, 1.8, -1.0, -1.0, -1.0}, //[4][0] ability on, leap power
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[5][0] leap cooldown
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[6][0] ability on, leap cooldown
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[7][0] ability on, speed potion level
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[8][0] ability on, jump potion level
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[9][0] ability on, haste potion levels
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {true, false, false, false, false}, //[3][0]
-                    {true, false, false, false, false}, //[4][0]
-                    {true, false, false, false, false}, //[5][0]
-                    {true, false, false, false, false}, //[6][0]
-                    {false, false, false, false, false}, //[7][0]
-                    {false, false, false, false, false}, //[8][0]
-                    {false, false, false, false, false},} //[9][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "axe_melee", //[2]
+                            "leap_power", //[3]
+                            "ability_leap_power", //[4]
+                            "leap_cooldown", //[5]
+                            "ability_leap_cooldown", //[6]
+                            "ability_speed_level", //[7]
+                            "ability_jump_level", //[8]
+                            "ability_haste_level" //[9]
+                    },
+                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
+                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[7]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[8]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}  //[9]
+                    }
+            )),
     SHOTTY_SHOTGUN("Shotty Shotgun",
             W2_ShottyShotgun.class,
             ChatColor.YELLOW,
@@ -72,34 +78,37 @@ public enum WeaponType {
             Material.IRON_SHOVEL,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] shovel melee
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] recoil power
-                    {1.7, 1.8, -1.0, -1.0, -1.0}, //[4][0] ability on, recoil power
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[5][0] shoot cooldown
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[6][0] ability on, shoot cooldown
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[7][0] bullet damage
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[8][0] ability on, bullet damage
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[9][0] number of bullets
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[10][0] ability on, number of bullets
-                    {1.0, -1.0, -1.0, -1.0, -1.0}, //[11][0] set blocks on fire that it hits
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {true, false, false, false, false}, //[3][0]
-                    {true, false, false, false, false}, //[4][0]
-                    {true, false, false, false, false}, //[5][0]
-                    {true, false, false, false, false}, //[6][0]
-                    {true, false, false, false, false}, //[7][0]
-                    {true, false, false, false, false}, //[8][0]
-                    {true, false, false, false, false}, //[9][0]
-                    {true, false, false, false, false}, //[10][0]
-                    {false, false, false, false, false},} //[11][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "shovel_melee", //[2]
+                            "recoil_power", //[3]
+                            "ability_on_recoil_power", //[4]
+                            "shoot_cooldown", //[5]
+                            "ability_on_shoot_cooldown", //[6]
+                            "bullet_damage", //[7]
+                            "ability_on_bullet_damage", //[8]
+                            "num_bullets", //[9]
+                            "ability_on_num_bullets", //[10]
+                            "set_blocks_on_fire" //[11]
+                    },
+                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
+                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[7]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[8]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[9]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[10]
+                            {1.0, -1.0, -1.0, -1.0, -1.0}  //[11]
+                    }
+            )),
     GOBLIN_BOW("Goblin Bow",
             W3_GoblinArrow.class,
             ChatColor.GREEN,
@@ -108,24 +117,27 @@ public enum WeaponType {
             Material.BOW,
             new Enchantment[]{Enchantment.INFINITY},
             new Integer[]{1},
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] bow melee
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] arrow damage
-                    {1.7, 1.8, -1.0, -1.0, -1.0}, //[4][0] ability on, arrow damage
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[5][0] ability on, number of arrows in barrage
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[6][0] ability on, arrow hit poison potion
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {true, false, false, false, false}, //[3][0]
-                    {true, false, false, false, false}, //[4][0]
-                    {true, false, false, false, false}, //[5][0]
-                    {false, false, false, false, false},} //[6][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "bow_melee", //[2]
+                            "arrow_damage", //[3]
+                            "ability_on_arrow_damage", //[4]
+                            "num_arrows_barrage", //[5]
+                            "ability_on_arrow_hit_poison_potion" //[6]
+                    },
+                    new Integer[]{1, 1, 1, 1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
+                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}  //[6]
+                    }
+            )),
     GOBLIN_SWORD("Goblin Sword",
             W3_GoblinBow.class,
             ChatColor.GREEN,
@@ -134,23 +146,25 @@ public enum WeaponType {
             Material.WOODEN_SWORD,
             new Enchantment[]{Enchantment.FIRE_ASPECT},
             new Integer[]{1},
-            new Double[][]{
-                    {7.0, 8.0, -1.0, -1.0, -1.0}, //[0][0] sword melee damage
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[1][0] flame aspect
-                    {1.0, 2.0, -1.0, -1.0, -1.0}, //[2][0] knockback
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {false, false, false, false, false}, //[1][0]
-                    {false, false, false, false, false},} //[9][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "sword_melee_damage", //[0]
+                            "flame_aspect", //[1]
+                            "knockback" //[2]
+                    },
+                    new Integer[]{1, 1, 1},
+                    new Double[][]{
+                            {7.0, 8.0, -1.0, -1.0, -1.0}, //[0]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[1]
+                            {1.0, 2.0, -1.0, -1.0, -1.0}  //[2]
+                    }
+            )),
     GOBLIN_ARROW("Goblin Arrow",
             W3_GoblinSword.class,
             ChatColor.GREEN,
             "None",
             "None",
             Material.ARROW,
-            null,
             null,
             null,
             null
@@ -163,28 +177,31 @@ public enum WeaponType {
             Material.TRIDENT,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] trident melee
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] trident projectile damage
-                    {1.7, 1.8, -1.0, -1.0, -1.0}, //[4][0] ability on, trident projectile damage
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[5][0] trident explosion damage
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[6][0] ability on, trident explosion damage
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[7][0] trident explosion power
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[8][0] ability on, trident explosion power
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {true, false, false, false, false}, //[3][0]
-                    {true, false, false, false, false}, //[4][0]
-                    {true, false, false, false, false}, //[5][0]
-                    {true, false, false, false, false}, //[6][0]
-                    {true, false, false, false, false}, //[7][0]
-                    {false, false, false, false, false},} //[8][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "trident_melee", //[2]
+                            "trident_projectile_damage", //[3]
+                            "ability_on_trident_projectile_damage", //[4]
+                            "trident_explosion_damage", //[5]
+                            "ability_on_trident_explosion_damage", //[6]
+                            "trident_explosion_power", //[7]
+                            "ability_on_trident_explosion_power" //[8]
+                    },
+                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
+                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[7]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}  //[8]
+                    }
+            )),
     SUMO_STICK("Sumo Stick",
             W5_SumoStick.class,
             ChatColor.LIGHT_PURPLE,
@@ -193,29 +210,31 @@ public enum WeaponType {
             Material.STICK,
             new Enchantment[]{Enchantment.KNOCKBACK},
             new Integer[]{2},
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] stick melee
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[3][0] stick knockback power
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[4][0] throw power
-                    {1.7, 1.8, -1.0, -1.0, -1.0}, //[5][0] ability on, throw power
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[6][0] summo slam explosion damage
-                    {8.0, 7.0, -1.0, -1.0, -1.0}, //[7][0] summo slam explosion power
-                    {9.0, 8.0, -1.0, -1.0, -1.0}, //[8][0] summo jump height
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {true, false, false, false, false}, //[3][0]
-                    {true, false, false, false, false}, //[4][0]
-                    {true, false, false, false, false}, //[5][0]
-                    {true, false, false, false, false}, //[6][0]
-                    {true, false, false, false, false}, //[7][0]
-                    {true, false, false, false, false}, //[8][0]
-                    {false, false, false, false, false},} //[9][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "stick_melee", //[2]
+                            "stick_knockback_power", //[3]
+                            "throw_power", //[4]
+                            "ability_on_throw_power", //[5]
+                            "summo_slam_explosion_damage", //[6]
+                            "summo_slam_explosion_power", //[7]
+                            "summo_jump_height" //[8]
+                    },
+                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[3]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[4]
+                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[5]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[6]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[7]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}  //[8]
+                    }
+            )),
     GRIEF_SWORD("Grief Sword",
             W6_GriefSword.class,
             ChatColor.AQUA,
@@ -224,20 +243,23 @@ public enum WeaponType {
             Material.NETHERITE_SWORD,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] ability duration
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] ability recharge
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] sword melee
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] sword melee health steal amount
-                    {1.0, -1.0, -1.0, -1.0, -1.0}, //[4][0] blast shield, explosive immune
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {true, false, false, false, false}, //[3][0]
-                    {false, false, false, false, false},} //[9][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "a_dur", //[0]
+                            "a_rech", //[1]
+                            "sword_melee", //[2]
+                            "sword_melee_health_steal", //[3]
+                            "blast_shield_explosive_immune" //[4]
+                    },
+                    new Integer[]{1, 1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
+                            {1.0, -1.0, -1.0, -1.0, -1.0}  //[4]
+                    }
+            )),
     PARACHUTE("Parachute",
             S0_Parachute.class,
             ChatColor.YELLOW,
@@ -246,18 +268,21 @@ public enum WeaponType {
             Material.PHANTOM_MEMBRANE,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] item melee damage
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] parachute cooldown
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] chicken speed
-                    {1.6, 1.7, -1.0, -1.0, -1.0}, //[3][0] chicken carpet bomb TNT
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {false, false, false, false, false},} //[4][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "item_melee_damage", //[0]
+                            "parachute_cooldown", //[1]
+                            "chicken_speed", //[2]
+                            "chicken_carpet_bomb_tnt" //[3]
+                    },
+                    new Integer[]{1, 1, 1, 1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.6, 1.7, -1.0, -1.0, -1.0}  //[3]
+                    }
+            )),
     THROWING_TNT("Throwing TNT",
             S1_ThrowingTNT.class,
             ChatColor.YELLOW,
@@ -266,20 +291,24 @@ public enum WeaponType {
             Material.COAL,
             null,
             null,
-            new Double[][]{
-                    {15.0, 14.0, -1.0, -1.0, -1.0}, //[0][0] tnt melee damage
-                    {20.0, 18.0, -1.0, -1.0, -1.0}, //[1][0] TNT explode damage
-                    {7.0, 7.3, -1.0, -1.0, -1.0}, //[2][0] TNT explode power
-                    {1.0, -1.0, -1.0, -1.0, -1.0}, //[3][0] turn blocks on fire that it hits
-            },
-            new Boolean[][]{ //defaults for new player go here, store players version of this in MySQL table
-                    {true, false, false, false, false}, //[0][0] [X][Y] true or false if this upgrade Y of stat X is unlocked
-                    {true, false, false, false, false}, //[1][0]
-                    {true, false, false, false, false}, //[2][0]
-                    {false, false, false, false, false},} //[3][0]
-    ),
+            new StatBundle(
+                    new String[]{
+                            "tnt_melee_damage", //[0]
+                            "tnt_throw_cooldown", //[1]
+                            "tnt_explode_damage", //[2]
+                            "tnt_explode_power", //[3]
+                            "set_blocks_on_fire" //[4]
+                    },
+                    new Integer[]{0, 0, 0, 0, -1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
+                            {1.0, -1.0, -1.0, -1.0, -1.0}, //[3]
+                            {1.0, -1.0, -1.0, -1.0, -1.0}  //[4]
+                    }
+            )),
     UNKNOWN_WEAPON(null,
-            null,
             null,
             null,
             null,
@@ -289,6 +318,10 @@ public enum WeaponType {
             null,
             null);
 
+    //give each weapon a unique id
+    private int counter = 0;
+    private final int weaponID;
+
     private final String name;
     private final ChatColor textColor;
     private final String weaponDrop;
@@ -297,10 +330,11 @@ public enum WeaponType {
     private final Class<? extends WeaponHolder> weaponClass;
     private final Enchantment[] enchantments;
     private final Integer[] enchantmentPowers;
-    private final Double[][] stats;
-    private final Integer[] unlocked;
+    private final StatBundle statBundle;
 
-    private WeaponType(String name, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, Double[][] stats, Integer[] unlocked){
+    private WeaponType(String name, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, StatBundle statBundle){
+        this.weaponID = counter;
+        counter++;
         this.name = name;
         this.weaponClass = weaponClass;
         this.textColor = textColor;
@@ -309,8 +343,11 @@ public enum WeaponType {
         this.material = material;
         this.enchantments = enchantments;
         this.enchantmentPowers = enchantmentPowers;
-        this.stats = stats;
-        this.unlocked = unlocked;
+        this.statBundle = statBundle;
+    }
+
+    public int getWeaponID() {
+        return weaponID;
     }
 
     public String getWeaponNameUncolored(){
@@ -349,26 +386,7 @@ public enum WeaponType {
         return enchantmentPowers;
     }
 
-    public Integer[] getUnlocked() {
-        return unlocked;
+    public StatBundle getStatBundle() {
+        return statBundle;
     }
-
-    public Double[][] getStats() {
-        return stats;
-    }
-
-    //    public Boolean getUnlocked(int i, int j) {
-//        return unlocked[i][j];
-//    }
-//
-//    public Double getStat(int i, int j) {
-//        return stats[i][j];
-//    }
-//
-//    public Double getStatOrNull(int i, int j) {
-//        if(getUnlocked(i, j)){
-//            return stats[i][j];
-//        }
-//        return null;
-//    }
 }

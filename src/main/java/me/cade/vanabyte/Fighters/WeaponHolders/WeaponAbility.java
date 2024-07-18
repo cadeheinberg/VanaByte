@@ -35,10 +35,9 @@ public class WeaponAbility {
         this.abilityRecharged = true;
     }
 
-    public void startAbilityDuration() {
+    public void startAbilityDuration(int durationTicks, int rechargeTicks) {
         this.setAbilityActive(true);
         this.setAbilityRecharged(false);
-        int durationTicks = this.weaponHolder.abilityDurationTicks;
         player.setCooldown(FighterKitManager.cooldownMaterial, durationTicks);
         int cooldownTask = new BukkitRunnable() {
             @Override
@@ -53,7 +52,7 @@ public class WeaponAbility {
                         weaponAbility.setAbilityActive(false);
                         weaponAbility.setActionBarToFloat(0);
                         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_BREAK, 8, 1);
-                        startAbilityRecharge();
+                        startAbilityRecharge(rechargeTicks);
                         return;
                     }
                     weaponAbility.setActionBarToFloat(((float) player.getCooldown(FighterKitManager.cooldownMaterial)) / durationTicks);
@@ -63,8 +62,7 @@ public class WeaponAbility {
         Fighter.get(player).setCooldownTask(cooldownTask);
     }
 
-    public void startAbilityRecharge() {
-        int rechargeTicks = weaponHolder.getAbilityRechargeTicks();
+    public void startAbilityRecharge(int rechargeTicks) {
         player.setCooldown(FighterKitManager.cooldownMaterial, rechargeTicks);
         int rechargeTask = new BukkitRunnable() {
             @Override
@@ -134,7 +132,7 @@ public class WeaponAbility {
             message.setColor(net.md_5.bungee.api.ChatColor.of(Color.GREEN));
         }else{
 //            message.setColor(net.md_5.bungee.api.ChatColor.of("#FF99CC"));
-            message.setColor(weaponHolder.getWeaponType().getTextColor().asBungee());
+            message.setColor(weaponHolder.weaponType.getTextColor().asBungee());
         }
         message.setBold(true);
         this.player.spigot().sendMessage(ChatMessageType.ACTION_BAR, message);

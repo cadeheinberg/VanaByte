@@ -16,10 +16,14 @@ import org.bukkit.util.Vector;
 public class S0_Parachute extends WeaponHolder {
 
 	private Chicken chicken = null;
+	private final int baseCooldown = fighter.getTickFromWeaponType(weaponType, 1);
+	private final int abilityOnCooldown = -1;
+	private final double chickenSpeed = fighter.getDoubleFromWeaponType(weaponType, 2);
 
 	public S0_Parachute(Fighter fighter, WeaponType weaponType) {
 		super(fighter, weaponType);
 	}
+
 
 	@Override
 	public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
@@ -28,7 +32,7 @@ public class S0_Parachute extends WeaponHolder {
 
 	@Override
 	public void doRightClick(PlayerInteractEvent e) {
-		if(!super.checkAndSetMainCooldown()){
+		if(!super.checkAndSetMainCooldown(baseCooldown, abilityOnCooldown)){
 			return;
 		}
 		openParachute();
@@ -36,7 +40,7 @@ public class S0_Parachute extends WeaponHolder {
 
 	@Override
 	public void doDrop(PlayerDropItemEvent e) {
-		if(!super.checkAndSetMainCooldown()){
+		if(!super.checkAndSetMainCooldown(baseCooldown, abilityOnCooldown)){
 			return;
 		}
 		openParachute();
@@ -68,7 +72,6 @@ public class S0_Parachute extends WeaponHolder {
 	}
 
 	private void doGliding(Chicken chicken, Player player) {
-		double multiplier = statBundle.basePower1;
 		fighter.getFighterTaskManager().setParachuteTask(new BukkitRunnable() {
 			@Override
 			public void run() {
@@ -85,7 +88,7 @@ public class S0_Parachute extends WeaponHolder {
 					loc.setPitch(75);
 				}
 				Vector vector = loc.getDirection();
-				chicken.setVelocity(vector.multiply(multiplier));
+				chicken.setVelocity(vector.multiply(chickenSpeed));
 			}
 		}.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId());
 	}

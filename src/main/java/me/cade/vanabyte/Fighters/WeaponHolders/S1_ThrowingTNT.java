@@ -12,6 +12,11 @@ import org.bukkit.util.Vector;
 
 public class S1_ThrowingTNT extends WeaponHolder {
 
+	private final int baseCooldown = fighter.getTickFromWeaponType(weaponType, 1);
+	private final int abilityOnCooldown = -1;
+	private final double explosionDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
+	private final double explosionPower = fighter.getDoubleFromWeaponType(weaponType, 3);
+
 	public S1_ThrowingTNT(Fighter fighter, WeaponType weaponType) {
 		super(fighter, weaponType);
 	}
@@ -23,7 +28,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 
 	@Override
 	public void doRightClick(PlayerInteractEvent e) {
-		if(!super.checkAndSetMainCooldown()){
+		if(!super.checkAndSetMainCooldown(baseCooldown, abilityOnCooldown)){
 			return;
 		}
 		throwTNT();
@@ -31,7 +36,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 
 	@Override
 	public void doDrop(PlayerDropItemEvent e) {
-		if(!super.checkAndSetMainCooldown()){
+		if(!super.checkAndSetMainCooldown(baseCooldown, abilityOnCooldown)){
 			return;
 		}
 		throwTNT();
@@ -39,14 +44,14 @@ public class S1_ThrowingTNT extends WeaponHolder {
 
 	@Override
 	public void doExplosion(ExplosionPrimeEvent e, Player killer){
-		super.createAnExplosion(killer, e.getEntity().getLocation());
+		super.createAnExplosion(killer, e.getEntity().getLocation(), explosionDamage, explosionPower);
 	}
 
 	private void throwTNT(){
 		Entity tnt = player.getWorld().spawnEntity(player.getEyeLocation(), EntityType.TNT);
 		TNTPrimed fuse = (TNTPrimed) tnt;
-		tnt.setCustomName(player.getName());
 		tnt.setCustomNameVisible(false);
+		tnt.setCustomName(player.getName());
 		EntityMetadata.addWeaponTypeToEntity(tnt, weaponType, player.getUniqueId());
 		fuse.setFuseTicks(15);
 		Vector currentDirection4 = player.getLocation().getDirection().normalize();

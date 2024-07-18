@@ -227,4 +227,8 @@ public class VanaByte extends JavaPlugin {
 		return plugin;
 	}
 
+	public static int convertDoubleToTicks(double d){
+		return (int) Math.round(d * 20);
+	}
+
 }

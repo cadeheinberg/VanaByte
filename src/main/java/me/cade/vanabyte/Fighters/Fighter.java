@@ -1,5 +1,6 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.NPCS.GUIs.GUIManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestManager;
 import me.cade.vanabyte.NPCS.PacketHolograms.HologramManager;
@@ -228,4 +229,13 @@ public class Fighter {
 	public FighterMYSQLManager getFighterMYSQLManager(){
 		return fighterMYSQLManager;
 	}
+
+	public double getDoubleFromWeaponType(WeaponType weaponType, int index){
+		return fighterMYSQLManager.getFIGHTER_STATS()[weaponType.getWeaponID()][index];
+	}
+
+	public int getTickFromWeaponType(WeaponType weaponType, int index){
+		return VanaByte.convertDoubleToTicks(fighterMYSQLManager.getFIGHTER_STATS()[weaponType.getWeaponID()][index]);
+	}
+
 }

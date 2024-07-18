@@ -1,6 +1,7 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
 import com.google.errorprone.annotations.ForOverride;
+import me.cade.vanabyte.Fighters.Enums.StatBundle;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
@@ -37,7 +38,7 @@ public abstract class WeaponHolder {
         this.player = this.fighter.getPlayer();
         this.statBundle = weaponType.getStatBundle();
         this.weapon = new Weapon(this.weaponType, this.weaponType.getMaterial(), this.weaponType.getWeaponNameColored(),
-                this.statBundle.getBaseMeleeDamage(),
+                this.statBundle.,
                 this.statBundle.getBaseProjectileDamage(),
                 this.statBundle.getBaseExplosionDamage(),
                 this.statBundle.getBaseMainCoolDown(),
@@ -96,25 +97,25 @@ public abstract class WeaponHolder {
         VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(this.player, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.PLAYER_ATTACK).build(), 1), this.weaponType));
     }
 
-    public boolean checkAndSetMainCooldown(){
+    public boolean checkAndSetMainCooldown(int baseCooldown, int abilityOnCooldown){
         if (player.getCooldown(this.weaponType.getMaterial()) > 0) {
             this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
             return false;
         }
-        if(weaponAbility.isAbilityActive()){
-            player.setCooldown(this.weaponType.getMaterial(), statBundle.getSpecialMainCoolDown());
+        if(abilityOnCooldown >= 0 && weaponAbility.isAbilityActive()){
+            player.setCooldown(this.weaponType.getMaterial(), abilityOnCooldown);
         }else{
-            player.setCooldown(this.weaponType.getMaterial(), statBundle.getBaseMainCoolDown());
+            player.setCooldown(this.weaponType.getMaterial(), baseCooldown);
         }
         return true;
     }
 
-    public boolean checkAndSetSpecialCooldown(){
+    public boolean checkAndSetSpecialCooldown(int durationTicks, int rechargeTicks){
         if (this.player.getCooldown(FighterKitManager.cooldownMaterial) > 0 || Fighter.get(player).getWeaponAbilityManager().isSomeWeaponAbilityActive() != null) {
             this.player.playSound(this.player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, 8, 1);
             return false;
         }
-        weaponAbility.startAbilityDuration();
+        weaponAbility.startAbilityDuration(durationTicks, rechargeTicks);
         return true;
     }
 
@@ -128,7 +129,7 @@ public abstract class WeaponHolder {
         return true;
     }
 
-    public void createAnExplosion(Player shooter, Location location, double power, double damage) {
+    public void createAnExplosion(Player shooter, Location location, double damage, double power) {
         //sends an EntityDamageByEntityEvent aswelll that we cancel
         //we can cancel if Cause=Explosion and damager=Player
         location.getWorld().createExplosion(location, 4F, false, true, shooter);
@@ -169,5 +170,9 @@ public abstract class WeaponHolder {
                 ((LivingEntity) ent).damage(damage);
             }
         }
+    }
+
+    public WeaponType getWeaponType() {
+        return weaponType;
     }
 }

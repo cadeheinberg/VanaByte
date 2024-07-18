@@ -8,7 +8,6 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
@@ -18,6 +17,12 @@ import java.util.ArrayList;
 public class W0_AirbenderSword extends WeaponHolder {
 
     private final Player player;
+
+    private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
+    private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
+    private final double gustEnemyPower = fighter.getDoubleFromWeaponType(weaponType, 3);
+    private final double gustEnemyDamage = fighter.getDoubleFromWeaponType(weaponType, 4);
+    private final double gustSelfPower = fighter.getDoubleFromWeaponType(weaponType, 5);
 
     public W0_AirbenderSword(Fighter fighter, WeaponType weaponType) {
         super(fighter, weaponType);
@@ -30,27 +35,20 @@ public class W0_AirbenderSword extends WeaponHolder {
     }
 
     @Override
-    public void doRightClick(PlayerInteractEvent e) {
-        if(!super.checkAndSetMainCooldown()){
-            return;
-        }
-    }
-
-    @Override
     public void doDrop(PlayerDropItemEvent e) {
-        if(!super.checkAndSetSpecialCooldown()){
+        if(!super.checkAndSetSpecialCooldown(abilityDuration, abilityRecharge)){
             return;
         }
         this.gustOfWindSpell();
-        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, statBundle.abilityDuration, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, statBundle.abilityDuration, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, abilityDuration, 1));
+        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityRecharge, 1));
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
     }
 
-    public void gustOfWindSpell() {
+    private void gustOfWindSpell() {
         Location playerLocation = super.player.getLocation();
         if (playerLocation.getPitch() > 49) {
-            launchPlayer(super.player, statBundle.getBasePower2());
+            launchSelf();
             return;
         }
         Location origin = super.player.getEyeLocation();
@@ -59,7 +57,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         double dY = direction.getY();
         double dZ = direction.getZ();
         playerLocation.setPitch((float) -30.0);
-        double power = statBundle.getBasePower1();
+        double power = gustEnemyPower;
         int range = 3;
         ArrayList<Integer> hitList = new ArrayList<Integer>();
         for (int j = 2; j < range; j++) {
@@ -82,7 +80,7 @@ public class W0_AirbenderSword extends WeaponHolder {
                     }
                 }
                 super.trackWeaponDamage((LivingEntity) entity);
-                ((LivingEntity) entity).damage(statBundle.getBaseDamage1());
+                ((LivingEntity) entity).damage(gustEnemyDamage);
                 Vector currentDirection = playerLocation.getDirection().normalize();
                 currentDirection = currentDirection.multiply(new Vector(power, power, power));
                 entity.setVelocity(currentDirection);
@@ -92,10 +90,10 @@ public class W0_AirbenderSword extends WeaponHolder {
         }
     }
 
-    private static void launchPlayer(Player player, Double power) {
+    private void launchSelf() {
         player.spawnParticle(Particle.DUST, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
         Vector currentDirection = player.getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(power, power, power));
+        currentDirection = currentDirection.multiply(new Vector(gustSelfPower, gustSelfPower, gustSelfPower));
         player.setVelocity(currentDirection);
     }
 
