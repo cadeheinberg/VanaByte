@@ -87,7 +87,7 @@ public class FighterKitManager {
         for(WeaponType weaponType : kitType.getWeaponTypes()){
             if(weaponType.getWeaponClass() != null){
                 try {
-                    WeaponHolder weaponHolder = weaponType.getWeaponClass().getDeclaredConstructor(Fighter.class, WeaponType.class).newInstance(fighter, weaponType);
+                    WeaponHolder weaponHolder = weaponType.getWeaponClass().getDeclaredConstructor(Fighter.class).newInstance(fighter);
                     this.player.getInventory().addItem(weaponHolder.getWeapon().getWeaponItem());
                     this.weaponHolders.add(weaponHolder);
                 } catch (Exception e) {

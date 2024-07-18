@@ -12,18 +12,35 @@ import org.bukkit.util.Vector;
 
 public class S1_ThrowingTNT extends WeaponHolder {
 
+	private final static WeaponType WEAPON_TYPE = WeaponType.THROWING_TNT;
+
+	private final double meleeDamage = fighter.getDoubleFromWeaponType(weaponType, 0);
+
 	private final int baseCooldown = fighter.getTickFromWeaponType(weaponType, 1);
 	private final int abilityOnCooldown = -1;
+
 	private final double explosionDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
 	private final double explosionPower = fighter.getDoubleFromWeaponType(weaponType, 3);
 
-	public S1_ThrowingTNT(Fighter fighter, WeaponType weaponType) {
-		super(fighter, weaponType);
+	public S1_ThrowingTNT(Fighter fighter) {
+		super(WEAPON_TYPE);
+		super.weapon = new Weapon(
+				WEAPON_TYPE,
+				WEAPON_TYPE.getMaterial(),
+				WEAPON_TYPE.getWeaponNameColored(),
+				meleeDamage,
+				baseCooldown,
+				-1,
+				-1);
+		super.player = fighter.getPlayer();
+		super.weaponAbility = new WeaponAbility(fighter, this);
+		super.fighter = fighter;
+		this.player = this.fighter.getPlayer();
 	}
 
 	@Override
 	public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-		super.trackWeaponDamage(victim);
+		super.trackWeaponDamage(victim, e.getFinalDamage());
 	}
 
 	@Override
@@ -44,7 +61,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 
 	@Override
 	public void doExplosion(ExplosionPrimeEvent e, Player killer){
-		super.createAnExplosion(killer, e.getEntity().getLocation(), explosionDamage, explosionPower);
+		super.createAnExplosion(e.getEntity().getLocation(), explosionDamage, explosionPower);
 	}
 
 	private void throwTNT(){

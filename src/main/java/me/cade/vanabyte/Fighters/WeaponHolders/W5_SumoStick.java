@@ -4,6 +4,7 @@ import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -17,121 +18,116 @@ import org.bukkit.util.Vector;
 
 public class W5_SumoStick extends WeaponHolder {
 
-    private final Player player;
+    private final static WeaponType WEAPON_TYPE = WeaponType.PARACHUTE;
 
-    public W5_SumoStick(Fighter fighter, WeaponType weaponType) {
-        super(fighter, weaponType);
-        player = fighter.getPlayer();
-    }
+    private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
+    private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
 
-    @Override
-    public boolean doLeftClick(PlayerInteractEvent e){
-        if(super.doLeftClick(e)){
-            if (e.getPlayer().getPassengers() != null && e.getPlayer().getPassengers().size() > 1) {
-                this.doThrow(e.getPlayer(), (LivingEntity) e.getPlayer().getPassengers().get(0));
-                return true;
-            }
+    private final double meleeDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
+    private final double knockBackLevel = fighter.getDoubleFromWeaponType(weaponType, 3);
+
+    private final int basePickUpCooldown = fighter.getTickFromWeaponType(weaponType, 4);
+    private final int abilityOnPickUpCooldown = fighter.getTickFromWeaponType(weaponType, 5);
+
+    private final double baseThrowPower = fighter.getDoubleFromWeaponType(weaponType, 6);
+    private final double abilityOnThrowPower = fighter.getDoubleFromWeaponType(weaponType, 7);
+
+    private final double sumoSlamExplosionDamage = fighter.getDoubleFromWeaponType(weaponType, 8);
+    private final double sumoSlamExplosionPower = fighter.getDoubleFromWeaponType(weaponType, 9);
+    private final double sumoJumpPower = fighter.getDoubleFromWeaponType(weaponType, 10);
+
+    public W5_SumoStick(Fighter fighter) {
+        super(WEAPON_TYPE);
+        super.weapon = new Weapon(
+                WEAPON_TYPE,
+                WEAPON_TYPE.getMaterial(),
+                WEAPON_TYPE.getWeaponNameColored(),
+                meleeDamage,
+                basePickUpCooldown,
+                abilityDuration,
+                abilityRecharge);
+        if((int) knockBackLevel >= 0){
+            weapon.applyWeaponUnsafeEnchantment(Enchantment.KNOCKBACK, (int) knockBackLevel);
         }
-        return false;
-    }
-
-    @Override
-    public boolean doRightClick(PlayerInteractEvent e) {
-        // super checks if there is a cooldown on material,
-        if(super.doRightClick(e)){
-            //do specific stuff here, apply cooldown?
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean doRightClickEntity(PlayerInteractEntityEvent e) {
-        // super checks if there is a cooldown on material
-        if(super.doRightClickEntity(e)){
-            //do specific stuff here
-            if(e.getRightClicked() instanceof LivingEntity){
-                if (player.getPassengers() == null) {
-                    return false;
-                }
-                if (player.getPassengers().size() >= 1) {
-                    return false;
-                }
-                if (e.getRightClicked() instanceof Player) {
-                    if (((Player) e.getRightClicked()).isSneaking()) {
-                        return false;
-                    }
-                }
-                this.doPickUp((LivingEntity) e.getRightClicked());
-                return true;
-            }
-        }
-        return false;
-    }
-
-    @Override
-    public boolean doDrop(PlayerDropItemEvent e) {
-        if (super.doDrop(e)){
-            if(Fighter.get(player).getFighterTaskManager().getGroundPoundTask() != 0){
-                return false;
-            }
-            this.activateSpecial();
-            return true;
-        }
-        return false;
+        super.player = fighter.getPlayer();
+        super.weaponAbility = new WeaponAbility(fighter, this);
+        super.fighter = fighter;
+        this.player = this.fighter.getPlayer();
     }
 
     @Override
     public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        if(super.doMeleeAttack(e, killer, victim)){
-            if (killer.getPassengers() == null) {
-                return false;
-            }
-            if (killer.getPassengers().size() < 1) {
-                return false;
-            }
-            if (!(killer.getPassengers().get(0).equals(victim))) {
-                return false;
-            }
-            this.doThrow((Player) e.getDamager(), (LivingEntity) e.getEntity());
-            return true;
+        if (player.getPassengers() == null) {
+            return;
         }
-        return false;
+        if (player.getPassengers().isEmpty()) {
+            return;
+        }
+        if (player.getPassengers().get(0).equals(victim)) {
+            this.doThrow(victim);
+            return;
+        }
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     @Override
-    public boolean activateSpecial() {
-        if(super.activateSpecial()){
-            doJump(player, 1.4, Fighter.get(this.player));
-            this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, super.getAbilityDurationTicks(), 0));
-            this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, super.getAbilityDurationTicks(), 1));
-            this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
-            return true;
+    public void doLeftClick(PlayerInteractEvent e){
+        if (player.getPassengers() == null) {
+            return;
         }
-        return false;
+        if (player.getPassengers().isEmpty()) {
+            return;
+        }
+        this.doThrow((LivingEntity) e.getPlayer().getPassengers().get(0));
     }
 
     @Override
-    public boolean deActivateSpecial() {
-        if(super.deActivateSpecial()){
-            this.stopListening(player);
-            return true;
+    public void doRightClickEntity(PlayerInteractEntityEvent e) {
+        if (!super.checkAndSetMainCooldown(basePickUpCooldown, abilityOnPickUpCooldown)) {
+            return;
         }
-        return false;
+        if (e.getRightClicked() instanceof LivingEntity) {
+            if (player.getPassengers() == null) {
+                return;
+            }
+            if (player.getPassengers().isEmpty()) {
+                return;
+            }
+            if (e.getRightClicked() instanceof Player) {
+                if (((Player) e.getRightClicked()).isSneaking()) {
+                    return;
+                }
+            }
+            this.doPickUp((LivingEntity) e.getRightClicked());
+        }
     }
 
-    public void doJump(Player player, Double power, Fighter pFight) {
+    @Override
+    public void doDrop(PlayerDropItemEvent e) {
+        if(!super.checkAndSetSpecialCooldown(abilityDuration, abilityRecharge)){
+            return;
+        }
+        if(Fighter.get(player).getFighterTaskManager().getGroundPoundTask() != 0){
+            return;
+        }
+        this.doJump();
+//        this.player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, abilityDuration, 0));
+//        this.player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityDuration, 1));
+        this.player.playSound(this.player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
+    }
+
+    public void doJump() {
         Location local = player.getLocation();
         local.setPitch(-60);
         Vector currentDirection = local.getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(power, power, power));
+        currentDirection = currentDirection.multiply(new Vector(sumoJumpPower, sumoJumpPower, sumoJumpPower));
         player.setVelocity(currentDirection);
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(VanaByte.getInstance(), new Runnable() {
             @Override
             public void run() {
-                listenForFall(player, pFight);
+                listenForFall(player, fighter);
             }
-        }, 5);
+        }, 2);
     }
 
     public void listenForFall(Player player, Fighter fighter) {
@@ -153,7 +149,7 @@ public class W5_SumoStick extends WeaponHolder {
                 }
                 if (player.isOnGround()) {
                     stopListening(player);
-                    doGroundHit(player, player.getLocation(), 0.3);
+                    doGroundHit(player.getLocation());
                     return;
                 }
                 if (player.isSneaking()) {
@@ -177,25 +173,29 @@ public class W5_SumoStick extends WeaponHolder {
     }
 
     // make this freeze players also
-    public void doGroundHit(Player shooter, Location location, double power) {
-        CreateExplosion.doAnExplosion(shooter, location, 0.7, this.getSpecialDamage(), true, super.getWeaponType());
+    public void doGroundHit(Location location) {
+        createAnExplosion(location, sumoSlamExplosionDamage, sumoSlamExplosionPower);
     }
 
     public void doPickUp(LivingEntity rightClicked) {
         player.addPassenger(rightClicked);
     }
 
-    public void doThrow(Player killer, LivingEntity victim) {
-        killer.eject();
+    public void doThrow(LivingEntity victim) {
+        player.eject();
         Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(VanaByte.getInstance(), new Runnable() {
             @Override
             public void run() {
-                Location playerLocation = killer.getLocation();
+                Location playerLocation = player.getLocation();
                 if (playerLocation.getPitch() < -60) {
                     playerLocation.setPitch((float) -60.0);
                 }
                 Vector currentDirection = playerLocation.getDirection().normalize();
-                currentDirection = currentDirection.multiply(new Vector(2, 2, 2));
+                if(abilityOnThrowPower >= 0 && weaponAbility.isAbilityActive()){
+                    currentDirection = currentDirection.multiply(new Vector(abilityOnThrowPower, abilityOnThrowPower, abilityOnThrowPower));
+                }else{
+                    currentDirection = currentDirection.multiply(new Vector(baseThrowPower, baseThrowPower, baseThrowPower));
+                }
                 victim.setVelocity(currentDirection);
             }
         }, 2);

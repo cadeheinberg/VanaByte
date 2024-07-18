@@ -18,21 +18,51 @@ import java.util.Random;
 
 public class W2_ShottyShotgun extends WeaponHolder {
 
-    private final Player player;
+    private final static WeaponType WEAPON_TYPE = WeaponType.SHOTTY_SHOTGUN;
 
-    public W2_ShottyShotgun(Fighter fighter, WeaponType weaponType) {
-        super(fighter, weaponType);
-        this.player = fighter.getPlayer();
+    private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
+    private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
+
+    private final double meleeDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
+
+    private final int baseShootCooldown = fighter.getTickFromWeaponType(weaponType, 3);
+    private final int abilityOnShootCooldown = fighter.getTickFromWeaponType(weaponType, 4);
+
+    private final double baseRecoilPower = fighter.getDoubleFromWeaponType(weaponType, 5);
+    private final double abilityOnRecoilPower = fighter.getDoubleFromWeaponType(weaponType, 6);
+
+    private final double baseBulletDamage = fighter.getDoubleFromWeaponType(weaponType, 7);
+    private final double abilityOnBulletDamage = fighter.getDoubleFromWeaponType(weaponType, 8);
+
+    private final double baseNumBullets = fighter.getDoubleFromWeaponType(weaponType, 9);
+    private final double abilityOnNumBullets = fighter.getDoubleFromWeaponType(weaponType, 10);
+
+    private final double abilityOnSetBlocksOnFire = fighter.getDoubleFromWeaponType(weaponType, 11);
+
+    public W2_ShottyShotgun(Fighter fighter) {
+        super(WEAPON_TYPE);
+        super.weapon = new Weapon(
+                WEAPON_TYPE,
+                WEAPON_TYPE.getMaterial(),
+                WEAPON_TYPE.getWeaponNameColored(),
+                meleeDamage,
+                baseShootCooldown,
+                abilityDuration,
+                abilityRecharge);
+        super.player = fighter.getPlayer();
+        super.weaponAbility = new WeaponAbility(fighter, this);
+        super.fighter = fighter;
+        this.player = this.fighter.getPlayer();
     }
 
     @Override
     public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        super.trackWeaponDamage(victim);
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     @Override
     public void doRightClick(PlayerInteractEvent e) {
-        if(!super.checkAndSetMainCooldown()){
+        if(!super.checkAndSetMainCooldown(baseShootCooldown, abilityOnShootCooldown)){
             return;
         }
         this.shootSnowballs();
@@ -41,7 +71,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
 
     @Override
     public void doDrop(PlayerDropItemEvent e) {
-        if(!super.checkAndSetSpecialCooldown()){
+        if(!super.checkAndSetSpecialCooldown(abilityDuration, abilityRecharge)){
             return;
         }
         // instant reload shotgun
@@ -57,22 +87,22 @@ public class W2_ShottyShotgun extends WeaponHolder {
 
     @Override
     public void doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
-        super.trackWeaponDamage(victim);
         if (damagingEntity.getFireTicks() > 0) {
             victim.setFireTicks(50);
-            e.setDamage(statBundle.getSpecialProjectileDamage());
+            e.setDamage(abilityOnBulletDamage);
         }else{
-            e.setDamage(statBundle.getBaseProjectileDamage());
+            e.setDamage(baseBulletDamage);
         }
         e.getDamager().remove();
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     private void doShotgunRecoil() {
         Vector currentDirection = player.getLocation().getDirection().normalize();
-        if(weaponAbility.isAbilityActive()){
-            currentDirection = currentDirection.multiply(new Vector(statBundle.getBasePower1(), statBundle.getBasePower1(), statBundle.getBasePower1()));
+        if(abilityOnRecoilPower >= 0 && weaponAbility.isAbilityActive()){
+            currentDirection = currentDirection.multiply(new Vector(baseRecoilPower, baseRecoilPower, baseRecoilPower));
         }else{
-            currentDirection = currentDirection.multiply(new Vector(statBundle.getSpecialPower1(), statBundle.getSpecialPower1(), statBundle.getSpecialPower1()));
+            currentDirection = currentDirection.multiply(new Vector(abilityOnRecoilPower, abilityOnRecoilPower, abilityOnRecoilPower));
         }
         player.setVelocity(currentDirection);
     }
@@ -80,7 +110,11 @@ public class W2_ShottyShotgun extends WeaponHolder {
     public void shootSnowballs() {
         player.playSound(player.getLocation(), Sound.ENTITY_ZOMBIE_BREAK_WOODEN_DOOR, 8, 1);
         ArrayList<Snowball> snowBalls = new ArrayList<Snowball>();
-        for (int i = 0; i < 6; i++){
+        int numBullets = (int) baseNumBullets;
+        if(weaponAbility.isAbilityActive()){
+            numBullets = (int) Math.max(baseNumBullets, abilityOnNumBullets);
+        }
+        for (int i = 0; i < numBullets; i++){
             snowBalls.add(player.launchProjectile(Snowball.class));
             Random random = new Random();
             snowBalls.get(i).setVelocity(snowBalls.get(i).getVelocity().add(new Vector(random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25))));

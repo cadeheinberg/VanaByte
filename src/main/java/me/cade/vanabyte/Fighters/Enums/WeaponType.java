@@ -48,10 +48,10 @@ public enum WeaponType {
                             "a_dur", //[0]
                             "a_rech", //[1]
                             "axe_melee", //[2]
-                            "leap_power", //[3]
-                            "ability_leap_power", //[4]
-                            "leap_cooldown", //[5]
-                            "ability_leap_cooldown", //[6]
+                            "leap_cooldown", //[3]
+                            "ability_leap_cooldown", //[4]
+                            "leap_power", //[5]
+                            "ability_leap_power", //[6]
                             "ability_speed_level", //[7]
                             "ability_jump_level", //[8]
                             "ability_haste_level" //[9]
@@ -83,15 +83,15 @@ public enum WeaponType {
                             "a_dur", //[0]
                             "a_rech", //[1]
                             "shovel_melee", //[2]
-                            "recoil_power", //[3]
-                            "ability_on_recoil_power", //[4]
-                            "shoot_cooldown", //[5]
-                            "ability_on_shoot_cooldown", //[6]
+                            "shoot_cooldown", //[3]
+                            "ability_on_shoot_cooldown", //[4]
+                            "recoil_power", //[5]
+                            "ability_on_recoil_power", //[6]
                             "bullet_damage", //[7]
                             "ability_on_bullet_damage", //[8]
                             "num_bullets", //[9]
                             "ability_on_num_bullets", //[10]
-                            "set_blocks_on_fire" //[11]
+                            "ability_on_set_blocks_on_fire" //[11]
                     },
                     new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
                     new Double[][]{
@@ -124,8 +124,8 @@ public enum WeaponType {
                             "bow_melee", //[2]
                             "arrow_damage", //[3]
                             "ability_on_arrow_damage", //[4]
-                            "num_arrows_barrage", //[5]
-                            "ability_on_arrow_hit_poison_potion" //[6]
+                            "ability_on_num_arrows_barrage", //[5]
+                            "ability_on_arrow_poison" //[6]
                     },
                     new Integer[]{1, 1, 1, 1, 1, 1, 1},
                     new Double[][]{
@@ -167,8 +167,15 @@ public enum WeaponType {
             Material.ARROW,
             null,
             null,
-            null
-    ),
+            new StatBundle(
+                    new String[]{
+                            "melee_damage", //[0]
+                    },
+                    new Integer[]{1},
+                    new Double[][]{
+                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                    }
+            )),
     IGORS_TRIDENT("Igors Trident",
             W4_IgorsTrident.class,
             ChatColor.RED,
@@ -185,11 +192,9 @@ public enum WeaponType {
                             "trident_projectile_damage", //[3]
                             "ability_on_trident_projectile_damage", //[4]
                             "trident_explosion_damage", //[5]
-                            "ability_on_trident_explosion_damage", //[6]
-                            "trident_explosion_power", //[7]
-                            "ability_on_trident_explosion_power" //[8]
+                            "trident_explosion_power", //[6]
                     },
-                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Integer[]{1, 1, 1, 1, 1, 1, 1},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
@@ -197,9 +202,7 @@ public enum WeaponType {
                             {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
                             {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
                             {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[7]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}  //[8]
+                            {8.0, 7.0, -1.0, -1.0, -1.0} //[6]
                     }
             )),
     SUMO_STICK("Sumo Stick",
@@ -216,11 +219,13 @@ public enum WeaponType {
                             "a_rech", //[1]
                             "stick_melee", //[2]
                             "stick_knockback_power", //[3]
-                            "throw_power", //[4]
-                            "ability_on_throw_power", //[5]
-                            "summo_slam_explosion_damage", //[6]
-                            "summo_slam_explosion_power", //[7]
-                            "summo_jump_height" //[8]
+                            "pickup_cooldown", //[4]
+                            "ability_on_pickup_cooldown", //[5]
+                            "throw_power", //[6]
+                            "ability_on_throw_power", //[7]
+                            "sumo_slam_explosion_damage", //[8]
+                            "sumo_slam_explosion_power", //[9]
+                            "sumo_jump_power" //[10]
                     },
                     new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1},
                     new Double[][]{
@@ -248,8 +253,8 @@ public enum WeaponType {
                             "a_dur", //[0]
                             "a_rech", //[1]
                             "sword_melee", //[2]
-                            "sword_melee_health_steal", //[3]
-                            "blast_shield_explosive_immune" //[4]
+                            "ability_on_melee_health_steal", //[3]
+                            "ability_on_explosive_immune" //[4]
                     },
                     new Integer[]{1, 1, 1, 1, 1},
                     new Double[][]{

@@ -28,34 +28,9 @@ public abstract class WeaponHolder {
     protected Player player = null;
     protected Weapon weapon = null;
     protected WeaponAbility weaponAbility = null;
-    protected StatBundle statBundle;
 
-    public WeaponHolder(Fighter fighter, WeaponType weaponType){
+    public WeaponHolder(WeaponType weaponType){
         this.weaponType = weaponType;
-        this.player = fighter.getPlayer();
-        this.weaponAbility = new WeaponAbility(fighter, this);
-        this.fighter = fighter;
-        this.player = this.fighter.getPlayer();
-        this.statBundle = weaponType.getStatBundle();
-        this.weapon = new Weapon(this.weaponType, this.weaponType.getMaterial(), this.weaponType.getWeaponNameColored(),
-                this.statBundle.,
-                this.statBundle.getBaseProjectileDamage(),
-                this.statBundle.getBaseExplosionDamage(),
-                this.statBundle.getBaseMainCoolDown(),
-                this.statBundle.getAbilityDuration(),
-                this.statBundle.getAbilityRecharge());
-        if(weaponType.getEnchantments() != null && weaponType.getEnchantmentPowers() != null &&
-                weaponType.getEnchantments().length == weaponType.getEnchantmentPowers().length){
-            for(int i = 0; i < weaponType.getEnchantments().length; i++){
-                this.weapon.applyWeaponUnsafeEnchantment(weaponType.getEnchantments()[i], weaponType.getEnchantmentPowers()[i]);
-            }
-        }
-        //MODIFY THE STAT BUNDLE TO DO UPGRADES
-        //        for(Quest quest : fighter.getQuestManager().getQuestsOfWeaponType(weaponType)){
-//            if(quest.getUpgradeType() == UpgradeType.EXPLOSION_IMMUNE_WHEN_SPECIAL_ACTIVATED){
-//                this.explosionImmuneUpgrade = quest.isGoalMet();
-//            }
-//        }
     }
 
     @ForOverride
@@ -74,27 +49,17 @@ public abstract class WeaponHolder {
     public void doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {}
     @ForOverride
     public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {}
-
     @ForOverride
-    public boolean doBowShootEvent(EntityShootBowEvent e){
-        checkAndSetMainCooldown();
-        EntityMetadata.addWeaponTypeToEntity(e.getProjectile(), this.weapon.getWeaponType(), this.player.getUniqueId());
-        return true;
-    }
-
+    public void doBowShootEvent(EntityShootBowEvent e) {}
     @ForOverride
-    public boolean doProjectileLaunch(ProjectileLaunchEvent e) {
-        checkAndSetMainCooldown();
-        EntityMetadata.addWeaponTypeToEntity(e.getEntity(), this.weapon.getWeaponType(), this.player.getUniqueId());
-        return true;
-    }
+    public void doProjectileLaunch(ProjectileLaunchEvent e) {}
     @ForOverride
     public void doDismount(EntityDismountEvent e) {}
     @ForOverride
     public void doExplosion(ExplosionPrimeEvent e, Player killer) {}
 
-    public void trackWeaponDamage(LivingEntity victim){
-        VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(this.player, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.PLAYER_ATTACK).build(), 1), this.weaponType));
+    public void trackWeaponDamage(LivingEntity victim, double damageInflicted){
+        VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(new EntityDamageByEntityEvent(this.player, victim, EntityDamageEvent.DamageCause.ENTITY_ATTACK, DamageSource.builder(DamageType.PLAYER_ATTACK).build(), damageInflicted), this.weaponType));
     }
 
     public boolean checkAndSetMainCooldown(int baseCooldown, int abilityOnCooldown){
@@ -129,10 +94,10 @@ public abstract class WeaponHolder {
         return true;
     }
 
-    public void createAnExplosion(Player shooter, Location location, double damage, double power) {
+    public void createAnExplosion(Location location, double damage, double power) {
         //sends an EntityDamageByEntityEvent aswelll that we cancel
         //we can cancel if Cause=Explosion and damager=Player
-        location.getWorld().createExplosion(location, 4F, false, true, shooter);
+        location.getWorld().createExplosion(location, 4F, false, true, player);
         //just create your own explosion to break blocks cause spigots is bad
         location.getWorld().spawnParticle(Particle.EXPLOSION, location.getX(), location.getY() + 2,
                 location.getZ(), 2);
@@ -165,11 +130,19 @@ public abstract class WeaponHolder {
             Vector currentDirection = upShoot.toVector().subtract(location.toVector());
             currentDirection = currentDirection.multiply(new Vector(power, power, power));
             ent.setVelocity(currentDirection);
-            if (((LivingEntity) ent) != shooter) {
-                this.trackWeaponDamage((LivingEntity) ent);
+            if (((LivingEntity) ent) != player) {
                 ((LivingEntity) ent).damage(damage);
+                this.trackWeaponDamage((LivingEntity) ent, damage);
             }
         }
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public WeaponAbility getWeaponAbility() {
+        return weaponAbility;
     }
 
     public WeaponType getWeaponType() {

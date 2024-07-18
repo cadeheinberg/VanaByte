@@ -16,22 +16,36 @@ import java.util.ArrayList;
 
 public class W0_AirbenderSword extends WeaponHolder {
 
-    private final Player player;
+    private final static WeaponType WEAPON_TYPE = WeaponType.AIRBENDER_SWORD;
 
     private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
     private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
+
+    private final double meleeDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
+
     private final double gustEnemyPower = fighter.getDoubleFromWeaponType(weaponType, 3);
     private final double gustEnemyDamage = fighter.getDoubleFromWeaponType(weaponType, 4);
     private final double gustSelfPower = fighter.getDoubleFromWeaponType(weaponType, 5);
 
-    public W0_AirbenderSword(Fighter fighter, WeaponType weaponType) {
-        super(fighter, weaponType);
-        this.player = fighter.getPlayer();
+    public W0_AirbenderSword(Fighter fighter) {
+        super(WEAPON_TYPE);
+        super.weapon = new Weapon(
+                WEAPON_TYPE,
+                WEAPON_TYPE.getMaterial(),
+                WEAPON_TYPE.getWeaponNameColored(),
+                meleeDamage,
+                -1,
+                abilityDuration,
+                abilityDuration);
+        super.player = fighter.getPlayer();
+        super.weaponAbility = new WeaponAbility(fighter, this);
+        super.fighter = fighter;
+        this.player = this.fighter.getPlayer();
     }
 
     @Override
     public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        super.trackWeaponDamage(victim);
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     @Override
@@ -40,15 +54,18 @@ public class W0_AirbenderSword extends WeaponHolder {
             return;
         }
         this.gustOfWindSpell();
-        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, abilityDuration, 1));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityRecharge, 1));
+//        player.addPotionEffect(new PotionEffect(PotionEffectType.STRENGTH, abilityDuration, 1));
+//        player.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, abilityRecharge, 1));
         player.playSound(player.getLocation(), Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 8, 1);
     }
 
     private void gustOfWindSpell() {
         Location playerLocation = super.player.getLocation();
-        if (playerLocation.getPitch() > 49) {
-            launchSelf();
+        if (gustSelfPower >= 0 && playerLocation.getPitch() > 49) {
+            player.spawnParticle(Particle.DUST, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
+            Vector currentDirection = player.getLocation().getDirection().normalize();
+            currentDirection = currentDirection.multiply(new Vector(gustSelfPower, gustSelfPower, gustSelfPower));
+            player.setVelocity(currentDirection);
             return;
         }
         Location origin = super.player.getEyeLocation();
@@ -79,7 +96,7 @@ public class W0_AirbenderSword extends WeaponHolder {
                         return;
                     }
                 }
-                super.trackWeaponDamage((LivingEntity) entity);
+                super.trackWeaponDamage((LivingEntity) entity, gustEnemyDamage);
                 ((LivingEntity) entity).damage(gustEnemyDamage);
                 Vector currentDirection = playerLocation.getDirection().normalize();
                 currentDirection = currentDirection.multiply(new Vector(power, power, power));
@@ -88,13 +105,6 @@ public class W0_AirbenderSword extends WeaponHolder {
             }
             origin = origin.subtract(dX * j, dY * j, dZ * j);
         }
-    }
-
-    private void launchSelf() {
-        player.spawnParticle(Particle.DUST, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
-        Vector currentDirection = player.getLocation().getDirection().normalize();
-        currentDirection = currentDirection.multiply(new Vector(gustSelfPower, gustSelfPower, gustSelfPower));
-        player.setVelocity(currentDirection);
     }
 
 }

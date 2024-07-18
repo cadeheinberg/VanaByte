@@ -4,142 +4,108 @@ import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import org.bukkit.*;
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class W3_GoblinBow extends WeaponHolder {
 
-    private final Player player;
+    private final static WeaponType WEAPON_TYPE = WeaponType.GOBLIN_BOW;
+    private final int BOW_SPAM_COOLDOWN_TICKS = 3;
 
-    public W3_GoblinBow(Fighter fighter, WeaponType weaponType) {
-        super(fighter, weaponType);
-        this.player = fighter.getPlayer();
+    private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
+    private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
+
+    private final double meleeDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
+
+    private final double baseArrowDamage = fighter.getDoubleFromWeaponType(weaponType, 3);
+    private final double abilityOnArrowDamage = fighter.getDoubleFromWeaponType(weaponType, 4);
+
+    private final double abilityOnNumArrowsBarrage = fighter.getDoubleFromWeaponType(weaponType, 5);
+
+    private final double abilityOnArrowPoison = fighter.getDoubleFromWeaponType(weaponType, 6);
+
+    public W3_GoblinBow(Fighter fighter) {
+        super(WEAPON_TYPE);
+        super.weapon = new Weapon(
+                WEAPON_TYPE,
+                WEAPON_TYPE.getMaterial(),
+                WEAPON_TYPE.getWeaponNameColored(),
+                meleeDamage,
+                BOW_SPAM_COOLDOWN_TICKS,
+                abilityDuration,
+                abilityRecharge);
+        super.player = fighter.getPlayer();
+        super.weaponAbility = new WeaponAbility(fighter, this);
+        super.fighter = fighter;
+        this.player = this.fighter.getPlayer();
     }
 
     @Override
-    public boolean doRightClick(PlayerInteractEvent e) {
-        if(super.doRightClick(e)){
-            return true;
-        }
-        return false;
+    public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     @Override
-    public boolean doDrop(PlayerDropItemEvent e) {
-        if (super.doDrop(e)){
-            this.activateSpecial();
-            return true;
+    public void doDrop(PlayerDropItemEvent e) {
+        if(!super.checkAndSetSpecialCooldown(abilityDuration, abilityRecharge)){
+            return;
         }
-        return true;
+        player.playSound(player.getLocation(), Sound.EVENT_RAID_HORN, 8, 1);
     }
 
     @Override
-    public boolean activateSpecial() {
-        if(super.activateSpecial()){
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BIT, 8, 1);
-            return true;
-        }
-        return false;
-    }
-    @Override
-    public boolean deActivateSpecial() {
-        if(super.deActivateSpecial()){
-            return true;
-        }
-        return false;
+    public void doProjectileHitBlock(ProjectileHitEvent e) {
+        e.getEntity().remove();
     }
 
     @Override
-    public boolean doProjectileHitBlock(ProjectileHitEvent e) {
-        if (super.doProjectileHitBlock(e)) {
-            e.getEntity().remove();
-            return true;
+    public void doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
+        if (victim instanceof Player) {
+            Fighter.get((Player) victim).fighterDismountParachute();
         }
-        return false;
+        if (damagingEntity.getFireTicks() > 0) {
+            e.setDamage(baseArrowDamage);
+            victim.setFireTicks(50);
+        } else {
+            e.setDamage(abilityOnArrowDamage);
+        }
+        e.getDamager().remove();
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     @Override
-    public boolean doProjectileHitEntity(EntityDamageByEntityEvent e, Player shooter, LivingEntity victim, Entity damagingEntity) {
-        if(super.doProjectileHitEntity(e, shooter, victim, damagingEntity)){
-            if (victim instanceof Player) {
-                Fighter.get((Player) victim).fighterDismountParachute();
-            }
-            if (damagingEntity.getFireTicks() > 0) {
-                victim.setFireTicks(50);
-            }
-            e.setDamage(super.getProjectileDamage());
-            e.getDamager().remove();
-            return true;
+    public void doBowShootEvent(EntityShootBowEvent e){
+        if(!checkAndSetMainCooldown(BOW_SPAM_COOLDOWN_TICKS, -1)){
+            e.setCancelled(true);
+            return;
         }
-        return true;
+        Arrow arrow = (Arrow) e.getProjectile();
+        double force = e.getForce();
+        EntityMetadata.addWeaponTypeToEntity(arrow, this.weapon.getWeaponType(), this.player.getUniqueId());
+        if (force > 0.75 && weaponAbility.isAbilityActive()) {
+            doArrowBarrage(arrow, force);
+        }
     }
 
-    @Override
-    public boolean doBowShootEvent(EntityShootBowEvent e){
-        if(super.doBowShootEvent(e)){
-            this.doArrowShoot((Arrow) e.getProjectile(), e.getForce());
-            return true;
-        }
-        //cooldown
-        e.setCancelled(true);
-        return false;
-    }
-
-    public boolean doArrowShoot(Arrow arrow, double force) {
-        if (super.getWeaponAbility().isAbilityActive()) {
-            arrow.setFireTicks(1000);
-            doArrowBarrage(this.player, arrow, force);
-        }
-        return true;
-    }
-
-    public void doArrowBarrage(Player player, Arrow arrow, double force) {
-        if (force > 0.75) {
-            Arrow arrow1 = player.launchProjectile(Arrow.class);
-            arrow1.setVelocity(arrow.getVelocity().add(new Vector(0, 0.25, 0)));
-            arrow1.setFireTicks(2000);
-            arrow1.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow1, super.getWeaponType(), player.getUniqueId());
-
-            Arrow arrow2 = player.launchProjectile(Arrow.class);
-            arrow2.setVelocity(arrow.getVelocity().add(new Vector(0, -0.25, 0)));
-            arrow2.setFireTicks(2000);
-            arrow2.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow2, super.getWeaponType(), player.getUniqueId());
-
-            Arrow arrow3 = player.launchProjectile(Arrow.class);
-            arrow3.setVelocity(arrow.getVelocity().add(new Vector(0.25, 0, 0)));
-            arrow3.setFireTicks(2000);
-            arrow3.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow3, super.getWeaponType(), player.getUniqueId());
-
-            Arrow arrow4 = player.launchProjectile(Arrow.class);
-            arrow4.setVelocity(arrow.getVelocity().add(new Vector(-0.25, 0, 0)));
-            arrow4.setFireTicks(2000);
-            arrow4.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow4, super.getWeaponType(), player.getUniqueId());
-
-            Arrow arrow5 = player.launchProjectile(Arrow.class);
-            arrow5.setVelocity(arrow.getVelocity().add(new Vector(0, 0, 0.25)));
-            arrow5.setFireTicks(2000);
-            arrow5.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow5, super.getWeaponType(), player.getUniqueId());
-
-            Arrow arrow6 = player.launchProjectile(Arrow.class);
-            arrow6.setVelocity(arrow.getVelocity().add(new Vector(0, 0, -0.25)));
-            arrow6.setFireTicks(2000);
-            arrow6.setShooter(player);
-            EntityMetadata.addWeaponTypeToEntity(arrow6, super.getWeaponType(), player.getUniqueId());
+    public void doArrowBarrage(Arrow arrow, double force) {
+        arrow.setFireTicks(1000);
+        player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_LAUNCH, 8, 1);
+        ArrayList<Arrow> arrows = new ArrayList<Arrow>();
+        int numBonusArrows = (int) abilityOnNumArrowsBarrage;
+        for (int i = 0; i < numBonusArrows; i++){
+            arrows.add(player.launchProjectile(Arrow.class));
+            Random random = new Random();
+            arrows.get(i).setVelocity(arrows.get(i).getVelocity().add(new Vector(random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25))));
+            EntityMetadata.addWeaponTypeToEntity(arrows.get(i), weaponType, player.getUniqueId());
+            arrows.get(i).setShooter(player);
+            arrows.get(i).setFireTicks(1000);
         }
     }
 }

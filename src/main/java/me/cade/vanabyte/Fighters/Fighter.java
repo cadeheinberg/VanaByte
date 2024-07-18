@@ -8,6 +8,8 @@ import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 
 import java.util.HashMap;
 import java.util.UUID;
@@ -183,6 +185,12 @@ public class Fighter {
 	public void decCakes(int inc) {
 		this.cakes = this.cakes - inc;
 		fighterScoreBoardManager.updateCookies();
+	}
+
+	public void addPotionIfStrengthIsNonNegative(PotionEffectType potionEffect, int durationTicks, double strength){
+		if((int) strength >= 0){
+			player.addPotionEffect(new PotionEffect(potionEffect, durationTicks, (int) strength));
+		}
 	}
 
 	public int getKitID() {return kitID;};

@@ -14,18 +14,47 @@ import org.bukkit.util.Vector;
 
 public class W1_BeserkerAxe extends WeaponHolder {
 
-    public W1_BeserkerAxe(Fighter fighter, WeaponType weaponType) {
-        super(fighter, weaponType);
+    private final static WeaponType WEAPON_TYPE = WeaponType.BESERKER_AXE;
+
+    private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
+    private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
+
+    private final double meleeDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
+
+    private final int baseLeapCooldown = fighter.getTickFromWeaponType(weaponType, 3);
+    private final int abilityOnLeapCooldown = fighter.getTickFromWeaponType(weaponType, 4);
+
+    private final double baseLeapPower = fighter.getDoubleFromWeaponType(weaponType, 5);
+    private final double abilityOnLeapPower = fighter.getDoubleFromWeaponType(weaponType, 6);
+
+    private final double abilityOnSpeedLevel = fighter.getDoubleFromWeaponType(weaponType, 7);
+    private final double abilityOnJumpLevel = fighter.getDoubleFromWeaponType(weaponType, 8);
+    private final double abilityOnHasteLevel = fighter.getDoubleFromWeaponType(weaponType, 9);
+
+    public W1_BeserkerAxe(Fighter fighter) {
+        super(WEAPON_TYPE);
+        super.weapon = new Weapon(
+                WEAPON_TYPE,
+                WEAPON_TYPE.getMaterial(),
+                WEAPON_TYPE.getWeaponNameColored(),
+                meleeDamage,
+                baseLeapCooldown,
+                abilityDuration,
+                abilityRecharge);
+        super.player = fighter.getPlayer();
+        super.weaponAbility = new WeaponAbility(fighter, this);
+        super.fighter = fighter;
+        this.player = this.fighter.getPlayer();
     }
 
     @Override
     public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        super.trackWeaponDamage(victim);
+        super.trackWeaponDamage(victim, e.getFinalDamage());
     }
 
     @Override
     public void doRightClick(PlayerInteractEvent e) {
-        if(!super.checkAndSetMainCooldown()){
+        if(!super.checkAndSetMainCooldown(baseLeapCooldown, abilityOnLeapCooldown)){
             return;
         }
         this.doBoosterJump();
@@ -33,22 +62,22 @@ public class W1_BeserkerAxe extends WeaponHolder {
 
     @Override
     public void doDrop(PlayerDropItemEvent e) {
-        if(!super.checkAndSetSpecialCooldown()){
+        if(!super.checkAndSetSpecialCooldown(abilityDuration, abilityRecharge)){
             return;
         }
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SPEED, statBundle.getAbilityDuration(), 0));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.HASTE, statBundle.getAbilityDuration(), 3));
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, statBundle.getAbilityDuration(), 0));
+        fighter.addPotionIfStrengthIsNonNegative(PotionEffectType.SPEED, abilityDuration, abilityOnSpeedLevel);
+        fighter.addPotionIfStrengthIsNonNegative(PotionEffectType.HASTE, abilityDuration, abilityOnHasteLevel);
+        fighter.addPotionIfStrengthIsNonNegative(PotionEffectType.JUMP_BOOST, abilityDuration, abilityOnJumpLevel);
         player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SCREAM, 8, 1);
     }
 
     private void doBoosterJump() {
         player.playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, 8, 1);
         Vector currentDirection = player.getLocation().getDirection().normalize();
-        if(weaponAbility.isAbilityActive()){
-            currentDirection = currentDirection.multiply(new Vector(statBundle.getBasePower1(), statBundle.getBasePower1(), statBundle.getBasePower1()));
+        if(abilityOnLeapPower >= 0 && weaponAbility.isAbilityActive()){
+            currentDirection = currentDirection.multiply(new Vector(abilityOnLeapPower, abilityOnLeapPower, abilityOnLeapPower));
         }else{
-            currentDirection = currentDirection.multiply(new Vector(statBundle.getSpecialPower1(), statBundle.getSpecialPower1(), statBundle.getSpecialPower1()));
+            currentDirection = currentDirection.multiply(new Vector(baseLeapPower, baseLeapPower, baseLeapPower));
         }
         player.setVelocity(currentDirection);
     }
