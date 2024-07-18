@@ -1,5 +1,6 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -10,6 +11,53 @@ public class FighterMYSQLManager {
     private Player player = null;
     private Fighter fighter = null;
     private final int[] unlockedKits = new int[7];
+
+    //when giving a weapon say beserker axe, use its kit ID to index FIGHTER_STATS[KIT_ID][Y] where Y
+    //is the specific stat you need from the BLUEPRINT. Here we only store the highest unlocked stat in a vector
+
+    //FIGHTER_UNLOCKS will be incrememnted upon purchases, and stored in the MYSQL database, probably store
+    //a single array per kit instead of entire [][] thing. in case you make changes to a kit
+    //it will probably be easier to fix players using old stat tables. man this is alot of work.
+    private Double[][] FIGHTER_STATS = new Double[WeaponType.values().length - 1][];
+    private Integer[][] FIGHTER_UNLOCKS = new Integer[WeaponType.values().length - 1][];
+
+    private Double[] buildStatTable(int i, Double[][] STATS_FROM_BLUEPRINT, Integer[] UNLOCKED_FROM_BLUEPRINT){
+        //Integer[X] = Y means that upgrade Double[X][Y] has been unlocked. First level of each unlocked here.
+        //Integer[X] = -1 means that this skill has not been unlocked at all
+        Double[] outputStats = new Double[UNLOCKED_FROM_BLUEPRINT.length];
+        Integer[] outputUnlocks = new Integer[UNLOCKED_FROM_BLUEPRINT.length];
+        for(int X = 0; X < UNLOCKED_FROM_BLUEPRINT.length; X++){
+            if(UNLOCKED_FROM_BLUEPRINT[X] <= 0){
+                //skill has not been unlocked at all
+                outputStats[X] = -1.0;
+            }else{
+                int Y = UNLOCKED_FROM_BLUEPRINT[X];
+                if(STATS_FROM_BLUEPRINT[X][Y] <= 0){
+                    //somehow unlocked an invalid stat, just use base and report issue
+                    outputStats[X] = STATS_FROM_BLUEPRINT[X][0];
+                    Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "CADE1: FighterMYSQLManager.java");
+                }else{
+                    outputStats[X] = STATS_FROM_BLUEPRINT[X][Y];
+                }
+            }
+        }
+        FIGHTER_STATS[i] = outputStats;
+        FIGHTER_UNLOCKS[i] = UNLOCKED_FROM_BLUEPRINT;
+        return outputStats;
+    }
+    //fill stats to use for kits and weapons later
+    private void statsDoerThing(){
+        //if player is not in the mysql table
+        //build "stats" using WeaponType blueprint
+        for(int i = 0; i < FIGHTER_STATS.length; i++){
+            buildStatTable(i, WeaponType.values()[i].getStats(), WeaponType.values()[i].getUnlocked());
+        }
+
+
+        //if player is in the mysql
+        //check if the WeaponType stats structure matches whats stored in mysql
+        //if not, the mysql will need to be restructured somehow
+    }
 
     protected FighterMYSQLManager(Player player, Fighter fighter){
         this.player = player;
