@@ -29,8 +29,11 @@ public abstract class WeaponHolder {
     protected Weapon weapon = null;
     protected WeaponAbility weaponAbility = null;
 
-    public WeaponHolder(WeaponType weaponType){
+    public WeaponHolder(WeaponType weaponType, Fighter fighter){
         this.weaponType = weaponType;
+        this.fighter = fighter;
+        this.player = fighter.getPlayer();
+        this.weaponAbility = new WeaponAbility(fighter, this);
     }
 
     @ForOverride

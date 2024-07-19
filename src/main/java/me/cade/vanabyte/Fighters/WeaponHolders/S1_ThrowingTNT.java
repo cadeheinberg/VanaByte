@@ -23,7 +23,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 	private final double explosionPower = fighter.getDoubleFromWeaponType(weaponType, 3);
 
 	public S1_ThrowingTNT(Fighter fighter) {
-		super(WEAPON_TYPE);
+		super(WEAPON_TYPE, fighter);
 		super.weapon = new Weapon(
 				WEAPON_TYPE,
 				WEAPON_TYPE.getMaterial(),
@@ -32,10 +32,6 @@ public class S1_ThrowingTNT extends WeaponHolder {
 				baseCooldown,
 				-1,
 				-1);
-		super.player = fighter.getPlayer();
-		super.weaponAbility = new WeaponAbility(fighter, this);
-		super.fighter = fighter;
-		this.player = this.fighter.getPlayer();
 	}
 
 	@Override

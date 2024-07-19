@@ -3,6 +3,7 @@ package me.cade.vanabyte.Fighters.WeaponHolders;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -31,7 +32,7 @@ public class W4_IgorsTrident extends WeaponHolder {
     private final double baseTridentExplosionPower = fighter.getDoubleFromWeaponType(weaponType, 6);
 
     public W4_IgorsTrident(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -40,10 +41,6 @@ public class W4_IgorsTrident extends WeaponHolder {
                 TRIDENT_SPAM_COOLDOWN_TICKS,
                 abilityDuration,
                 abilityRecharge);
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
     }
     @Override
     public void doDrop(PlayerDropItemEvent e) {

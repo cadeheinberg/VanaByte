@@ -3,6 +3,7 @@ package me.cade.vanabyte.Fighters.WeaponHolders;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -40,7 +41,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
     private final double abilityOnSetBlocksOnFire = fighter.getDoubleFromWeaponType(weaponType, 11);
 
     public W2_ShottyShotgun(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -49,10 +50,6 @@ public class W2_ShottyShotgun extends WeaponHolder {
                 baseShootCooldown,
                 abilityDuration,
                 abilityRecharge);
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
     }
 
     @Override
@@ -100,9 +97,9 @@ public class W2_ShottyShotgun extends WeaponHolder {
     private void doShotgunRecoil() {
         Vector currentDirection = player.getLocation().getDirection().normalize();
         if(abilityOnRecoilPower >= 0 && weaponAbility.isAbilityActive()){
-            currentDirection = currentDirection.multiply(new Vector(baseRecoilPower, baseRecoilPower, baseRecoilPower));
+            currentDirection = currentDirection.multiply(new Vector(-baseRecoilPower, -baseRecoilPower, -baseRecoilPower));
         }else{
-            currentDirection = currentDirection.multiply(new Vector(abilityOnRecoilPower, abilityOnRecoilPower, abilityOnRecoilPower));
+            currentDirection = currentDirection.multiply(new Vector(-abilityOnRecoilPower, -abilityOnRecoilPower, -abilityOnRecoilPower));
         }
         player.setVelocity(currentDirection);
     }

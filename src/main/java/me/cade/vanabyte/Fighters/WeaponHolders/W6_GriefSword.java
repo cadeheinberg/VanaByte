@@ -14,7 +14,7 @@ import org.bukkit.potion.PotionEffectType;
 
 public class W6_GriefSword extends WeaponHolder {
 
-    private final static WeaponType WEAPON_TYPE = WeaponType.PARACHUTE;
+    private final static WeaponType WEAPON_TYPE = WeaponType.GRIEF_SWORD;
 
     private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
     private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
@@ -26,7 +26,7 @@ public class W6_GriefSword extends WeaponHolder {
     private final int abilityOnBlastShield = fighter.getTickFromWeaponType(weaponType, 4);
 
     public W6_GriefSword(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -35,10 +35,6 @@ public class W6_GriefSword extends WeaponHolder {
                 -1,
                 abilityDuration,
                 abilityRecharge);
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
     }
 
     @Override

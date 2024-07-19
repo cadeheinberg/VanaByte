@@ -33,6 +33,9 @@ public class WeaponAbility {
     public void resetSpecialAbility(){
         this.abilityActive = false;
         this.abilityRecharged = true;
+        fighter.getFighterTaskManager().cancelCooldownTask();
+        fighter.getFighterTaskManager().cancelRechargeTask();
+        player.setCooldown(FighterKitManager.cooldownMaterial, 0);
     }
 
     public void startAbilityDuration(int durationTicks, int rechargeTicks) {

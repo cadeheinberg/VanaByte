@@ -26,13 +26,6 @@ public class NPCListener implements Listener {
 		if (e.getHand() == EquipmentSlot.OFF_HAND) {
 			return; // off hand packet, ignore.
 		}
-		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(e.getPlayer());
-		if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
-			WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(weaponType);
-			if(weaponHolder != null){
-				weaponHolder.doRightClickEntity(e);
-			}
-		}
 		if(SafeZone.safeZone(e.getRightClicked().getLocation())) {
 			if (e.getRightClicked().getType() == EntityType.ARMOR_STAND) {
 				handleKitSelection(e.getPlayer(), e.getRightClicked().getLocation().getBlockX());
@@ -42,6 +35,14 @@ public class NPCListener implements Listener {
 			}else if (e.getRightClicked().getType() == EntityType.PIGLIN) {
 				e.getPlayer().teleport(VanaByte.anarchyWorldSpawn);
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_WOLF_HOWL, 8, 1);
+			}
+		}else{
+			WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(e.getPlayer());
+			if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
+				WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(weaponType);
+				if(weaponHolder != null){
+					weaponHolder.doRightClickEntity(e);
+				}
 			}
 		}
 	}

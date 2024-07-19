@@ -239,11 +239,13 @@ public class Fighter {
 	}
 
 	public double getDoubleFromWeaponType(WeaponType weaponType, int index){
-		return fighterMYSQLManager.getFIGHTER_STATS()[weaponType.getWeaponID()][index];
+		double num = fighterMYSQLManager.getFIGHTER_STATS().get(weaponType)[index];
+		return num;
 	}
 
 	public int getTickFromWeaponType(WeaponType weaponType, int index){
-		return VanaByte.convertDoubleToTicks(fighterMYSQLManager.getFIGHTER_STATS()[weaponType.getWeaponID()][index]);
+		int num = VanaByte.convertDoubleToTicks(fighterMYSQLManager.getFIGHTER_STATS().get(weaponType)[index]);
+		return num;
 	}
 
 }

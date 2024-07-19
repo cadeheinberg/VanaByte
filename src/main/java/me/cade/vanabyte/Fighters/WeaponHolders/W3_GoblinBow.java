@@ -4,6 +4,7 @@ import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import org.bukkit.*;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -32,7 +33,7 @@ public class W3_GoblinBow extends WeaponHolder {
     private final double abilityOnArrowPoison = fighter.getDoubleFromWeaponType(weaponType, 6);
 
     public W3_GoblinBow(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -41,10 +42,7 @@ public class W3_GoblinBow extends WeaponHolder {
                 BOW_SPAM_COOLDOWN_TICKS,
                 abilityDuration,
                 abilityRecharge);
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
+        super.weapon.applyWeaponUnsafeEnchantment(Enchantment.INFINITY, 1);
     }
 
     @Override
@@ -88,7 +86,7 @@ public class W3_GoblinBow extends WeaponHolder {
         }
         Arrow arrow = (Arrow) e.getProjectile();
         double force = e.getForce();
-        EntityMetadata.addWeaponTypeToEntity(arrow, this.weapon.getWeaponType(), this.player.getUniqueId());
+        EntityMetadata.addWeaponTypeToEntity(arrow, WEAPON_TYPE, this.player.getUniqueId());
         if (force > 0.75 && weaponAbility.isAbilityActive()) {
             doArrowBarrage(arrow, force);
         }
@@ -103,7 +101,7 @@ public class W3_GoblinBow extends WeaponHolder {
             arrows.add(player.launchProjectile(Arrow.class));
             Random random = new Random();
             arrows.get(i).setVelocity(arrows.get(i).getVelocity().add(new Vector(random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25), random.nextDouble(-0.25, 0.25))));
-            EntityMetadata.addWeaponTypeToEntity(arrows.get(i), weaponType, player.getUniqueId());
+            EntityMetadata.addWeaponTypeToEntity(arrows.get(i), WEAPON_TYPE, player.getUniqueId());
             arrows.get(i).setShooter(player);
             arrows.get(i).setFireTicks(1000);
         }

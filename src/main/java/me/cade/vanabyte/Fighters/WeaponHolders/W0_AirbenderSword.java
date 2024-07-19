@@ -28,7 +28,7 @@ public class W0_AirbenderSword extends WeaponHolder {
     private final double gustSelfPower = fighter.getDoubleFromWeaponType(weaponType, 5);
 
     public W0_AirbenderSword(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -36,11 +36,7 @@ public class W0_AirbenderSword extends WeaponHolder {
                 meleeDamage,
                 -1,
                 abilityDuration,
-                abilityDuration);
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
+                abilityRecharge);
     }
 
     @Override
@@ -64,7 +60,7 @@ public class W0_AirbenderSword extends WeaponHolder {
         if (gustSelfPower >= 0 && playerLocation.getPitch() > 49) {
             player.spawnParticle(Particle.DUST, player.getLocation(), 100, 0.5, 0.5, 0.5, new Particle.DustOptions(Color.fromRGB(255, 255, 255), 1.0F));
             Vector currentDirection = player.getLocation().getDirection().normalize();
-            currentDirection = currentDirection.multiply(new Vector(gustSelfPower, gustSelfPower, gustSelfPower));
+            currentDirection = currentDirection.multiply(new Vector(-gustSelfPower, -gustSelfPower, -gustSelfPower));
             player.setVelocity(currentDirection);
             return;
         }

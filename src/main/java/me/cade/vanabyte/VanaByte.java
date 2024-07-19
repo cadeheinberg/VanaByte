@@ -1,5 +1,6 @@
 package me.cade.vanabyte;
 
+import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.PVP.DamageTracker.EntityDamageManager;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.PVP.EntityDamageListener;
@@ -229,6 +230,10 @@ public class VanaByte extends JavaPlugin {
 
 	public static int convertDoubleToTicks(double d){
 		return (int) Math.round(d * 20);
+	}
+
+	public static void sendConsoleError(String fileName, String message){
+		Bukkit.getConsoleSender().sendMessage(ChatColor.RED + fileName + ": " + ChatColor.WHITE + message);
 	}
 
 }

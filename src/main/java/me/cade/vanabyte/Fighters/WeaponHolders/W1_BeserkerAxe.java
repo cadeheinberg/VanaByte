@@ -32,7 +32,7 @@ public class W1_BeserkerAxe extends WeaponHolder {
     private final double abilityOnHasteLevel = fighter.getDoubleFromWeaponType(weaponType, 9);
 
     public W1_BeserkerAxe(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -41,10 +41,6 @@ public class W1_BeserkerAxe extends WeaponHolder {
                 baseLeapCooldown,
                 abilityDuration,
                 abilityRecharge);
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
     }
 
     @Override

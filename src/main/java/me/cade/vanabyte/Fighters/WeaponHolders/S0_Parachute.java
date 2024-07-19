@@ -23,7 +23,7 @@ public class S0_Parachute extends WeaponHolder {
 	private final double chickenSpeed = fighter.getDoubleFromWeaponType(weaponType, 2);
 
 	public S0_Parachute(Fighter fighter) {
-		super(WEAPON_TYPE);
+		super(WEAPON_TYPE, fighter);
 		super.weapon = new Weapon(
 				WEAPON_TYPE,
 				WEAPON_TYPE.getMaterial(),
@@ -32,10 +32,6 @@ public class S0_Parachute extends WeaponHolder {
 				baseCooldown,
 				-1,
 				-1);
-		super.player = fighter.getPlayer();
-		super.weaponAbility = new WeaponAbility(fighter, this);
-		super.fighter = fighter;
-		this.player = this.fighter.getPlayer();
 	}
 
 	@Override

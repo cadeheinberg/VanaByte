@@ -4,7 +4,9 @@ import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.WeaponHolders.*;
 import me.cade.vanabyte.Permissions.SafeZone;
+import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -51,7 +53,6 @@ public class KitListener implements Listener {
 				if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
 					weaponHolder.doLeftClick(e);
 				}else if (e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) {
-					e.getPlayer().sendMessage("oops");
 					weaponHolder.doRightClick(e);
 				}
 			}
@@ -102,8 +103,7 @@ public class KitListener implements Listener {
 		WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(e.getEntity());
 		if(weaponType == null ||
 				Fighter.get(pkiller) == null ||
-				Fighter.get(pkiller).getFighterKitManager() == null ||
-				e.getHitBlock() == null){
+				Fighter.get(pkiller).getFighterKitManager() == null){
 			return;
 		}
 		Fighter.get(pkiller).getFighterKitManager().getWeaponHolderWithType(weaponType).doProjectileHitBlock(e);
@@ -118,12 +118,8 @@ public class KitListener implements Listener {
 		if (!(e.getEntity().getShooter() instanceof Player)) {
 			return;
 		}
-		if(!(e.getEntity() instanceof Item)){
-			return;
-		}
 		Player shooter = (Player) e.getEntity().getShooter();
-		ItemStack itemStack = ((Item) e.getEntity()).getItemStack();
-		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(itemStack);
+		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(shooter);
 		if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
 			return;
 		}
@@ -131,7 +127,6 @@ public class KitListener implements Listener {
 		if(weaponHolder == null){
 			return;
 		}
-		((Player) e.getEntity().getShooter()).sendMessage("1: " + weaponType);
 		weaponHolder.doProjectileLaunch(e);
 	}
 
@@ -145,11 +140,7 @@ public class KitListener implements Listener {
 			return;
 		}
 		Player shooter = (Player) e.getEntity();
-		if(!(e.getBow() instanceof Item)){
-			return;
-		}
-		ItemStack itemStack = ((Item) e.getEntity()).getItemStack();
-		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(itemStack);
+		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(shooter);
 		if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
 			return;
 		}
@@ -157,7 +148,6 @@ public class KitListener implements Listener {
 		if(weaponHolder == null){
 			return;
 		}
-		((Player) e.getEntity()).sendMessage("2: " + weaponType);
 		weaponHolder.doBowShootEvent(e);
 	}
 	@EventHandler

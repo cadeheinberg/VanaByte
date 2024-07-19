@@ -18,7 +18,7 @@ import org.bukkit.util.Vector;
 
 public class W5_SumoStick extends WeaponHolder {
 
-    private final static WeaponType WEAPON_TYPE = WeaponType.PARACHUTE;
+    private final static WeaponType WEAPON_TYPE = WeaponType.SUMO_STICK;
 
     private final int abilityDuration = fighter.getTickFromWeaponType(weaponType, 0);
     private final int abilityRecharge = fighter.getTickFromWeaponType(weaponType, 1);
@@ -37,7 +37,7 @@ public class W5_SumoStick extends WeaponHolder {
     private final double sumoJumpPower = fighter.getDoubleFromWeaponType(weaponType, 10);
 
     public W5_SumoStick(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -49,17 +49,10 @@ public class W5_SumoStick extends WeaponHolder {
         if((int) knockBackLevel >= 0){
             weapon.applyWeaponUnsafeEnchantment(Enchantment.KNOCKBACK, (int) knockBackLevel);
         }
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
     }
 
     @Override
     public void doMeleeAttack(EntityDamageByEntityEvent e, Player killer, LivingEntity victim) {
-        if (player.getPassengers() == null) {
-            return;
-        }
         if (player.getPassengers().isEmpty()) {
             return;
         }
@@ -72,9 +65,6 @@ public class W5_SumoStick extends WeaponHolder {
 
     @Override
     public void doLeftClick(PlayerInteractEvent e){
-        if (player.getPassengers() == null) {
-            return;
-        }
         if (player.getPassengers().isEmpty()) {
             return;
         }
@@ -86,18 +76,20 @@ public class W5_SumoStick extends WeaponHolder {
         if (!super.checkAndSetMainCooldown(basePickUpCooldown, abilityOnPickUpCooldown)) {
             return;
         }
+        VanaByte.sendConsoleError("pickup", "0");
         if (e.getRightClicked() instanceof LivingEntity) {
-            if (player.getPassengers() == null) {
+            VanaByte.sendConsoleError("pickup", "1");
+            //if you have passengers you cant add more
+            if (!player.getPassengers().isEmpty()) {
                 return;
             }
-            if (player.getPassengers().isEmpty()) {
-                return;
-            }
+            VanaByte.sendConsoleError("pickup", "2");
             if (e.getRightClicked() instanceof Player) {
                 if (((Player) e.getRightClicked()).isSneaking()) {
                     return;
                 }
             }
+            VanaByte.sendConsoleError("pickup", "3");
             this.doPickUp((LivingEntity) e.getRightClicked());
         }
     }
@@ -153,7 +145,7 @@ public class W5_SumoStick extends WeaponHolder {
                     return;
                 }
                 if (player.isSneaking()) {
-                    launchPlayerDown(player, 1.5, fighter);
+                    launchPlayerDown(player, 5.0, fighter);
                 }
             }
         }.runTaskTimer(VanaByte.getInstance(), 0L, 1L).getTaskId());

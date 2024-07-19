@@ -28,7 +28,7 @@ public enum WeaponType {
                     new Integer[]{0, 0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
+                            {20.5, 18.0, -1.0, -1.0, -1.0}, //[1]
                             {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
                             {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
                             {6.0, 1.8, -1.0, -1.0, -1.0}, //[4]
@@ -56,14 +56,14 @@ public enum WeaponType {
                             "ability_jump_level", //[8]
                             "ability_haste_level" //[9]
                     },
-                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
                             {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
                             {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
                             {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
+                            {1.8, 8.0, -1.0, -1.0, -1.0}, //[5]
                             {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
                             {1.0, 2.0, -1.0, -1.0, -1.0}, //[7]
                             {1.0, 2.0, -1.0, -1.0, -1.0}, //[8]
@@ -93,19 +93,19 @@ public enum WeaponType {
                             "ability_on_num_bullets", //[10]
                             "ability_on_set_blocks_on_fire" //[11]
                     },
-                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
                             {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
                             {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
                             {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
+                            {1.2, 8.0, -1.0, -1.0, -1.0}, //[5]
+                            {1.4, 7.0, -1.0, -1.0, -1.0}, //[6]
                             {9.0, 8.0, -1.0, -1.0, -1.0}, //[7]
                             {8.0, 7.0, -1.0, -1.0, -1.0}, //[8]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[9]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[10]
+                            {5.0, 2.0, -1.0, -1.0, -1.0}, //[9]
+                            {20.0, 2.0, -1.0, -1.0, -1.0}, //[10]
                             {1.0, -1.0, -1.0, -1.0, -1.0}  //[11]
                     }
             )),
@@ -127,7 +127,7 @@ public enum WeaponType {
                             "ability_on_num_arrows_barrage", //[5]
                             "ability_on_arrow_poison" //[6]
                     },
-                    new Integer[]{1, 1, 1, 1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
@@ -152,7 +152,7 @@ public enum WeaponType {
                             "flame_aspect", //[1]
                             "knockback" //[2]
                     },
-                    new Integer[]{1, 1, 1},
+                    new Integer[]{0, 0, 0},
                     new Double[][]{
                             {7.0, 8.0, -1.0, -1.0, -1.0}, //[0]
                             {1.0, 2.0, -1.0, -1.0, -1.0}, //[1]
@@ -171,9 +171,9 @@ public enum WeaponType {
                     new String[]{
                             "melee_damage", //[0]
                     },
-                    new Integer[]{1},
+                    new Integer[]{0},
                     new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
+                            {100.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                     }
             )),
     IGORS_TRIDENT("Igors Trident",
@@ -194,7 +194,7 @@ public enum WeaponType {
                             "trident_explosion_damage", //[5]
                             "trident_explosion_power", //[6]
                     },
-                    new Integer[]{1, 1, 1, 1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
@@ -207,7 +207,7 @@ public enum WeaponType {
             )),
     SUMO_STICK("Sumo Stick",
             W5_SumoStick.class,
-            ChatColor.LIGHT_PURPLE,
+            ChatColor.BLUE,
             "Ground Pound",
             "PickUp/Toss Enemy",
             Material.STICK,
@@ -227,7 +227,7 @@ public enum WeaponType {
                             "sumo_slam_explosion_power", //[9]
                             "sumo_jump_power" //[10]
                     },
-                    new Integer[]{1, 1, 1, 1, 1, 1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
@@ -237,7 +237,9 @@ public enum WeaponType {
                             {1.7, 1.8, -1.0, -1.0, -1.0}, //[5]
                             {9.0, 8.0, -1.0, -1.0, -1.0}, //[6]
                             {8.0, 7.0, -1.0, -1.0, -1.0}, //[7]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}  //[8]
+                            {9.0, 8.0, -1.0, -1.0, -1.0},  //[8]
+                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[9]
+                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[10]
                     }
             )),
     GRIEF_SWORD("Grief Sword",
@@ -256,7 +258,7 @@ public enum WeaponType {
                             "ability_on_melee_health_steal", //[3]
                             "ability_on_explosive_immune" //[4]
                     },
-                    new Integer[]{1, 1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
@@ -280,7 +282,7 @@ public enum WeaponType {
                             "chicken_speed", //[2]
                             "chicken_carpet_bomb_tnt" //[3]
                     },
-                    new Integer[]{1, 1, 1, 1},
+                    new Integer[]{0, 0, 0, 0},
                     new Double[][]{
                             {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
                             {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
@@ -323,10 +325,6 @@ public enum WeaponType {
             null,
             null);
 
-    //give each weapon a unique id
-    private int counter = 0;
-    private final int weaponID;
-
     private final String name;
     private final ChatColor textColor;
     private final String weaponDrop;
@@ -338,8 +336,6 @@ public enum WeaponType {
     private final StatBundle statBundle;
 
     private WeaponType(String name, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, StatBundle statBundle){
-        this.weaponID = counter;
-        counter++;
         this.name = name;
         this.weaponClass = weaponClass;
         this.textColor = textColor;
@@ -349,10 +345,6 @@ public enum WeaponType {
         this.enchantments = enchantments;
         this.enchantmentPowers = enchantmentPowers;
         this.statBundle = statBundle;
-    }
-
-    public int getWeaponID() {
-        return weaponID;
     }
 
     public String getWeaponNameUncolored(){

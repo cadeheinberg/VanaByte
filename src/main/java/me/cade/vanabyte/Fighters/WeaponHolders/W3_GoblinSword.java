@@ -16,7 +16,7 @@ public class W3_GoblinSword extends WeaponHolder {
     private final double knockBackLevel = fighter.getDoubleFromWeaponType(weaponType, 2);
 
     public W3_GoblinSword(Fighter fighter) {
-        super(WEAPON_TYPE);
+        super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,
                 WEAPON_TYPE.getMaterial(),
@@ -31,10 +31,6 @@ public class W3_GoblinSword extends WeaponHolder {
         if((int) knockBackLevel >= 0){
             weapon.applyWeaponUnsafeEnchantment(Enchantment.KNOCKBACK, (int) knockBackLevel);
         }
-        super.player = fighter.getPlayer();
-        super.weaponAbility = new WeaponAbility(fighter, this);
-        super.fighter = fighter;
-        this.player = this.fighter.getPlayer();
     }
 
     @Override

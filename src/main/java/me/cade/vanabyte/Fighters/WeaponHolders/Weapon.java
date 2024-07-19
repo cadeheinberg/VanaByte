@@ -34,17 +34,17 @@ public class Weapon {
           itemLore.add(noColor + "no melee damage");
       }
       if(main_cooldown > 0) {
-          itemLore.add(ChatColor.WHITE + "" + main_cooldown + "s" + ChatColor.YELLOW + " main cooldown");
+          itemLore.add(ChatColor.WHITE + "" + Math.round((main_cooldown/20.0) * 10)/10.0 + "s" + ChatColor.YELLOW + " main cooldown");
       }else {
           itemLore.add(noColor + "no main cooldown");
       }
       if(ability_duration > 0) {
-          itemLore.add(ChatColor.WHITE + "" + ability_duration + "s" + ChatColor.YELLOW + " special duration");
+          itemLore.add(ChatColor.WHITE + "" + Math.round((ability_duration/20.0) * 10)/10.0 + "s" + ChatColor.YELLOW + " special duration");
       }else {
           itemLore.add(noColor + "no ability cooldown");
       }
       if(ability_recharge > 0) {
-          itemLore.add(ChatColor.WHITE + "" + ability_recharge + "s" + ChatColor.YELLOW + " special recharge");
+          itemLore.add(ChatColor.WHITE + "" + Math.round((ability_recharge/20.0) * 10)/10.0 + "s" + ChatColor.YELLOW + " special recharge");
       }else {
           itemLore.add(noColor + "no main cooldown");
       }
@@ -58,7 +58,7 @@ public class Weapon {
       ItemMeta meta = weaponItem.getItemMeta();
       meta.setDisplayName(weaponName);
       meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
-      meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+      //meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
       meta.addItemFlags(ItemFlag.HIDE_DESTROYS);
       meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
       meta.setLore(itemLore);

@@ -84,6 +84,10 @@ public class FighterKitManager {
         if(weaponHolders != null){
             weaponHolders.clear();
         }
+//        VanaByte.sendConsoleError("fighter", fighter.toString());
+//        WeaponHolder weaponHolder = new W0_AirbenderSword(fighter);
+//        this.weaponHolders.add(weaponHolder);
+//        this.player.getInventory().addItem(weaponHolder.getWeapon().getWeaponItem());
         for(WeaponType weaponType : kitType.getWeaponTypes()){
             if(weaponType.getWeaponClass() != null){
                 try {
