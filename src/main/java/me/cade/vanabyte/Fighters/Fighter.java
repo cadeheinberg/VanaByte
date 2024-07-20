@@ -21,8 +21,9 @@ public class Fighter {
 	private Plugin plugin = VanaByte.getPlugin(VanaByte.class);
 	private Player player = null;
 	private UUID uuid = null;
-	private static final int numberOfKits = 7;
-	private int kitID, fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
+	private String kitID;
+	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
+
 
 	protected HologramManager fighterPacketHologramsManager = null;
 	protected FighterTaskManager fighterTaskManager = null;
@@ -99,7 +100,7 @@ public class Fighter {
 		fighterPacketHologramsManager.fighterPurchasedKit();
 	}
 
-	public void setKitID(int kitID){
+	public void setKitID(String kitID){
 		this.kitID = kitID;
 	}
 
@@ -193,7 +194,7 @@ public class Fighter {
 		}
 	}
 
-	public int getKitID() {return kitID;};
+	public String getKitID() {return kitID;};
 	public int getFighterLevel() {return fighterLevel;}
 	public int getCakes() {return cakes;}
 	public int getDeaths() {return deaths;}
@@ -210,7 +211,6 @@ public class Fighter {
 	public void setCooldownTask(int cooldownTask) {fighterTaskManager.cooldownTask = cooldownTask;}
 	public void setRechargeTask(int rechargeTask) {fighterTaskManager.rechargeTask = rechargeTask;}
 	public FighterScoreBoardManager getFighterScoreBoardManager() {return this.fighterScoreBoardManager;}
-	public static int getNumberOfKits() {return numberOfKits;}
 	public FighterKitManager getFighterKitManager() {return fighterKitManager;}
 	public HologramManager getFighterPacketHologramsManager() {return fighterPacketHologramsManager;}
 	public FighterAbilityManager getWeaponAbilityManager(){

@@ -1,5 +1,6 @@
 package me.cade.vanabyte;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.PVP.DamageTracker.EntityDamageManager;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.PVP.EntityDamageListener;
@@ -24,6 +25,8 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
 public class VanaByte extends JavaPlugin {
 
@@ -64,7 +67,19 @@ public class VanaByte extends JavaPlugin {
 		// do last
 		addPlayersToFighters();
 		entityDamageManager = new EntityDamageManager();
+		extraErrorChecking();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "SERVER STARTED SUCCESSFULLY");
+	}
+
+	private void extraErrorChecking() {
+		List<String> kitIDs = new ArrayList<>();
+		for (KitType kitType : KitType.values()){
+			if(kitIDs.contains(kitType.getKitID())){
+				throw new RuntimeException("VanaByte.java: Two Kits with the same ID");
+			}else{
+				kitIDs.add(kitType.getKitID());
+			}
+		}
 	}
 
 	private static void startMySQL() {

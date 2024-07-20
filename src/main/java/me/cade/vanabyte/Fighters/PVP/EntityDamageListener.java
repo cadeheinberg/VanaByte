@@ -86,7 +86,7 @@ public class EntityDamageListener implements Listener {
 //			List<ItemStack> toRemove = List.of();
 			for(int i = 0; i < drops.size(); i++){
 				if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
-					|| (FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null && FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != ArmorType.UNKOWN_ARMOR)){
+					|| (FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null && FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null)){
 					drops.get(i).setType(Material.AIR);
 				}
 			}

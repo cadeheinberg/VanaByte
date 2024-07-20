@@ -1,5 +1,6 @@
 package me.cade.vanabyte.Fighters.PVP;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
@@ -18,6 +19,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.ItemStack;
 
 public class NPCListener implements Listener {
 
@@ -48,17 +50,19 @@ public class NPCListener implements Listener {
 	}
 	
 	public static void handleKitSelection(Player player, int x){
-		for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-			if (MyArmorStand.getLocationOfSelector(i).getBlockX() == x) {
-				Fighter fighter = Fighter.fighters.get(player.getUniqueId());
-				if (fighter.getFighterMYSQLManager().getUnlockedKit(i) == true) {
-					fighter.getFighterKitManager().setKitType(i);
+		Fighter fighter = Fighter.fighters.get(player.getUniqueId());
+		for(KitType kitType : KitType.values()){
+			if(kitType.getSelectorLocation().getBlockX() == x){
+				if (fighter.getFighterMYSQLManager().getUnlockedKit(kitType)) {
+					//player owns this kit
+					fighter.getFighterKitManager().setKitType(kitType);
 					fighter.getFighterKitManager().giveKit();
-				} else {
+				}
+				else {
 					player.sendMessage(ChatColor.GREEN + "Server in beta, you have unlocked this kit for free!");
 					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
-					fighter.getFighterMYSQLManager().setUnlockedKit(i);
-					fighter.getFighterKitManager().setKitType(i);
+					fighter.getFighterMYSQLManager().setUnlockedKit(kitType);
+					fighter.getFighterKitManager().setKitType(kitType);
 					fighter.getFighterKitManager().giveKit();
 				}
 			}

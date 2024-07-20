@@ -36,7 +36,7 @@ public class FighterKitManager {
     protected FighterKitManager(Player player, Fighter fighter){
         this.player = player;
         this.fighter = fighter;
-        kitType = KitType.UNKNOWN_KIT;
+        kitType = null;
     }
 
     protected void fighterJoined(){
@@ -67,18 +67,19 @@ public class FighterKitManager {
         this.applyNightVision();
     }
 
-    public void setKitType(int kitID){
-        this.kitType = KitType.getKitTypeFromKitID(kitID);
-        fighter.setKitID(kitID);
+    public void setKitType(KitType kitType){
+        this.kitType = kitType;
+        fighter.setKitID(kitType.getKitID());
     }
 
     public void giveKit() {
-        if(kitType == KitType.UNKNOWN_KIT){
-            this.setKitType(fighter.getKitID());
-            if(kitType == KitType.UNKNOWN_KIT){
+        if(kitType == null){
+            KitType toGive = KitType.getKitTypeFromKitID(fighter.getKitID());
+            if(toGive == null){
                 player.sendMessage(ChatColor.RED + "Error retrieving your kit, contact a mod");
                 return;
             }
+            this.setKitType(toGive);
         }
         this.clearFighterKitItems();
         if(weaponHolders != null){
@@ -152,14 +153,14 @@ public class FighterKitManager {
     public static ArmorType getArmorTypeFromItemStack(ItemStack itemStack) {
         ItemMeta meta = itemStack.getItemMeta();
         if(meta == null){
-            return ArmorType.UNKOWN_ARMOR;
+            return null;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
         if(container == null){
-            return ArmorType.UNKOWN_ARMOR;
+            return null;
         }
         if (!(container.has(ARMOR_TYPE_KEY, PersistentDataType.STRING))) {
-            return ArmorType.UNKOWN_ARMOR;
+            return null;
         }
         String armorTypeName = container.get(ARMOR_TYPE_KEY, PersistentDataType.STRING);
         return ArmorType.valueOf(armorTypeName);
@@ -180,28 +181,28 @@ public class FighterKitManager {
         ItemStack boots = this.player.getEquipment().getBoots();
 
         if(helmet != null){
-            if(getArmorTypeFromItemStack(helmet) == ArmorType.UNKOWN_ARMOR){
+            if(getArmorTypeFromItemStack(helmet) == null){
                 this.moveItemStackToOpenSpotOrDrop(helmet);
             }else{
                 this.player.getInventory().remove(helmet);
             }
         }
         if(chest != null){
-            if(getArmorTypeFromItemStack(chest) == ArmorType.UNKOWN_ARMOR){
+            if(getArmorTypeFromItemStack(chest) == null){
                 this.moveItemStackToOpenSpotOrDrop(chest);
             }else{
                 this.player.getInventory().remove(chest);
             }
         }
         if(leggings != null){
-            if(getArmorTypeFromItemStack(leggings) == ArmorType.UNKOWN_ARMOR){
+            if(getArmorTypeFromItemStack(leggings) == null){
                 this.moveItemStackToOpenSpotOrDrop(leggings);
             }else{
                 this.player.getInventory().remove(leggings);
             }
         }
         if(boots != null){
-            if(getArmorTypeFromItemStack(boots) == ArmorType.UNKOWN_ARMOR){
+            if(getArmorTypeFromItemStack(boots) == null){
                 this.moveItemStackToOpenSpotOrDrop(boots);
             }else{
                 this.player.getInventory().remove(boots);

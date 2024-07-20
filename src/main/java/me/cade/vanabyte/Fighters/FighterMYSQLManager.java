@@ -1,5 +1,6 @@
 package me.cade.vanabyte.Fighters;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
@@ -159,11 +160,11 @@ public class FighterMYSQLManager {
         VanaByte.databaseManager.updateName(player, VanaByte.databaseManager.column[1], player.getName());
     }
 
-    public boolean getUnlockedKit(int kitID) {
+    public boolean getUnlockedKit(KitType kitType) {
         return unlockedKits[kitID] == 1;
     }
 
-    public void setUnlockedKit(int kitID) {
+    public void setUnlockedKit(KitType kit) {
         fighter.fighterPurchasedKit();
         unlockedKits[kitID] = 1;
     }

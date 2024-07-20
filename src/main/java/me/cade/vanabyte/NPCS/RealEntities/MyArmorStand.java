@@ -11,19 +11,11 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 
 public class MyArmorStand {
 
+  private static MyArmorStand[] kits;
+
   private String name;
   private Location location;
   private org.bukkit.entity.ArmorStand stand;
-  private static MyArmorStand[] kits;
-  private static Location[] locations = {
-          new Location(VanaByte.hub, -1043.5, 195.3, -111.5, 135, 0),
-          new Location(VanaByte.hub, -1045.5, 195.3, -108.5, 135, 0),
-          new Location(VanaByte.hub, -1048.5, 195.3, -106.5, 135, 0),
-          new Location(VanaByte.hub, -1052.5, 195.3, -105.5, 180, 0),
-          new Location(VanaByte.hub, -1056.5, 195.3, -106.5, -135, 0),
-          new Location(VanaByte.hub, -1059.5, 195.3, -108.5, -135, 0),
-          new Location(VanaByte.hub, -1061.5, 195.3, -111.5, -135, 0)
-  };
   
   public MyArmorStand(String name, Location location, float yaw, boolean visible, boolean marker, boolean gravity) {
     this.name = name;
@@ -120,19 +112,16 @@ public class MyArmorStand {
   }
 
   public static void spawnAll() {
-    ChatColor y = ChatColor.YELLOW;
-    ChatColor b = ChatColor.BOLD;
-    String p = y + "" + b + "";
-    kits = new MyArmorStand[Fighter.getNumberOfKits()];
-    for (int i = 0; i < Fighter.getNumberOfKits(); i++) {
-      kits[i] = new MyArmorStand(p + KitType.getKitTypeFromKitID(i).getKitNameUncolored(), locations[i], locations[i].getYaw(), false, false, true);
-      kits[i].equipColoredArmor(KitType.getKitTypeFromKitID(i).getArmorColor());
-      kits[i].getStand().setItemInHand(new ItemStack(KitType.getKitTypeFromKitID(i).getWeaponTypes()[0].getMaterial(), 1));
+    kits = new MyArmorStand[KitType.values().length];
+    int i = 0;
+    for(KitType kitType : KitType.values()){
+      kits[i] = new MyArmorStand(ChatColor.YELLOW + "" + ChatColor.BOLD + "" + kitType.getKitNameUncolored(),
+              kitType.getSelectorLocation(),
+              kitType.getSelectorLocation().getYaw(), false, false, true);
+      kits[i].equipColoredArmor(kitType.getArmorColor());
+      kits[i].getStand().setItemInHand(new ItemStack(kitType.getWeaponTypes()[0].getMaterial(), 1));
+      i++;
     }
-  }
-
-  public static Location getLocationOfSelector(int kitID) {
-    return locations[kitID];
   }
   
 }

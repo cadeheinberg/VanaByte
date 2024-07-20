@@ -6,6 +6,7 @@ import me.cade.vanabyte.NPCS.RealEntities.MyArmorStand;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 
@@ -15,8 +16,8 @@ public class HologramManager {
 
     private Player player = null;
     private Fighter fighter = null;
-    private Hologram[] kitHolograms = {null, null, null, null, null, null, null};
-    private Hologram welcomeHologram = null;
+    private Hologram[] kitHolograms;
+    private Hologram welcomeHologram;
 
     public HologramManager(Player player, Fighter fighter){
         this.player = player;
@@ -82,23 +83,25 @@ public class HologramManager {
 
     private void respawnKitHolograms(){
         Bukkit.getConsoleSender().sendMessage("respawning kit holograms");
-        for (int kitID = 0; kitID < kitHolograms.length; kitID++) {
-            if (kitHolograms[kitID] == null) {
-                kitHolograms[kitID] = new Hologram(MyArmorStand.getLocationOfSelector(kitID).clone().add(0, 2.50, 0),false);
-            }
-            if (kitHolograms[kitID] == null) {
-                player.sendMessage("HologramManager Error: kits");
-            }
-            else{
-                String locked = ChatColor.RED + " Free For Beta ";
-                if (fighter.getFighterMYSQLManager().getUnlockedKit(kitID) == true) {
-                    locked = ChatColor.GREEN + " Unlocked ";
+        kitHolograms = new Hologram[kitHolograms.length];
+        int i = 0;
+        for(KitType kitType : KitType.values()){
+            if (kitHolograms[i] == null) {
+                kitHolograms[i] = new Hologram(kitType.getSelectorLocation().clone().add(0, 2.50, 0),false);
+                if (kitHolograms[i] == null) {
+                    player.sendMessage("HologramManager Error: kits");
+                    return;
                 }
-                kitHolograms[kitID].setDisplayText(locked + "\n"
-                        + ChatColor.WHITE + " Special: " + KitType.getKitTypeFromKitID(kitID).getWeaponTypes()[0].getWeaponDrop() + " \n"
-                        + ChatColor.WHITE + " Main: " + KitType.getKitTypeFromKitID(kitID).getWeaponTypes()[0].getWeaponRightClick() + " ");
-                kitHolograms[kitID].showTo(this.player);
             }
+            String locked = ChatColor.RED + " Free For Beta ";
+            if (fighter.getFighterMYSQLManager().getUnlockedKit(kitType)) {
+                locked = ChatColor.GREEN + " Unlocked ";
+            }
+            kitHolograms[i].setDisplayText(locked + "\n"
+                    + ChatColor.WHITE + " Special: " + kitType.getWeaponTypes()[0].getWeaponDrop() + " \n"
+                    + ChatColor.WHITE + " Main: " + kitType.getWeaponTypes()[0].getWeaponRightClick() + " ");
+            kitHolograms[i].showTo(this.player);
+            i++;
         }
     }
 

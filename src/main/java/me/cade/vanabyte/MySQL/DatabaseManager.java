@@ -10,6 +10,7 @@ import org.bukkit.plugin.Plugin;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 public class DatabaseManager {
 
@@ -92,7 +93,12 @@ public class DatabaseManager {
     VanaByte.sendConsoleMessageWarning("DatabaseManager", "checking if " + tableName + " exists");
     String[] TABLE_COLUMNS = getColumnNamesIfTableExists(tableName);
     if(TABLE_COLUMNS == null){
-      VanaByte.sendConsoleMessageGood("DatabaseManager", "table does not exist, creating new");
+      VanaByte.sendConsoleMessageGood("DatabaseManager", "table does not exist");
+      //prompt user if they would like to create new table, or rename an existing one
+      Scanner scanner = new Scanner(System.in);
+      System.out.println("enter something cade: ");
+      String TEST = scanner.nextLine();
+      System.out.println("you entered: " + TEST);
     }else{
       VanaByte.sendConsoleMessageGood("DatabaseManager", "table exists, checking schema");
       for(DatabaseColumn codeCol : dt.getDatabaseColumns()){
