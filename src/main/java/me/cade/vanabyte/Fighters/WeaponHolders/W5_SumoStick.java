@@ -11,8 +11,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
@@ -76,20 +74,20 @@ public class W5_SumoStick extends WeaponHolder {
         if (!super.checkAndSetMainCooldown(basePickUpCooldown, abilityOnPickUpCooldown)) {
             return;
         }
-        VanaByte.sendConsoleError("pickup", "0");
+        VanaByte.sendConsoleMessageBad("pickup", "0");
         if (e.getRightClicked() instanceof LivingEntity) {
-            VanaByte.sendConsoleError("pickup", "1");
+            VanaByte.sendConsoleMessageBad("pickup", "1");
             //if you have passengers you cant add more
             if (!player.getPassengers().isEmpty()) {
                 return;
             }
-            VanaByte.sendConsoleError("pickup", "2");
+            VanaByte.sendConsoleMessageBad("pickup", "2");
             if (e.getRightClicked() instanceof Player) {
                 if (((Player) e.getRightClicked()).isSneaking()) {
                     return;
                 }
             }
-            VanaByte.sendConsoleError("pickup", "3");
+            VanaByte.sendConsoleMessageBad("pickup", "3");
             this.doPickUp((LivingEntity) e.getRightClicked());
         }
     }

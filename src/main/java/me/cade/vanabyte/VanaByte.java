@@ -1,15 +1,12 @@
 package me.cade.vanabyte;
 
-import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.PVP.DamageTracker.EntityDamageManager;
 import me.cade.vanabyte.Fighters.*;
 import me.cade.vanabyte.Fighters.PVP.EntityDamageListener;
 import me.cade.vanabyte.Fighters.PVP.KitListener;
 import me.cade.vanabyte.Money.CakeManager;
-import me.cade.vanabyte.MySQL.MySQL_KitPVP;
-import me.cade.vanabyte.MySQL.MySQL_Royale;
-import me.cade.vanabyte.MySQL.MySQL_Upgrades;
-import me.cade.vanabyte.MySQL.Polling;
+import me.cade.vanabyte.MySQL.DatabaseManager;
+import me.cade.vanabyte.MySQL.DatabaseRunnables;
 import me.cade.vanabyte.NPCS.GUIs.MyGUIListener;
 import me.cade.vanabyte.Fighters.PVP.NPCListener;
 import me.cade.vanabyte.NPCS.RealEntities.SpawnRealEntities;
@@ -37,10 +34,8 @@ public class VanaByte extends JavaPlugin {
 	public static World thirdWorld;
 	public static Location thirdWorldSpawn;
 
-	public static MySQL_KitPVP mySQL_Hub;
-	public static MySQL_Upgrades mySQL_upgrades;
-	public static MySQL_Royale mySQL_royale;
-	public static Polling poller;
+	public static DatabaseManager databaseManager;
+	public static DatabaseRunnables poller;
 
 	public static EntityDamageManager entityDamageManager;
 
@@ -73,10 +68,8 @@ public class VanaByte extends JavaPlugin {
 	}
 
 	private static void startMySQL() {
-		mySQL_Hub = new MySQL_KitPVP();
-		mySQL_upgrades = new MySQL_Upgrades();
-		mySQL_royale = new MySQL_Royale();
-		poller = new Polling();
+		databaseManager = new DatabaseManager();
+		poller = new DatabaseRunnables();
 		poller.refreshConnections();
 	}
 
@@ -100,9 +93,7 @@ public class VanaByte extends JavaPlugin {
 				Fighter.get(player).fighterLeftServer();
 			}
 		}
-		mySQL_Hub.closeConnection();
-		mySQL_upgrades.closeConnection();
-		mySQL_royale.closeConnection();
+		databaseManager.closeConnection();
 		CakeManager.stopCakePackage();
 		Borders.stopCheckingBorders();
 	}
@@ -232,8 +223,16 @@ public class VanaByte extends JavaPlugin {
 		return (int) Math.round(d * 20);
 	}
 
-	public static void sendConsoleError(String fileName, String message){
+	public static void sendConsoleMessageBad(String fileName, String message){
 		Bukkit.getConsoleSender().sendMessage(ChatColor.RED + fileName + ": " + ChatColor.WHITE + message);
+	}
+
+	public static void sendConsoleMessageGood(String fileName, String message){
+		Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + fileName + ": " + ChatColor.WHITE + message);
+	}
+
+	public static void sendConsoleMessageWarning(String fileName, String message){
+		Bukkit.getConsoleSender().sendMessage(ChatColor.YELLOW + fileName + ": " + ChatColor.WHITE + message);
 	}
 
 }

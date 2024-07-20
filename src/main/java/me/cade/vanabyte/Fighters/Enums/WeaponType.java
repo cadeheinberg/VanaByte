@@ -300,10 +300,10 @@ public enum WeaponType {
             null,
             new StatBundle(
                     new String[]{
-                            "tnt_melee_damage", //[0]
-                            "tnt_throw_cooldown", //[1]
-                            "tnt_explode_damage", //[2]
-                            "tnt_explode_power", //[3]
+                            "melee_damage", //[0]
+                            "throw_cooldown", //[1]
+                            "explode_damage", //[2]
+                            "explode_power", //[3]
                             "set_blocks_on_fire" //[4]
                     },
                     new Integer[]{0, 0, 0, 0, -1},

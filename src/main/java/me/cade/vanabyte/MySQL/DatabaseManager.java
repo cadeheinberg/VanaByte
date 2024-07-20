@@ -6,24 +6,26 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class MySQL_KitPVP {
+public class DatabaseManager {
 
   private Connection connection;
   private String url;
   private String username;
   private String password;
   private int port;
-  
-  private String tableName;
-  public String[] column;
+
+  private DatabaseTable table_fighter;
+  private DatabaseTable table_kit_unlocked;
+  private DatabaseTable[] table_weapon;
   
   private static Plugin plugin = VanaByte.getPlugin(VanaByte.class);
   
-  public MySQL_KitPVP() {
+  public DatabaseManager() {
 
     url = DatabaseAccess.getURL();
     port = DatabaseAccess.getPort();
@@ -41,6 +43,10 @@ public class MySQL_KitPVP {
       e.printStackTrace();
       Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "MYSQL: ERROR 2");
     }
+
+    DatabaseBackup.backupDatabase();
+
+    buildFighterTable();
     
     tableName = "hub_stats";
     column = new String[16];
@@ -69,10 +75,39 @@ public class MySQL_KitPVP {
     }
   }
 
-  private void createTable() throws SQLException{
-    Statement statement = connection.createStatement();
+  private void buildFighterTable() throws SQLException {
+    DatabaseColumn[] databaseColumns = new DatabaseColumn[5];
+    databaseColumns[0] = new DatabaseColumn("uuid", true, false, null, false, true, 0);
+    databaseColumns[1] = new DatabaseColumn("player_name", true, false, null, false, true, 0);
+    databaseColumns[2] = new DatabaseColumn("server_cakes", true, false, null, false, true, 100);
+    databaseColumns[3] = new DatabaseColumn("server_level", true, false, null, false, true, 1);
+    databaseColumns[4] = new DatabaseColumn("server_exp", true, false, null, false, true, 0);
+    table_fighter = new DatabaseTable("Fighter", databaseColumns);
+    createTableFromDatabaseTableObject(table_fighter);
+  }
 
-    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CREATING TABLE");
+  private void createTableFromDatabaseTableObject(DatabaseTable dt) throws SQLException {
+    String tableName = dt.getTableName();
+    Statement statement = connection.createStatement();
+    VanaByte.sendConsoleMessageWarning("DatabaseManager", "checking if " + tableName + " exists");
+    String[] TABLE_COLUMNS = getColumnNamesIfTableExists(tableName);
+    if(TABLE_COLUMNS == null){
+      VanaByte.sendConsoleMessageGood("DatabaseManager", "table does not exist, creating new");
+    }else{
+      VanaByte.sendConsoleMessageGood("DatabaseManager", "table exists, checking schema");
+      for(DatabaseColumn codeCol : dt.getDatabaseColumns()){
+        String codeColName = codeCol.getColumnName();
+        for(String dbColName : TABLE_COLUMNS){
+          if(codeColName.equals(dbColName)){
+            //flag both of these as partnered
+          }
+        }
+      }
+    }
+
+
+    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CREATING TABLE " + tableName);
+    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CREATING TABLE " + tableName);
     String createTableSQL = "CREATE TABLE IF NOT EXISTS " + tableName + " (UUID varchar(36) primary key, PlayerName varchar(16), ";
     for (int i = 2; i < column.length; i++) {
       if (i == column.length - 1) {
@@ -84,6 +119,39 @@ public class MySQL_KitPVP {
     statement.execute(createTableSQL);
     statement.close();
     Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: TABLE CREATED!");
+  }
+
+  public String[] getColumnNamesIfTableExists(String tableName) throws SQLException {
+    List<String> columnNames = new ArrayList<>();
+      if (tableExists(tableName)) {
+        DatabaseMetaData metaData = connection.getMetaData();
+        try (ResultSet columns = metaData.getColumns(null, null, tableName, null)) {
+          while (columns.next()) {
+            String columnName = columns.getString("COLUMN_NAME");
+            columnNames.add(columnName);
+          }
+        }
+      } else {
+        System.out.println("Table " + tableName + " does not exist.");
+        return null;
+      }
+
+    return columnNames.toArray(new String[0]);
+  }
+
+  private boolean tableExists(String tableName) {
+    String query = "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema = DATABASE() AND table_name = ?";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+      preparedStatement.setString(1, tableName);
+      try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        if (resultSet.next()) {
+          return resultSet.getInt(1) > 0;
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return false;
   }
   
   public void closeConnection() {
