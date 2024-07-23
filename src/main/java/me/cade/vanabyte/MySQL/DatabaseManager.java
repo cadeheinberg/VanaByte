@@ -9,6 +9,7 @@ import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,10 +20,6 @@ public class DatabaseManager {
   private String username;
   private String password;
   private int port;
-
-  private DatabaseTable table_fighter;
-  private DatabaseTable table_kit_unlocked;
-  private DatabaseTable[] table_weapon;
   
   private static Plugin plugin = VanaByte.getPlugin(VanaByte.class);
   
@@ -47,84 +44,185 @@ public class DatabaseManager {
 
     DatabaseBackup.backupDatabase();
 
-    buildFighterTable();
-    
-    tableName = "hub_stats";
-    column = new String[16];
-    column[0] = "UUID";
-    column[1] = "PlayerName";
-    column[2] = "server_cakes";
-    column[3] = "server_level";
-    column[4] = "server_xp";
-    column[5] = "kitpvp_kit_id";
-    column[6] = "kitpvp_kills";
-    column[7] = "kitpvp_killstreak";
-    column[8] = "kitpvp_deaths";
-    column[9] = "unlocked_kit_00";
-    column[10] = "unlocked_kit_01";
-    column[11] = "unlocked_kit_02";
-    column[12] = "unlocked_kit_03";
-    column[13] = "unlocked_kit_04";
-    column[14] = "unlocked_kit_05";
-    column[15] = "unlocked_kit_06";
-
     try{
-      createTable();
+      //keep calling until its true
+      while(createTableFromDatabaseTableObject(DatabaseTable.getFighterTable())){
+        //pass
+      }
+      createTableFromDatabaseTableObject(DatabaseTable.getUnlockedKitsTable());
+      for (DatabaseTable dt : DatabaseTable.getWeaponTables()){
+        createTableFromDatabaseTableObject(dt);
+      }
     } catch (SQLException e){
       e.printStackTrace();
       System.out.println("Error creating table");
     }
   }
 
-  private void buildFighterTable() throws SQLException {
-    DatabaseColumn[] databaseColumns = new DatabaseColumn[5];
-    databaseColumns[0] = new DatabaseColumn("uuid", true, false, null, false, true, 0);
-    databaseColumns[1] = new DatabaseColumn("player_name", true, false, null, false, true, 0);
-    databaseColumns[2] = new DatabaseColumn("server_cakes", true, false, null, false, true, 100);
-    databaseColumns[3] = new DatabaseColumn("server_level", true, false, null, false, true, 1);
-    databaseColumns[4] = new DatabaseColumn("server_exp", true, false, null, false, true, 0);
-    table_fighter = new DatabaseTable("Fighter", databaseColumns);
-    createTableFromDatabaseTableObject(table_fighter);
-  }
-
-  private void createTableFromDatabaseTableObject(DatabaseTable dt) throws SQLException {
-    String tableName = dt.getTableName();
+  private boolean createTableFromDatabaseTableObject(DatabaseTable databaseTable) throws SQLException {
+    Scanner scanner = new Scanner(System.in);
+    String tableName = databaseTable.getTableName();
     Statement statement = connection.createStatement();
     VanaByte.sendConsoleMessageWarning("DatabaseManager", "checking if " + tableName + " exists");
-    String[] TABLE_COLUMNS = getColumnNamesIfTableExists(tableName);
-    if(TABLE_COLUMNS == null){
+    String[] DATABASE_COLUMN_NAMES = getColumnNamesIfTableExists(tableName);
+    if(DATABASE_COLUMN_NAMES == null){
       VanaByte.sendConsoleMessageGood("DatabaseManager", "table does not exist");
       //prompt user if they would like to create new table, or rename an existing one
-      Scanner scanner = new Scanner(System.in);
-      System.out.println("enter something cade: ");
-      String TEST = scanner.nextLine();
-      System.out.println("you entered: " + TEST);
-    }else{
-      VanaByte.sendConsoleMessageGood("DatabaseManager", "table exists, checking schema");
-      for(DatabaseColumn codeCol : dt.getDatabaseColumns()){
-        String codeColName = codeCol.getColumnName();
-        for(String dbColName : TABLE_COLUMNS){
-          if(codeColName.equals(dbColName)){
-            //flag both of these as partnered
+      System.out.println("1. Create a new Table in the database");
+      String linkedTo = null;
+      System.out.println("OR Rename one of the below database columns");
+      int i = 2;
+      for (String tableName : ALL_TABLES_IN_DATABASE) {
+        System.out.println(i + ": " + tableName);
+        i++;
+      }
+      String USER_INPUT = scanner.nextLine();
+      int USER_INTEGER;
+      try {
+        USER_INTEGER = Integer.getInteger(USER_INPUT);
+      } catch (Exception e) {
+        e.printStackTrace();
+        scanner.close();
+        return false;
+      }
+      if (USER_INTEGER == 1) {
+        //make a new Table
+        String createTableSQL = "CREATE TABLE IF NOT EXISTS " + tableName + " (";
+        String primaryKey = "";
+        List<String> foreignKeys = new ArrayList<>();
+        for(DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()){
+          String dataType;
+          String dataDefault;
+          if(databaseColumn.isInt()){
+            dataType = "int";
+            dataDefault = "" + databaseColumn.getDefaultValue();
+          } else if (databaseColumn.isVarChar()) {
+            dataType = "varchar(100)";
+            dataDefault = "NOT NULL";
+          } else{
+            System.out.println("data type is not correct for this");
+            return false;
+          }
+          if(databaseColumn.isPrimaryKey()){
+            primaryKey = primaryKey + databaseColumn.getColumnName() + ", ";
+          }
+          if(databaseColumn.isForeignKey()){
+            foreignKeys.add("FOREIGN KEY (" + databaseColumn.getColumnName() + ") REFERENCES " + databaseColumn.getForeignReferences());
+          }
+          createTableSQL = databaseColumn.getColumnName() + " " + dataType + " " + dataDefault + ", ";
+        }
+        if(primaryKey.isEmpty()){
+          System.out.println("primary key shouldnt be empty for a table");
+          return false;
+        }
+        createTableSQL = createTableSQL + primaryKey;
+        if(!foreignKeys.isEmpty()){
+          for(String fKey : foreignKeys){
+            createTableSQL = createTableSQL + fKey;
           }
         }
-      }
-    }
+        createTableSQL = createTableSQL.substring(0, createTableSQL.length() - 2);
+        statement.execute(createTableSQL);
+        statement.close();
+        Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: TABLE CREATED!");
+      } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < ALL_TABLES_IN_DATABASE.size())) {
+        System.out.println("Type yes to confirm renaming of \"" + ALL_TABLES_IN_DATABASE.get(USER_INTEGER - 2) + "\" to \"" + codeName.getColumnName());
+        String YES_INPUT = scanner.nextLine();
+        if (YES_INPUT.equals("yes")) {
+          //rename the old table
 
-
-    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CREATING TABLE " + tableName);
-    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: CREATING TABLE " + tableName);
-    String createTableSQL = "CREATE TABLE IF NOT EXISTS " + tableName + " (UUID varchar(36) primary key, PlayerName varchar(16), ";
-    for (int i = 2; i < column.length; i++) {
-      if (i == column.length - 1) {
-        createTableSQL = createTableSQL + column[column.length -1] + " int)";
+          //recursive call
+        }else {
+          System.out.println("canceled by user");
+          scanner.close();
+          return;
+        }
       } else {
-        createTableSQL = createTableSQL + column[i] + " int, ";
+        System.out.println("bad user input");
+        scanner.close();
+        return;
+      }
+      createTableFromDatabaseTableObject(databaseTable);
+      scanner.close();
+      return;
+    }
+    List<String> codeColNamesWithPartners = new ArrayList<>();
+    List<DatabaseColumn> codeColNamesWithoutPartners = new ArrayList<>();
+    VanaByte.sendConsoleMessageGood("DatabaseManager", "table exists, checking schema");
+    List<DatabaseColumn> codeColNames = Arrays.stream(databaseTable.getDatabaseColumns()).toList(); //.getColName
+    List<String> databaseColNames = new ArrayList<>(Arrays.stream(DATABASE_COLUMN_NAMES).toList());
+    for(DatabaseColumn codeName : codeColNames){
+      if(databaseColNames.contains(codeName.getColumnName())){
+        codeColNamesWithPartners.add(codeName.getColumnName());
+      }else{
+        codeColNamesWithoutPartners.add(codeName);
       }
     }
-    statement.execute(createTableSQL);
-    statement.close();
-    Bukkit.getConsoleSender().sendMessage(ChatColor.GREEN + "MYSQL: TABLE CREATED!");
+    if(!codeColNamesWithoutPartners.isEmpty()) {
+      databaseColNames.removeAll(codeColNamesWithPartners);
+      for (DatabaseColumn codeName : codeColNamesWithoutPartners) {
+        System.out.println("Column name given in code: " + codeName.getColumnName() + " was not found in Table: " + databaseTable.getTableName());
+        System.out.println("1. Create a new column in the table");
+        String linkedTo = null;
+        System.out.println("OR Rename one of the below database columns");
+        int i = 2;
+        for (String remainingDatabaseCol : databaseColNames) {
+          System.out.println(i + ": " + remainingDatabaseCol);
+          i++;
+        }
+        String USER_INPUT = scanner.nextLine();
+        int USER_INTEGER;
+        try {
+          USER_INTEGER = Integer.getInteger(USER_INPUT);
+        } catch (Exception e) {
+          e.printStackTrace();
+          scanner.close();
+          return;
+        }
+        if (USER_INTEGER == 1) {
+          //make a new column using codeName
+        } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < databaseColNames.size())) {
+          System.out.println("Type yes to confirm renaming of \"" + databaseColNames.get(USER_INTEGER - 2) + "\" to \"" + codeName.getColumnName());
+          String YES_INPUT = scanner.nextLine();
+          if (YES_INPUT.equals("yes")) {
+            //rename the database column
+
+            //remove it
+            databaseColNames.remove(USER_INTEGER - 2);
+          }else {
+            System.out.println("canceled by user");
+            scanner.close();
+            return;
+          }
+        } else {
+          System.out.println("bad user input");
+          scanner.close();
+          return;
+        }
+      }
+      if (!databaseColNames.isEmpty()) {
+        //there are database columns we arent using anymore
+        for (String dataName : databaseColNames) {
+          System.out.println("Database has column name: " + dataName + " leftover");
+          System.out.println("Type yes to keep and no to remove");
+          String YES_INPUT = scanner.nextLine();
+          if (YES_INPUT.equals("yes")) {
+
+          } else if (YES_INPUT.equals("no")) {
+
+          } else {
+            System.out.println("bad user input");
+            scanner.close();
+            return;
+          }
+        }
+        createTableFromDatabaseTableObject(databaseTable);
+        scanner.close();
+        return;
+      }
+      VanaByte.sendConsoleMessageGood("DatabaseManager", "Table and schema is okay");
+      scanner.close();
+    }
   }
 
   public String[] getColumnNamesIfTableExists(String tableName) throws SQLException {

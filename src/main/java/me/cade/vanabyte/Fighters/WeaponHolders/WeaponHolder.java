@@ -1,12 +1,10 @@
 package me.cade.vanabyte.Fighters.WeaponHolders;
 
 import com.google.errorprone.annotations.ForOverride;
-import me.cade.vanabyte.Fighters.Enums.StatBundle;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.FighterKitManager;
 import me.cade.vanabyte.Fighters.PVP.DamageTracker.CustomDamageWrapper;
-import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.damage.DamageSource;

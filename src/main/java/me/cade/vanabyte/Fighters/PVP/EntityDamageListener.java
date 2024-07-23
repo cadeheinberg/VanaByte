@@ -85,7 +85,7 @@ public class EntityDamageListener implements Listener {
 			//3) set them to air, working so far?
 //			List<ItemStack> toRemove = List.of();
 			for(int i = 0; i < drops.size(); i++){
-				if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != WeaponType.UNKNOWN_WEAPON)
+				if((Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null && Weapon.getWeaponTypeFromItemStack(drops.get(i)) != null)
 					|| (FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null && FighterKitManager.getArmorTypeFromItemStack(drops.get(i)) != null)){
 					drops.get(i).setType(Material.AIR);
 				}
@@ -96,7 +96,7 @@ public class EntityDamageListener implements Listener {
 		} else if(killer instanceof Player){
 			Player pkiller = (Player) killer;
 			if(isValidKiller(pkiller, victim)) {
-				if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+				if(weaponType == null){
 					tellDeathMessage(e.getDeathMessage());
 					e.setDeathMessage("");
 				}else{
@@ -112,7 +112,7 @@ public class EntityDamageListener implements Listener {
 		} else if(killer instanceof LivingEntity){
 			LivingEntity lKiller = (LivingEntity) killer;
 			if(isValidKiller(lKiller, victim)) {
-				if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+				if(weaponType == null){
 					tellDeathMessage(e.getDeathMessage());
 					e.setDeathMessage("");
 				}else{
@@ -168,9 +168,9 @@ public class EntityDamageListener implements Listener {
 				return;
 			}
 			WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(pkiller);
-			if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+			if(weaponType == null){
 				//fists or non special weapon
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
+				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, null));
 				return;
 			}
 			WeaponHolder weaponHolder = Fighter.get((Player) damagingEntity).getFighterKitManager().getWeaponHolderWithType(weaponType);
@@ -186,7 +186,7 @@ public class EntityDamageListener implements Listener {
 			if(damagingEntity instanceof LivingEntity){
 				//damager is some living entity
 				//victim is a player or any living entity
-				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
+				VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, null));
 			}else if (e.getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 				Projectile projectile = (Projectile) e.getDamager();
 				if (EntityMetadata.getWeaponTypeFromEntity(e.getDamager()) == null) {
@@ -198,15 +198,15 @@ public class EntityDamageListener implements Listener {
 				}
 				Player pkiller = (Player) projectile.getShooter();
 				WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(damagingEntity);
-				if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+				if(weaponType == null){
 					//some other projectile
-					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
+					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, null));
 					return;
 				}
 				WeaponHolder weaponHolder = Fighter.get(pkiller).getFighterKitManager().getWeaponHolderWithType(weaponType);
 				if(weaponHolder == null){
 					//some other projectile
-					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, WeaponType.UNKNOWN_WEAPON));
+					VanaByte.getEntityDamageManger().register(new CustomDamageWrapper(e, null));
 					return;
 				}
 				weaponHolder.doProjectileHitEntity(e, pkiller, victim, damagingEntity);
@@ -251,11 +251,16 @@ public class EntityDamageListener implements Listener {
 	}
 
 	public void tellDeathMessage(LivingEntity killer, LivingEntity victim, WeaponType weaponType) {
-		String weaponName = weaponType.getWeaponNameUncolored();
+		if(weaponType == null){
+			PlayerChat.tellPlayerMessageToAll(ChatColor.YELLOW + "" + ChatColor.ITALIC + killer.getName() + ChatColor.RESET
+					+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victim.getName());
+		}else{
+			PlayerChat.tellPlayerMessageToAll(ChatColor.YELLOW + "" + ChatColor.ITALIC + killer.getName() + ChatColor.RESET
+					+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victim.getName() + ChatColor.RESET + " with "
+					+ ChatColor.YELLOW + "" + ChatColor.ITALIC + weaponType.getWeaponNameUncolored());
+		}
 
-		PlayerChat.tellPlayerMessageToAll(ChatColor.YELLOW + "" + ChatColor.ITALIC + killer.getName() + ChatColor.RESET
-				+ " killed " + ChatColor.YELLOW + "" + ChatColor.ITALIC + victim.getName() + ChatColor.RESET + " with "
-				+ ChatColor.YELLOW + "" + ChatColor.ITALIC + weaponName);
+
 	}
 
 }

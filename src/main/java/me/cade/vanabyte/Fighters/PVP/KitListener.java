@@ -47,7 +47,7 @@ public class KitListener implements Listener {
 			return;
 		}
 		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItem());
-		if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
+		if(weaponType != null){
 			WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(weaponType);
 			if(weaponHolder != null){
 				if (e.getAction() == Action.LEFT_CLICK_AIR || e.getAction() == Action.LEFT_CLICK_BLOCK) {
@@ -69,7 +69,7 @@ public class KitListener implements Listener {
 			return;
 		}
 		WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getItemDrop().getItemStack());
-		if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+		if(weaponType == null){
 			if(SafeZone.inAnarchy(e.getPlayer().getWorld())){
 				e.setCancelled(false);
 			}
@@ -120,7 +120,7 @@ public class KitListener implements Listener {
 		}
 		Player shooter = (Player) e.getEntity().getShooter();
 		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(shooter);
-		if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+		if(weaponType == null){
 			return;
 		}
 		WeaponHolder weaponHolder = Fighter.get(shooter).getFighterKitManager().getWeaponHolderWithType(weaponType);
@@ -141,7 +141,7 @@ public class KitListener implements Listener {
 		}
 		Player shooter = (Player) e.getEntity();
 		WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(shooter);
-		if(weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON){
+		if(weaponType == null){
 			return;
 		}
 		WeaponHolder weaponHolder = Fighter.get(shooter).getFighterKitManager().getWeaponHolderWithType(weaponType);
@@ -164,7 +164,7 @@ public class KitListener implements Listener {
 	@EventHandler
 	public void onExplodePrime(ExplosionPrimeEvent e) {
 		WeaponType weaponType = EntityMetadata.getWeaponTypeFromEntity(e.getEntity());
-		if (weaponType == null || weaponType == WeaponType.UNKNOWN_WEAPON) {
+		if (weaponType == null) {
 			return;
 		}
 		e.setCancelled(true);

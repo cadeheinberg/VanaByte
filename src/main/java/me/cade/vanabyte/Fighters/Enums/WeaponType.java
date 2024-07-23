@@ -9,6 +9,7 @@ import org.bukkit.enchantments.Enchantment;
 //defaults for new player go here, store players version of this in MySQL table
 public enum WeaponType {
     AIRBENDER_SWORD("Airbender Sword",
+            "W000",
             W0_AirbenderSword.class,
             ChatColor.WHITE,
             "Gust of Wind",
@@ -16,26 +17,16 @@ public enum WeaponType {
             Material.IRON_SWORD,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "sword_melee", //[2]
-                            "gust_enemy_power", //[3]
-                            "gust_enemy_damage", //[4]
-                            "gust_self_power" //[5]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.5, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
-                            {6.0, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {1.6, 8.0, -1.0, -1.0, -1.0}  //[5]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.5, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("sword_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("gust_enemy_power", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("gust_enemy_damage", 0, new Double[]{6.0, 1.8, -1.0, -1.0, -1.0}),
+                    new StatRow("gust_self_power", 0, new Double[]{1.6, 8.0, -1.0, -1.0, -1.0}),
+            })),
     BESERKER_AXE("Beserker Axe",
+            "W001",
             W1_BeserkerAxe.class,
             ChatColor.LIGHT_PURPLE,
             "Haste, Speed, Jump",
@@ -43,34 +34,20 @@ public enum WeaponType {
             Material.IRON_AXE,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "axe_melee", //[2]
-                            "leap_cooldown", //[3]
-                            "ability_leap_cooldown", //[4]
-                            "leap_power", //[5]
-                            "ability_leap_power", //[6]
-                            "ability_speed_level", //[7]
-                            "ability_jump_level", //[8]
-                            "ability_haste_level" //[9]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
-                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {1.8, 8.0, -1.0, -1.0, -1.0}, //[5]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[6]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[7]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[8]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}  //[9]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("axe_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("leap_cooldown", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_leap_cooldown", 0, new Double[]{1.7, 1.8, -1.0, -1.0, -1.0}),
+                    new StatRow("leap_power", 0, new Double[]{1.8, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_leap_power", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_speed_level", 0, new Double[]{1.0, 2.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_jump_level", 0, new Double[]{1.0, 2.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_haste_level", 0, new Double[]{1.0, 2.0, -1.0, -1.0, -1.0}),
+            })),
     SHOTTY_SHOTGUN("Shotty Shotgun",
+            "W002",
             W2_ShottyShotgun.class,
             ChatColor.YELLOW,
             "Flaming Bullets",
@@ -78,38 +55,22 @@ public enum WeaponType {
             Material.IRON_SHOVEL,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "shovel_melee", //[2]
-                            "shoot_cooldown", //[3]
-                            "ability_on_shoot_cooldown", //[4]
-                            "recoil_power", //[5]
-                            "ability_on_recoil_power", //[6]
-                            "bullet_damage", //[7]
-                            "ability_on_bullet_damage", //[8]
-                            "num_bullets", //[9]
-                            "ability_on_num_bullets", //[10]
-                            "ability_on_set_blocks_on_fire" //[11]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
-                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {1.2, 8.0, -1.0, -1.0, -1.0}, //[5]
-                            {1.4, 7.0, -1.0, -1.0, -1.0}, //[6]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[7]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[8]
-                            {5.0, 2.0, -1.0, -1.0, -1.0}, //[9]
-                            {20.0, 2.0, -1.0, -1.0, -1.0}, //[10]
-                            {1.0, -1.0, -1.0, -1.0, -1.0}  //[11]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("shovel_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("shoot_cooldown", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_shoot_cooldown", 0, new Double[]{1.7, 1.8, -1.0, -1.0, -1.0}),
+                    new StatRow("recoil_power", 0, new Double[]{1.2, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_recoil_power", 0, new Double[]{1.4, 7.0, -1.0, -1.0, -1.0}),
+                    new StatRow("bullet_damage", 0, new Double[]{9.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_bullet_damage", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+                    new StatRow("num_bullets", 0, new Double[]{5.0, 2.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_num_bullets", 0, new Double[]{20.0, 2.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_set_blocks_on_fire", 0, new Double[]{1.0, -1.0, -1.0, -1.0, -1.0}),
+            })),
     GOBLIN_BOW("Goblin Bow",
+            "W003",
             W3_GoblinArrow.class,
             ChatColor.GREEN,
             "Flaming Arrow Barrage",
@@ -117,28 +78,17 @@ public enum WeaponType {
             Material.BOW,
             new Enchantment[]{Enchantment.INFINITY},
             new Integer[]{1},
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "bow_melee", //[2]
-                            "arrow_damage", //[3]
-                            "ability_on_arrow_damage", //[4]
-                            "ability_on_num_arrows_barrage", //[5]
-                            "ability_on_arrow_poison" //[6]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
-                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}  //[6]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("bow_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("arrow_damage", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_arrow_damage", 0, new Double[]{1.7, 1.8, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_num_arrows_barrage", 0, new Double[]{9.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_arrow_poison", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+            })),
     GOBLIN_SWORD("Goblin Sword",
+            "W004",
             W3_GoblinBow.class,
             ChatColor.GREEN,
             "None",
@@ -146,20 +96,13 @@ public enum WeaponType {
             Material.WOODEN_SWORD,
             new Enchantment[]{Enchantment.FIRE_ASPECT},
             new Integer[]{1},
-            new StatBundle(
-                    new String[]{
-                            "sword_melee_damage", //[0]
-                            "flame_aspect", //[1]
-                            "knockback" //[2]
-                    },
-                    new Integer[]{0, 0, 0},
-                    new Double[][]{
-                            {7.0, 8.0, -1.0, -1.0, -1.0}, //[0]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}, //[1]
-                            {1.0, 2.0, -1.0, -1.0, -1.0}  //[2]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("sword_melee_damage", 0, new Double[]{7.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("flame_aspect", 0, new Double[]{1.0, 2.0, -1.0, -1.0, -1.0}),
+                    new StatRow("knockback", 0, new Double[]{1.0, 2.0, -1.0, -1.0, -1.0}),
+            })),
     GOBLIN_ARROW("Goblin Arrow",
+            "W005",
             W3_GoblinSword.class,
             ChatColor.GREEN,
             "None",
@@ -167,16 +110,11 @@ public enum WeaponType {
             Material.ARROW,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "melee_damage", //[0]
-                    },
-                    new Integer[]{0},
-                    new Double[][]{
-                            {100.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("melee_damage", 0, new Double[]{100.0, 14.0, -1.0, -1.0, -1.0}),
+            })),
     IGORS_TRIDENT("Igors Trident",
+            "W006",
             W4_IgorsTrident.class,
             ChatColor.RED,
             "Explosive Tridents",
@@ -184,28 +122,17 @@ public enum WeaponType {
             Material.TRIDENT,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "trident_melee", //[2]
-                            "trident_projectile_damage", //[3]
-                            "ability_on_trident_projectile_damage", //[4]
-                            "trident_explosion_damage", //[5]
-                            "trident_explosion_power", //[6]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
-                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[4]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[5]
-                            {8.0, 7.0, -1.0, -1.0, -1.0} //[6]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("trident_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("trident_projectile_damage", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_trident_projectile_damage", 0, new Double[]{1.7, 1.8, -1.0, -1.0, -1.0}),
+                    new StatRow("trident_explosion_damage", 0, new Double[]{9.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("trident_explosion_power", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+            })),
     SUMO_STICK("Sumo Stick",
+            "W007",
             W5_SumoStick.class,
             ChatColor.BLUE,
             "Ground Pound",
@@ -213,36 +140,21 @@ public enum WeaponType {
             Material.STICK,
             new Enchantment[]{Enchantment.KNOCKBACK},
             new Integer[]{2},
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "stick_melee", //[2]
-                            "stick_knockback_power", //[3]
-                            "pickup_cooldown", //[4]
-                            "ability_on_pickup_cooldown", //[5]
-                            "throw_power", //[6]
-                            "ability_on_throw_power", //[7]
-                            "sumo_slam_explosion_damage", //[8]
-                            "sumo_slam_explosion_power", //[9]
-                            "sumo_jump_power" //[10]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[3]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[4]
-                            {1.7, 1.8, -1.0, -1.0, -1.0}, //[5]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[6]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[7]
-                            {9.0, 8.0, -1.0, -1.0, -1.0},  //[8]
-                            {9.0, 8.0, -1.0, -1.0, -1.0}, //[9]
-                            {8.0, 7.0, -1.0, -1.0, -1.0}, //[10]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("stick_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("stick_knockback_power", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+                    new StatRow("pickup_cooldown", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_pickup_cooldown", 0, new Double[]{1.7, 1.8, -1.0, -1.0, -1.0}),
+                    new StatRow("throw_power", 0, new Double[]{9.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_throw_power", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+                    new StatRow("sumo_slam_explosion_damage", 0, new Double[]{9.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("sumo_slam_explosion_power", 0, new Double[]{9.0, 8.0, -1.0, -1.0, -1.0}),
+                    new StatRow("sumo_jump_power", 0, new Double[]{8.0, 7.0, -1.0, -1.0, -1.0}),
+            })),
     GRIEF_SWORD("Grief Sword",
+            "W008",
             W6_GriefSword.class,
             ChatColor.AQUA,
             "Invis & Health Steal",
@@ -250,24 +162,15 @@ public enum WeaponType {
             Material.NETHERITE_SWORD,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "a_dur", //[0]
-                            "a_rech", //[1]
-                            "sword_melee", //[2]
-                            "ability_on_melee_health_steal", //[3]
-                            "ability_on_explosive_immune" //[4]
-                    },
-                    new Integer[]{0, 0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}, //[3]
-                            {1.0, -1.0, -1.0, -1.0, -1.0}  //[4]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("a_dur", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("a_rech", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("sword_melee", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_melee_health_steal", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+                    new StatRow("ability_on_explosive_immune", 0, new Double[]{1.0, -1.0, -1.0, -1.0, -1.0}),
+            })),
     PARACHUTE("Parachute",
+            "W009",
             S0_Parachute.class,
             ChatColor.YELLOW,
             "Open Parachute",
@@ -275,22 +178,14 @@ public enum WeaponType {
             Material.PHANTOM_MEMBRANE,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "item_melee_damage", //[0]
-                            "parachute_cooldown", //[1]
-                            "chicken_speed", //[2]
-                            "chicken_carpet_bomb_tnt" //[3]
-                    },
-                    new Integer[]{0, 0, 0, 0},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.6, 1.7, -1.0, -1.0, -1.0}  //[3]
-                    }
-            )),
+            new StatTable(new StatRow[]{
+                    new StatRow("item_melee_damage", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("parachute_cooldown", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("chicken_speed", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("chicken_carpet_bomb_tnt", 0, new Double[]{1.6, 1.7, -1.0, -1.0, -1.0}),
+            })),
     THROWING_TNT("Throwing TNT",
+            "W010",
             S1_ThrowingTNT.class,
             ChatColor.YELLOW,
             "Throw TNT",
@@ -298,34 +193,16 @@ public enum WeaponType {
             Material.COAL,
             null,
             null,
-            new StatBundle(
-                    new String[]{
-                            "melee_damage", //[0]
-                            "throw_cooldown", //[1]
-                            "explode_damage", //[2]
-                            "explode_power", //[3]
-                            "set_blocks_on_fire" //[4]
-                    },
-                    new Integer[]{0, 0, 0, 0, -1},
-                    new Double[][]{
-                            {15.0, 14.0, -1.0, -1.0, -1.0}, //[0]
-                            {20.0, 18.0, -1.0, -1.0, -1.0}, //[1]
-                            {7.0, 7.3, -1.0, -1.0, -1.0}, //[2]
-                            {1.0, -1.0, -1.0, -1.0, -1.0}, //[3]
-                            {1.0, -1.0, -1.0, -1.0, -1.0}  //[4]
-                    }
-            )),
-    UNKNOWN_WEAPON(null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null,
-            null);
+            new StatTable(new StatRow[]{
+                    new StatRow("melee_damage", 0, new Double[]{15.0, 14.0, -1.0, -1.0, -1.0}),
+                    new StatRow("throw_cooldown", 0, new Double[]{20.0, 18.0, -1.0, -1.0, -1.0}),
+                    new StatRow("explode_damage", 0, new Double[]{7.0, 7.3, -1.0, -1.0, -1.0}),
+                    new StatRow("explode_power", 0, new Double[]{1.0, -1.0, -1.0, -1.0, -1.0}),
+                    new StatRow("set_blocks_on_fire", -1, new Double[]{1.0, -1.0, -1.0, -1.0, -1.0}),
+            }));
 
     private final String name;
+    private final String weaponID;
     private final ChatColor textColor;
     private final String weaponDrop;
     private final String weaponRightClick;
@@ -333,10 +210,11 @@ public enum WeaponType {
     private final Class<? extends WeaponHolder> weaponClass;
     private final Enchantment[] enchantments;
     private final Integer[] enchantmentPowers;
-    private final StatBundle statBundle;
+    private final StatTable statBundle;
 
-    private WeaponType(String name, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, StatBundle statBundle){
+    private WeaponType(String name, String weaponID, Class<? extends WeaponHolder> weaponClass, ChatColor textColor, String weaponDrop, String weaponRightClick, Material material, Enchantment[] enchantments, Integer[] enchantmentPowers, StatTable statBundle){
         this.name = name;
+        this.weaponID = weaponID;
         this.weaponClass = weaponClass;
         this.textColor = textColor;
         this.weaponDrop = weaponDrop;
@@ -383,7 +261,11 @@ public enum WeaponType {
         return enchantmentPowers;
     }
 
-    public StatBundle getStatBundle() {
+    public StatTable getStatTable() {
         return statBundle;
+    }
+
+    public String getWeaponID() {
+        return weaponID;
     }
 }

@@ -11,6 +11,12 @@ public class DatabaseColumn {
     private final int defaultValue;
 
     public DatabaseColumn(String columnName, boolean isPrimaryKey, boolean isForeignKey, String foreignReferences, boolean isInt, boolean isVarChar, int defaultValue){
+        if(isForeignKey && foreignReferences == null){
+            throw new RuntimeException("DatabaseColumn: isForeignKey cant be true without giving a foreign reference");
+        }
+        if(isInt && isVarChar){
+            throw new RuntimeException("DatabaseColumn: isInt and isVarChar cant both be true or false");
+        }
         this.columnName = columnName;
         this.isPrimaryKey = isPrimaryKey;
         this.isForeignKey = isForeignKey;

@@ -111,18 +111,18 @@ public class Weapon {
 
   public static WeaponType getWeaponTypeFromItemStack(ItemStack itemStack) {
       if(itemStack == null){
-          return WeaponType.UNKNOWN_WEAPON;
+          return null;
       }
       ItemMeta meta = itemStack.getItemMeta();
       if(meta == null){
-          return WeaponType.UNKNOWN_WEAPON;
+          return null;
       }
       PersistentDataContainer container = meta.getPersistentDataContainer();
       if(container == null){
-          return WeaponType.UNKNOWN_WEAPON;
+          return null;
       }
       if (!(container.has(WEAPON_TYPE_KEY, PersistentDataType.STRING))) {
-          return WeaponType.UNKNOWN_WEAPON;
+          return null;
       }
       String weaponTypeName = container.get(WEAPON_TYPE_KEY, PersistentDataType.STRING);
       return WeaponType.valueOf(weaponTypeName);
@@ -135,14 +135,14 @@ public class Weapon {
         }
         ItemMeta meta = itemStack.getItemMeta();
         if(meta == null){
-            return WeaponType.UNKNOWN_WEAPON;
+            return null;
         }
         PersistentDataContainer container = meta.getPersistentDataContainer();
         if(container == null){
-            return WeaponType.UNKNOWN_WEAPON;
+            return null;
         }
         if (!(container.has(WEAPON_TYPE_KEY, PersistentDataType.STRING))) {
-            return WeaponType.UNKNOWN_WEAPON;
+            return null;
         }
         String weaponTypeName = container.get(WEAPON_TYPE_KEY, PersistentDataType.STRING);
         return WeaponType.valueOf(weaponTypeName);

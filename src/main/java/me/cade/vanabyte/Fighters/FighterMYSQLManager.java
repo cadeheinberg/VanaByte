@@ -45,7 +45,7 @@ public class FighterMYSQLManager {
             if(WeaponType.values()[i] == WeaponType.UNKNOWN_WEAPON){
                 continue;
             }
-            FIGHTER_STATS.put(WeaponType.values()[i], buildStatTable(WeaponType.values()[i].getStatBundle().getStats(), WeaponType.values()[i].getStatBundle().getUpgradeLevels()));
+            FIGHTER_STATS.put(WeaponType.values()[i], buildStatTable(WeaponType.values()[i].getStatTable().getStats(), WeaponType.values()[i].getStatTable().getUpgradeLevels()));
         }
     }
 
