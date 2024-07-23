@@ -44,6 +44,8 @@ public class DatabaseManager {
 
     DatabaseBackup.backupDatabase();
 
+    getNamesOfEveryTableInDatabase();
+
     try{
       //keep calling until its true
       while(createTableFromDatabaseTableObject(DatabaseTable.getFighterTable())){
@@ -57,6 +59,12 @@ public class DatabaseManager {
       e.printStackTrace();
       System.out.println("Error creating table");
     }
+  }
+
+  private void getNamesOfEveryTableInDatabase() {
+//    SELECT table_name
+//    FROM information_schema.tables
+//    WHERE table_schema = 'your_database_name';
   }
 
   private boolean createTableFromDatabaseTableObject(DatabaseTable databaseTable) throws SQLException {
@@ -130,7 +138,7 @@ public class DatabaseManager {
         String YES_INPUT = scanner.nextLine();
         if (YES_INPUT.equals("yes")) {
           //rename the old table
-
+//          RENAME TABLE old_table_name TO new_table_name;
           //recursive call
         }else {
           System.out.println("canceled by user");
@@ -186,8 +194,9 @@ public class DatabaseManager {
           String YES_INPUT = scanner.nextLine();
           if (YES_INPUT.equals("yes")) {
             //rename the database column
-
-            //remove it
+//            ALTER TABLE table_name
+//            CHANGE COLUMN old_column_name new_column_name datatype;
+            //remove it from list we are working with.
             databaseColNames.remove(USER_INTEGER - 2);
           }else {
             System.out.println("canceled by user");
