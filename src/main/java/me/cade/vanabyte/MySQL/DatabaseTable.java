@@ -45,10 +45,10 @@ public class DatabaseTable {
         for(int i = 0; i < weaponTables.length; i++){
             WeaponType weaponType = WeaponType.values()[i];
             StatTable statTable = weaponType.getStatTable();
-            DatabaseColumn[] weaponColumns = new DatabaseColumn[statTable.getStatRows().length];
+            DatabaseColumn[] weaponColumns = new DatabaseColumn[statTable.getStatRows().length + 1];
             weaponColumns[0] = new DatabaseColumn("uuid", true, true, "Fighter (uuid)", false, true, 0);
             for (int j = 1; j < weaponColumns.length; j++){
-                StatRow statRow = statTable.getStatRows()[j];
+                StatRow statRow = statTable.getStatRows()[j - 1];
                 weaponColumns[j] = new DatabaseColumn(statRow.getStatName(), false, false, null, true, false, statRow.getDefaultUpgradeLevel());
             }
             weaponTables[i] = new DatabaseTable(weaponType.getWeaponID(), weaponColumns);
