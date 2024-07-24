@@ -26,7 +26,7 @@ public class QuestListener implements Listener {
         if(qManager == null){
             return;
         }
-        if(e.getWeaponType() == null || e.getWeaponType() == WeaponType.UNKNOWN_WEAPON){
+        if(e.getWeaponType() == null){
             return;
         }
         ArrayList<Quest> quests = qManager.getQuestsOfWeaponType(e.getWeaponType());

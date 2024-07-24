@@ -27,13 +27,13 @@ public class DatabaseTable {
     }
 
     public static void makeDatabaseTablesObjects(){
-        DatabaseColumn[] fighterColumns = new DatabaseColumn[5];
+        DatabaseColumn[] fighterColumns = new DatabaseColumn[6];
         fighterColumns[0] = new DatabaseColumn("uuid", true, false, null, false, true, 0);
         fighterColumns[1] = new DatabaseColumn("player_name", false, false, null, false, true, 0);
-        fighterColumns[4] = new DatabaseColumn("kit_id", false, true, "Unlocked Kit (uuid)", false, true, 0);
-        fighterColumns[2] = new DatabaseColumn("server_cakes", false, false, null, true, false, 100);
-        fighterColumns[3] = new DatabaseColumn("server_level", false, false, null, true, false, 1);
-        fighterColumns[4] = new DatabaseColumn("server_exp", false, false, null, true, false, 0);
+        fighterColumns[2] = new DatabaseColumn("kit_id", false, true, "Unlocked Kit (uuid)", false, true, 0);
+        fighterColumns[3] = new DatabaseColumn("server_cakes", false, false, null, true, false, 100);
+        fighterColumns[4] = new DatabaseColumn("server_level", false, false, null, true, false, 1);
+        fighterColumns[5] = new DatabaseColumn("server_exp", false, false, null, true, false, 0);
         fighterTable = new DatabaseTable("Fighter", fighterColumns);
 
         DatabaseColumn[] unlockedKitsColumns = new DatabaseColumn[2];
@@ -46,7 +46,7 @@ public class DatabaseTable {
             WeaponType weaponType = WeaponType.values()[i];
             StatTable statTable = weaponType.getStatTable();
             DatabaseColumn[] weaponColumns = new DatabaseColumn[statTable.getStatRows().length];
-            fighterColumns[0] = new DatabaseColumn("uuid", true, true, "Fighter (uuid)", false, true, 0);
+            weaponColumns[0] = new DatabaseColumn("uuid", true, true, "Fighter (uuid)", false, true, 0);
             for (int j = 1; j < weaponColumns.length; j++){
                 StatRow statRow = statTable.getStatRows()[j];
                 weaponColumns[j] = new DatabaseColumn(statRow.getStatName(), false, false, null, true, false, statRow.getDefaultUpgradeLevel());

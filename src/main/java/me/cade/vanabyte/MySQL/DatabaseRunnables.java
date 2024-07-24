@@ -18,7 +18,9 @@ public class DatabaseRunnables {
             public void run() {
                 Bukkit.getConsoleSender().sendMessage(ChatColor.LIGHT_PURPLE + "MYSQL_HUB: CHECKING CONNECTION");
                 try {
-                    VanaByte.databaseManager.isConnectionValid();
+                    if(!VanaByte.databaseManager.isConnectionValid()){
+                        Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "POLLING: ERROR 0");
+                    }
                 } catch (SQLException e) {
                     e.printStackTrace();
                     Bukkit.getConsoleSender().sendMessage(ChatColor.RED + "POLLING: ERROR 1");

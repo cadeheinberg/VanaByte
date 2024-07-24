@@ -171,7 +171,7 @@ public class FighterKitManager {
             if (item == null){
                 continue;
             }
-            if(Weapon.getWeaponTypeFromItemStack(item) != WeaponType.UNKNOWN_WEAPON){
+            if(Weapon.getWeaponTypeFromItemStack(item) != null){
                 player.getInventory().remove(item);
             }
         }

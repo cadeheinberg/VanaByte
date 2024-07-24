@@ -29,7 +29,7 @@ public class GUIManager {
                     if(upgradeLecternLocation.getZ() == location.getZ()){
                         ItemStack toUpgrade = player.getInventory().getItemInMainHand();
                         WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(toUpgrade);
-                        if(weaponType == WeaponType.UNKNOWN_WEAPON){
+                        if(weaponType == null){
                             player.sendMessage(ChatColor.RED + "Only special items can be upgrades");
                             return;
                         }

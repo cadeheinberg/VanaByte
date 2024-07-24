@@ -39,10 +39,10 @@ public class MyGUIListener implements Listener {
                 e.getAction() == InventoryAction.PLACE_SOME ||
                 e.getAction() == InventoryAction.PLACE_ALL ||
                 e.getAction() == InventoryAction.PLACE_ONE){
-            if(Weapon.getWeaponTypeFromItemStack(e.getCursor()) == null || Weapon.getWeaponTypeFromItemStack(e.getCursor()) == WeaponType.UNKNOWN_WEAPON){
+            if(Weapon.getWeaponTypeFromItemStack(e.getCursor()) == null || Weapon.getWeaponTypeFromItemStack(e.getCursor()) == null){
                 return;
             }
-            if (e.getCurrentItem() == null || Weapon.getWeaponTypeFromItemStack(e.getCurrentItem()) == WeaponType.UNKNOWN_WEAPON) {
+            if (e.getCurrentItem() == null || Weapon.getWeaponTypeFromItemStack(e.getCurrentItem()) == null) {
                 return;
             }
             e.setCancelled(true);

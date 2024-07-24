@@ -40,7 +40,7 @@ public class NPCListener implements Listener {
 			}
 		}else{
 			WeaponType weaponType = Weapon.getWeaponTypeFromMainHand(e.getPlayer());
-			if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
+			if(weaponType != null){
 				WeaponHolder weaponHolder = Fighter.get(e.getPlayer()).getFighterKitManager().getWeaponHolderWithType(weaponType);
 				if(weaponHolder != null){
 					weaponHolder.doRightClickEntity(e);
@@ -86,13 +86,13 @@ public class NPCListener implements Listener {
 			}
 			WeaponType weaponType = Weapon.getWeaponTypeFromItemStack(e.getPlayer().getInventory().getItemInMainHand());
 			WeaponType weaponType2 = Weapon.getWeaponTypeFromItemStack(e.getPlayer().getInventory().getItemInOffHand());
-			if(weaponType != null && weaponType != WeaponType.UNKNOWN_WEAPON){
+			if(weaponType != null){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);
 				return;
 			}
-			if(weaponType2 != null && weaponType2 != WeaponType.UNKNOWN_WEAPON){
+			if(weaponType2 != null){
 				e.setCancelled(true);
 				e.getPlayer().sendMessage(ChatColor.RED + "Special items can't leave your inventory!");
 				e.getPlayer().playSound(e.getPlayer().getLocation(), Sound.ENTITY_VILLAGER_NO, 8, 1);

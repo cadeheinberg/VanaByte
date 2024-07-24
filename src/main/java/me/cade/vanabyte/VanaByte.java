@@ -55,7 +55,6 @@ public class VanaByte extends JavaPlugin {
 //        }
 		getConfig().options().copyDefaults(true);
 		saveConfig();
-		startMySQL();
 		myFormat.setGroupingUsed(true);
 		setLocations();
 		SpawnRealEntities.removeAllNpcs();
@@ -68,6 +67,7 @@ public class VanaByte extends JavaPlugin {
 		addPlayersToFighters();
 		entityDamageManager = new EntityDamageManager();
 		extraErrorChecking();
+		startMySQL();
 		Bukkit.getConsoleSender().sendMessage(ChatColor.BLUE + "SERVER STARTED SUCCESSFULLY");
 	}
 
