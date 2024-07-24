@@ -30,7 +30,7 @@ public class DatabaseTable {
         DatabaseColumn[] fighterColumns = new DatabaseColumn[6];
         fighterColumns[0] = new DatabaseColumn("uuid", true, false, null, false, true, 0);
         fighterColumns[1] = new DatabaseColumn("player_name", false, false, null, false, true, 0);
-        fighterColumns[2] = new DatabaseColumn("kit_id", false, true, "Unlocked Kit (uuid)", false, true, 0);
+        fighterColumns[2] = new DatabaseColumn("kit_id", false, false, null, false, true, 0);
         fighterColumns[3] = new DatabaseColumn("server_cakes", false, false, null, true, false, 100);
         fighterColumns[4] = new DatabaseColumn("server_level", false, false, null, true, false, 1);
         fighterColumns[5] = new DatabaseColumn("server_exp", false, false, null, true, false, 0);
