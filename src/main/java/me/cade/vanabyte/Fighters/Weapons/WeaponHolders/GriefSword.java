@@ -1,7 +1,9 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -12,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class W6_GriefSword extends WeaponHolder {
+public class GriefSword extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.GRIEF_SWORD;
 
@@ -25,7 +27,7 @@ public class W6_GriefSword extends WeaponHolder {
 
     private final int abilityOnBlastShield = fighter.getTickFromWeaponType(weaponType, 4);
 
-    public W6_GriefSword(Fighter fighter) {
+    public GriefSword(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

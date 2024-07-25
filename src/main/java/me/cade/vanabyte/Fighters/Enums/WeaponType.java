@@ -1,7 +1,7 @@
 package me.cade.vanabyte.Fighters.Enums;
 
-import me.cade.vanabyte.Fighters.WeaponHolders.WeaponHolder;
-import me.cade.vanabyte.Fighters.WeaponHolders.*;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolders.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
@@ -10,7 +10,7 @@ import org.bukkit.enchantments.Enchantment;
 public enum WeaponType {
     AIRBENDER_SWORD("Airbender Sword",
             "W000",
-            W0_AirbenderSword.class,
+            AirbenderSword.class,
             ChatColor.WHITE,
             "Gust of Wind",
             "Use Shield",
@@ -27,7 +27,7 @@ public enum WeaponType {
             })),
     BESERKER_AXE("Beserker Axe",
             "W001",
-            W1_BeserkerAxe.class,
+            BeserkerAxe.class,
             ChatColor.LIGHT_PURPLE,
             "Haste, Speed, Jump",
             "Beserker Leap",
@@ -48,7 +48,7 @@ public enum WeaponType {
             })),
     SHOTTY_SHOTGUN("Shotty Shotgun",
             "W002",
-            W2_ShottyShotgun.class,
+            ShottyShotgun.class,
             ChatColor.YELLOW,
             "Flaming Bullets",
             "Shoot Shotgun",
@@ -71,7 +71,7 @@ public enum WeaponType {
             })),
     GOBLIN_BOW("Goblin Bow",
             "W003",
-            W3_GoblinArrow.class,
+            GoblinArrow.class,
             ChatColor.GREEN,
             "Flaming Arrow Barrage",
             "Shoot Bow",
@@ -89,7 +89,7 @@ public enum WeaponType {
             })),
     GOBLIN_SWORD("Goblin Sword",
             "W004",
-            W3_GoblinBow.class,
+            GoblinBow.class,
             ChatColor.GREEN,
             "None",
             "None",
@@ -103,7 +103,7 @@ public enum WeaponType {
             })),
     GOBLIN_ARROW("Goblin Arrow",
             "W005",
-            W3_GoblinSword.class,
+            GoblinSword.class,
             ChatColor.GREEN,
             "None",
             "None",
@@ -115,7 +115,7 @@ public enum WeaponType {
             })),
     IGORS_TRIDENT("Igors Trident",
             "W006",
-            W4_IgorsTrident.class,
+            IgorsTrident.class,
             ChatColor.RED,
             "Explosive Tridents",
             "Throw Trident",
@@ -133,7 +133,7 @@ public enum WeaponType {
             })),
     SUMO_STICK("Sumo Stick",
             "W007",
-            W5_SumoStick.class,
+            SumoStick.class,
             ChatColor.BLUE,
             "Ground Pound",
             "PickUp/Toss Enemy",
@@ -155,7 +155,7 @@ public enum WeaponType {
             })),
     GRIEF_SWORD("Grief Sword",
             "W008",
-            W6_GriefSword.class,
+            GriefSword.class,
             ChatColor.AQUA,
             "Invis & Health Steal",
             "None",
@@ -171,7 +171,7 @@ public enum WeaponType {
             })),
     PARACHUTE("Parachute",
             "W009",
-            S0_Parachute.class,
+            Parachute.class,
             ChatColor.YELLOW,
             "Open Parachute",
             "Open Parachute",
@@ -186,7 +186,7 @@ public enum WeaponType {
             })),
     THROWING_TNT("Throwing TNT",
             "W010",
-            S1_ThrowingTNT.class,
+            ThrowingTNT.class,
             ChatColor.YELLOW,
             "Throw TNT",
             "Throw TNT",

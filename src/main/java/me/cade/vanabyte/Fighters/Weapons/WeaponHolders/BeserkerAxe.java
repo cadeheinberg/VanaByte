@@ -1,18 +1,19 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-public class W1_BeserkerAxe extends WeaponHolder {
+public class BeserkerAxe extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.BESERKER_AXE;
 
@@ -31,7 +32,7 @@ public class W1_BeserkerAxe extends WeaponHolder {
     private final double abilityOnJumpLevel = fighter.getDoubleFromWeaponType(weaponType, 8);
     private final double abilityOnHasteLevel = fighter.getDoubleFromWeaponType(weaponType, 9);
 
-    public W1_BeserkerAxe(Fighter fighter) {
+    public BeserkerAxe(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

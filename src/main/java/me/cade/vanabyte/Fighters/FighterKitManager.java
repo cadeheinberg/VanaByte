@@ -3,7 +3,9 @@ package me.cade.vanabyte.Fighters;
 import me.cade.vanabyte.Fighters.Enums.ArmorType;
 import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
-import me.cade.vanabyte.Fighters.WeaponHolders.*;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolders.*;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
@@ -136,7 +138,7 @@ public class FighterKitManager {
         if(weaponHolder == null){
             return;
         }
-        ((S0_Parachute) weaponHolder).getOffChicken();
+        ((Parachute) weaponHolder).getOffChicken();
     }
 
     public void setExplosionImmune(boolean explosionImmune) {

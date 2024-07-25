@@ -1,7 +1,9 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.entity.*;
@@ -13,7 +15,7 @@ import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class S0_Parachute extends WeaponHolder {
+public class Parachute extends WeaponHolder {
 
 	private final static WeaponType WEAPON_TYPE = WeaponType.PARACHUTE;
 	private Chicken chicken = null;
@@ -22,7 +24,7 @@ public class S0_Parachute extends WeaponHolder {
 	private final int abilityOnCooldown = -1;
 	private final double chickenSpeed = fighter.getDoubleFromWeaponType(weaponType, 2);
 
-	public S0_Parachute(Fighter fighter) {
+	public Parachute(Fighter fighter) {
 		super(WEAPON_TYPE, fighter);
 		super.weapon = new Weapon(
 				WEAPON_TYPE,

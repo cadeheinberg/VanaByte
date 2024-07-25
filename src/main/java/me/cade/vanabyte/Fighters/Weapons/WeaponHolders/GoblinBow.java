@@ -1,8 +1,10 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.*;
@@ -15,7 +17,7 @@ import org.bukkit.util.Vector;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class W3_GoblinBow extends WeaponHolder {
+public class GoblinBow extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.GOBLIN_BOW;
     private final int BOW_SPAM_COOLDOWN_TICKS = 3;
@@ -32,7 +34,7 @@ public class W3_GoblinBow extends WeaponHolder {
 
     private final double abilityOnArrowPoison = fighter.getDoubleFromWeaponType(weaponType, 6);
 
-    public W3_GoblinBow(Fighter fighter) {
+    public GoblinBow(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

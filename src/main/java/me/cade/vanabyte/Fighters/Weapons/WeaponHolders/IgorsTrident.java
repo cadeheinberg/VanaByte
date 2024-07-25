@@ -1,20 +1,20 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
-import me.cade.vanabyte.VanaByte;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Trident;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
-public class W4_IgorsTrident extends WeaponHolder {
+public class IgorsTrident extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.IGORS_TRIDENT;
     private final int TRIDENT_SPAM_COOLDOWN_TICKS = 3;
@@ -31,7 +31,7 @@ public class W4_IgorsTrident extends WeaponHolder {
 
     private final double baseTridentExplosionPower = fighter.getDoubleFromWeaponType(weaponType, 6);
 
-    public W4_IgorsTrident(Fighter fighter) {
+    public IgorsTrident(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

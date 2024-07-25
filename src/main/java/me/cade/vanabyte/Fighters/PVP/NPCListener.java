@@ -3,10 +3,8 @@ package me.cade.vanabyte.Fighters.PVP;
 import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.Fighters.FighterKitManager;
-import me.cade.vanabyte.Fighters.WeaponHolders.Weapon;
-import me.cade.vanabyte.Fighters.WeaponHolders.WeaponHolder;
-import me.cade.vanabyte.NPCS.RealEntities.MyArmorStand;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import me.cade.vanabyte.Permissions.SafeZone;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.ChatColor;
@@ -19,7 +17,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
 
 public class NPCListener implements Listener {
 

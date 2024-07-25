@@ -1,6 +1,7 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
+import me.cade.vanabyte.MySQL.DatabaseTable;
 import me.cade.vanabyte.NPCS.GUIs.GUIManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestManager;
 import me.cade.vanabyte.NPCS.PacketHolograms.HologramManager;

@@ -1,23 +1,22 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
-import me.cade.vanabyte.VanaByte;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 import java.util.Random;
 
-public class W2_ShottyShotgun extends WeaponHolder {
+public class ShottyShotgun extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.SHOTTY_SHOTGUN;
 
@@ -40,7 +39,7 @@ public class W2_ShottyShotgun extends WeaponHolder {
 
     private final double abilityOnSetBlocksOnFire = fighter.getDoubleFromWeaponType(weaponType, 11);
 
-    public W2_ShottyShotgun(Fighter fighter) {
+    public ShottyShotgun(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

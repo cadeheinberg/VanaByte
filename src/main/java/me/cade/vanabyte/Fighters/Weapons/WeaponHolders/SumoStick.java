@@ -1,7 +1,9 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
@@ -14,7 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-public class W5_SumoStick extends WeaponHolder {
+public class SumoStick extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.SUMO_STICK;
 
@@ -34,7 +36,7 @@ public class W5_SumoStick extends WeaponHolder {
     private final double sumoSlamExplosionPower = fighter.getDoubleFromWeaponType(weaponType, 9);
     private final double sumoJumpPower = fighter.getDoubleFromWeaponType(weaponType, 10);
 
-    public W5_SumoStick(Fighter fighter) {
+    public SumoStick(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

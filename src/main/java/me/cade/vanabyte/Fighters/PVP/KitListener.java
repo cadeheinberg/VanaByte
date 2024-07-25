@@ -2,11 +2,10 @@ package me.cade.vanabyte.Fighters.PVP;
 
 import me.cade.vanabyte.Fighters.Fighter;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
-import me.cade.vanabyte.Fighters.WeaponHolders.*;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import me.cade.vanabyte.Permissions.SafeZone;
-import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.entity.*;
@@ -17,7 +16,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemStack;
+
 import java.util.UUID;
 
 public class KitListener implements Listener {

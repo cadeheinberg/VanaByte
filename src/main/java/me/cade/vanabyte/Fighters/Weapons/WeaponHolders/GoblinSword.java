@@ -1,13 +1,15 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
-public class W3_GoblinSword extends WeaponHolder {
+public class GoblinSword extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.GOBLIN_SWORD;
 
@@ -15,7 +17,7 @@ public class W3_GoblinSword extends WeaponHolder {
     private final double flameAspectLevel = fighter.getDoubleFromWeaponType(weaponType, 1);
     private final double knockBackLevel = fighter.getDoubleFromWeaponType(weaponType, 2);
 
-    public W3_GoblinSword(Fighter fighter) {
+    public GoblinSword(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

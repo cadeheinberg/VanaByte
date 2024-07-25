@@ -1,7 +1,7 @@
 package me.cade.vanabyte.Fighters;
 
-import me.cade.vanabyte.Fighters.WeaponHolders.W6_GriefSword;
-import me.cade.vanabyte.Fighters.WeaponHolders.WeaponHolder;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolders.GriefSword;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.entity.Player;
 
 public class FighterAbilityManager {
@@ -116,7 +116,7 @@ public class FighterAbilityManager {
     }
 
     public void updateAbilityParticles(WeaponHolder weaponHolder) {
-        if (weaponHolder instanceof W6_GriefSword) {
+        if (weaponHolder instanceof GriefSword) {
             // greif goes invisible
             return;
         }

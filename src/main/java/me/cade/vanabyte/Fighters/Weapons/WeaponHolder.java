@@ -1,4 +1,4 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons;
 
 import com.google.errorprone.annotations.ForOverride;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;

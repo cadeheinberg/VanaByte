@@ -4,14 +4,10 @@ import me.cade.vanabyte.MySQL.HiddenPersonal.DatabaseAccess;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class DatabaseManager {
 
@@ -95,7 +91,7 @@ public class DatabaseManager {
       throw new RuntimeException(e);
     }
     try {
-      if(!synchTableNames(code_TableNames, db_TableNames)){
+      if (!synchTableNames(code_TableNames, db_TableNames)) {
         VanaByte.sendConsoleMessageBad("DatabaseManager Tables", "doTableNameMatching error");
         return;
       }
@@ -106,23 +102,23 @@ public class DatabaseManager {
 
     VanaByte.sendConsoleMessageWarning("DatabaseManager Columns", "Comparing code to DB schema...");
     try {
-      if(!syncColumnNames(DatabaseTable.getFighterTable())){
+      if (!syncColumnNames(DatabaseTable.getFighterTable())) {
         // table not successfully created
         VanaByte.sendConsoleMessageBad("DatabaseManager Columns", "sync " + DatabaseTable.getFighterTable().getTableName() + " columns error");
         return;
       }
-      if(!syncColumnNames(DatabaseTable.getUnlockedKitsTable())) {
+      if (!syncColumnNames(DatabaseTable.getUnlockedKitsTable())) {
         // table not successfully created
         VanaByte.sendConsoleMessageBad("DatabaseManager Columns", "sync " + DatabaseTable.getUnlockedKitsTable().getTableName() + " columns error");
         return;
       }
-      for (DatabaseTable dt : DatabaseTable.getWeaponTables()){
-        if(!syncColumnNames(dt)) {
+      for (DatabaseTable dt : DatabaseTable.getWeaponTables()) {
+        if (!syncColumnNames(dt)) {
           VanaByte.sendConsoleMessageBad("DatabaseManager Columns", "sync " + dt.getTableName() + " columns error");
           return;
         }
       }
-    } catch (SQLException e){
+    } catch (SQLException e) {
       e.printStackTrace();
       System.out.println("Error creating table");
     }
@@ -150,85 +146,83 @@ public class DatabaseManager {
     Scanner scanner = new Scanner(System.in);
     List<String> matches = new ArrayList<>();
     List<DatabaseTable> matches_Tables = new ArrayList<>();
-    for(DatabaseTable code_TableName : code_TableNames){
-      if(db_TableNames.contains(code_TableName.getTableName())){
+    for (DatabaseTable code_TableName : code_TableNames) {
+      if (db_TableNames.contains(code_TableName.getTableName())) {
         matches.add(code_TableName.getTableName());
         matches_Tables.add(code_TableName);
       }
     }
     code_TableNames.removeAll(matches_Tables);
     db_TableNames.removeAll(matches);
-    for(DatabaseTable code_TableName : code_TableNames){
+    for (DatabaseTable code_TableName : code_TableNames) {
       System.out.println("Table name \"" + code_TableName.getTableName() + "\" exists in code but not in database");
       System.out.println("1. make a new table");
       int i = 2;
-      for (String db_TableName : db_TableNames){
+      for (String db_TableName : db_TableNames) {
         System.out.println(i + ". rename \"" + db_TableName + "\" from database to \"" + code_TableName.getTableName() + "\"");
         i++;
       }
-      while (true){
+      while (true) {
         String USER_INPUT = scanner.nextLine();
         System.out.println("You entered '" + USER_INPUT + "'");
         int USER_INTEGER = 0;
-        if(USER_INPUT.equals("vana")){
+        if (USER_INPUT.equals("vana")) {
           scanner.close();
           return false;
         }
         try {
           USER_INTEGER = Integer.parseInt(USER_INPUT);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
           System.out.println("type vana to exit");
           continue;
         }
-        if (USER_INTEGER == 1){
+        if (USER_INTEGER == 1) {
           //create new table code_TableName
-          if(!createNewTable(code_TableName)){
+          if (!createNewTable(code_TableName)) {
             scanner.close();
             return false;
           }
           break;
-        }
-        else if(USER_INTEGER > 1 && ((USER_INTEGER - 2) < db_TableNames.size())){
+        } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < db_TableNames.size())) {
           //rename db_TableNames.get(USER_INTERGER - 2) to code_TableName
           SQL_QUERY = "RENAME TABLE " + db_TableNames.get(USER_INTEGER - 2) + " TO " + code_TableName + ";";
-          if(!doubleCheckAndDoQuery(SQL_QUERY)){
+          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
             System.out.println("canceling table renaming");
             return false;
           }
           System.out.println("table successfully renamed");
           db_TableNames.remove(code_TableName.getTableName());
           break;
-        }else{
+        } else {
           System.out.println("type vana to exit");
           continue;
         }
       }
     }
-    for (String db_TableName : db_TableNames){
+    for (String db_TableName : db_TableNames) {
       System.out.println("Table name \"" + db_TableName + "\" exists in database but not in code");
       System.out.println("1. ignore");
       System.out.println("2. delete table");
-      while (true){
+      while (true) {
         String USER_INPUT = scanner.nextLine();
         int USER_INTEGER = 0;
-        if(USER_INPUT.equals("vana")){
+        if (USER_INPUT.equals("vana")) {
           scanner.close();
           return false;
         }
         try {
           USER_INTEGER = Integer.parseInt(USER_INPUT);
-        } catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
           System.out.println("type vana to exit");
           continue;
         }
-        if (USER_INTEGER == 1){
+        if (USER_INTEGER == 1) {
           break;
-        }
-        else if(USER_INTEGER == 2){
-          SQL_QUERY = "DROP TABLE IF EXISTS " +  db_TableName;
+        } else if (USER_INTEGER == 2) {
+          SQL_QUERY = "DROP TABLE IF EXISTS " + db_TableName;
           doubleCheckAndDoQuery(SQL_QUERY);
           break;
-        }else{
+        } else {
           System.out.println("type vana to exit");
           continue;
         }
@@ -244,44 +238,44 @@ public class DatabaseManager {
     String createTableSQL = "CREATE TABLE IF NOT EXISTS " + databaseTable.getTableName() + " (";
     String primaryKey = "";
     List<String> foreignKeys = new ArrayList<>();
-    for(DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()){
+    for (DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()) {
       String dataType;
       String dataDefault;
-      if(databaseColumn.isInt()){
+      if (databaseColumn.isInt()) {
         dataType = "int";
-        dataDefault = "DEFAULT " + databaseColumn.getDefaultValue();
+        dataDefault = "DEFAULT " + databaseColumn.getDefaultValueInt();
       } else if (databaseColumn.isVarChar()) {
         dataType = "varchar(100)";
         dataDefault = "NOT NULL";
-      } else{
+      } else {
         System.out.println("data type is not correct for this");
         return false;
       }
-      if(databaseColumn.isPrimaryKey()){
+      if (databaseColumn.isPrimaryKey()) {
         primaryKey = primaryKey + databaseColumn.getColumnName() + ", ";
       }
-      if(databaseColumn.isForeignKey()){
+      if (databaseColumn.isForeignKey()) {
         foreignKeys.add("FOREIGN KEY (" + databaseColumn.getColumnName() + ") REFERENCES " + databaseColumn.getForeignReferences());
       }
       createTableSQL = createTableSQL + databaseColumn.getColumnName() + " " + dataType + " " + dataDefault + ", ";
     }
-    if(primaryKey.isEmpty()){
+    if (primaryKey.isEmpty()) {
       System.out.println("primary key shouldnt be empty for a table");
       return false;
     }
     primaryKey = primaryKey.substring(0, primaryKey.length() - 2);
     primaryKey = "PRIMARY KEY (" + primaryKey + ")";
     createTableSQL = createTableSQL + primaryKey;
-    if(!foreignKeys.isEmpty()){
+    if (!foreignKeys.isEmpty()) {
       createTableSQL = createTableSQL + ", ";
-      for(String fKey : foreignKeys){
-        if(foreignKeys.getLast().equals(fKey)){
+      for (String fKey : foreignKeys) {
+        if (foreignKeys.getLast().equals(fKey)) {
           createTableSQL = createTableSQL + fKey + ");";
-        }else{
+        } else {
           createTableSQL = createTableSQL + fKey + ", ";
         }
       }
-    }else{
+    } else {
       createTableSQL = createTableSQL + ");";
     }
     //createTableSQL = createTableSQL.substring(0, createTableSQL.length() - 2);
@@ -368,8 +362,8 @@ public class DatabaseManager {
         }
         if (USER_INTEGER == 1) {
           //todo create a new row code_ColName in this table
-          SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " ADD COLUMN " + code_ColName + " INT DEFAULT " + code_ColName.getDefaultValue();
-          if(!doubleCheckAndDoQuery(SQL_QUERY)){
+          SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " ADD COLUMN " + code_ColName + " INT DEFAULT " + code_ColName.getDefaultValueInt();
+          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
             scanner.close();
             return false;
           }
@@ -413,7 +407,7 @@ public class DatabaseManager {
         } else if (USER_INTEGER == 2) {
           SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " DROP COLUMN " + db_ColName;
           //statement.executeUpdate(sql);
-          if(!doubleCheckAndDoQuery(SQL_QUERY)){
+          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
             return false;
           }
           break;
@@ -426,4 +420,99 @@ public class DatabaseManager {
     scanner.close();
     return true;
   }
+
+  public String getStatInt(DatabaseTable databaseTable, DatabaseColumn databaseColumn) {
+
+    return null;
+  }
+
+  public int getStatInt() {
+
+    return 0;
+  }
+
+  public boolean updateStat(DatabaseTable databaseTable, DatabaseColumn databaseColumn) {
+
+    return false;
+  }
+
+  public boolean insertStat(DatabaseTable databaseTable) {
+    String SQL_QUERY = "INSERT INTO " + databaseTable.getTableName() + " (player_name, health, strength) VALUES (?, ?, ?)";
+    String colNames = " (";
+    String colVals = " VALUES (";
+    for(DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()){
+      colNames = colNames + databaseColumn.getColumnName() + ", ";
+      colVals = colVals + "?, ";
+    }
+    colNames = colNames.substring(0, colNames.length() - 2);
+    colVals = colVals.substring(0, colVals.length() - 2);
+    colNames = colNames + ")";
+    colVals = colVals + ")";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
+      int currentIndex = 1;
+      for(DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()){
+        if(databaseColumn.isVarChar()){
+          preparedStatement.setString(currentIndex, databaseColumn);
+        }
+        if(databaseColumn.isInt()){
+          preparedStatement.setInt(currentIndex, databaseColumn.getDefaultValueInt());
+        }
+        currentIndex++;
+      }
+      preparedStatement.setString(1, playerName);
+      preparedStatement.setInt(2, health);
+      preparedStatement.setInt(3, strength);
+      preparedStatement.executeUpdate();
+    }
+    catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+    return true;
+  }
+
+  //return true if player is in database after execution
+  private boolean addPlayerToDatabaseIfNotExist(UUID playerUUID, String playerName){
+    if(doesPlayerExist(playerUUID)){
+      return true;
+    }
+    for(DatabaseTable databaseTable : DatabaseTable.getAllTables()){
+      if(!insertStat(databaseTable)){
+        return false;
+      }
+    }
+    return true;
+  }
+
+  private boolean doesPlayerExist(UUID playerUUID) {
+    int index = 0;
+    PreparedStatement statement;
+    try {
+      statement = connection.prepareStatement("SELECT " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " FROM " + DatabaseTable.getFighterTable().getTableName() + " WHERE " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " = ?");
+      statement.setString(1, playerUUID.toString());
+      ResultSet results = statement.executeQuery();
+      if (results.next()) {
+        return true;
+      }
+      return false;
+    }
+    catch (SQLException e) {
+      e.printStackTrace();
+      return false;
+    }
+  }
+
+  private void updatePlayerName(UUID playerUUID, String newName) {
+    int index = 1;
+    PreparedStatement statement;
+    try {
+      statement = connection.prepareStatement(
+              "UPDATE " + DatabaseTable.getFighterTable().getTableName() + " SET " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " = ? WHERE " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName()  + " = ?");
+      statement.setString(2, playerUUID.toString());
+      statement.setString(1, newName);
+      statement.executeUpdate();
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+  }
+
 }

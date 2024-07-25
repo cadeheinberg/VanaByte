@@ -1,20 +1,20 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
 import java.util.ArrayList;
 
-public class W0_AirbenderSword extends WeaponHolder {
+public class AirbenderSword extends WeaponHolder {
 
     private final static WeaponType WEAPON_TYPE = WeaponType.AIRBENDER_SWORD;
 
@@ -27,7 +27,7 @@ public class W0_AirbenderSword extends WeaponHolder {
     private final double gustEnemyDamage = fighter.getDoubleFromWeaponType(weaponType, 4);
     private final double gustSelfPower = fighter.getDoubleFromWeaponType(weaponType, 5);
 
-    public W0_AirbenderSword(Fighter fighter) {
+    public AirbenderSword(Fighter fighter) {
         super(WEAPON_TYPE, fighter);
         super.weapon = new Weapon(
                 WEAPON_TYPE,

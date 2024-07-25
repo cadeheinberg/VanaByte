@@ -1,8 +1,10 @@
-package me.cade.vanabyte.Fighters.WeaponHolders;
+package me.cade.vanabyte.Fighters.Weapons.WeaponHolders;
 
 import me.cade.vanabyte.Fighters.PVP.EntityMetadata;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.Fighters.Fighter;
+import me.cade.vanabyte.Fighters.Weapons.Weapon;
+import me.cade.vanabyte.Fighters.Weapons.WeaponHolder;
 import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.ExplosionPrimeEvent;
@@ -10,7 +12,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.util.Vector;
 
-public class S1_ThrowingTNT extends WeaponHolder {
+public class ThrowingTNT extends WeaponHolder {
 
 	private final static WeaponType WEAPON_TYPE = WeaponType.THROWING_TNT;
 
@@ -22,7 +24,7 @@ public class S1_ThrowingTNT extends WeaponHolder {
 	private final double explosionDamage = fighter.getDoubleFromWeaponType(weaponType, 2);
 	private final double explosionPower = fighter.getDoubleFromWeaponType(weaponType, 3);
 
-	public S1_ThrowingTNT(Fighter fighter) {
+	public ThrowingTNT(Fighter fighter) {
 		super(WEAPON_TYPE, fighter);
 		super.weapon = new Weapon(
 				WEAPON_TYPE,
