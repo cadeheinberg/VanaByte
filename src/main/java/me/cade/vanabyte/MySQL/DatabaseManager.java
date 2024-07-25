@@ -421,23 +421,91 @@ public class DatabaseManager {
     return true;
   }
 
-  public String getStatInt(DatabaseTable databaseTable, DatabaseColumn databaseColumn) {
-
-    return null;
+  public FighterTable downloadFighterTable(DatabaseTable databaseTable, UUID uuid) {
+    FighterTable fighterTable = null;
+    FighterColumn[] fighterColumns = new FighterColumn[databaseTable.getDatabaseColumns().length];
+    PreparedStatement statement;
+    try {
+      statement = connection
+              .prepareStatement("SELECT " + "*" + " FROM " + databaseTable.getTableName() + " WHERE " + "uuid" + " = ?");
+      statement.setString(1, uuid.toString());
+      ResultSet result = statement.executeQuery();
+      while (result.next()) {
+        for (int i = 0; i < databaseTable.getDatabaseColumns().length; i++){
+          DatabaseColumn databaseColumn = databaseTable.getDatabaseColumns()[i];
+          FighterColumn fighterColumn;
+          if(databaseColumn.isVarChar()){
+            fighterColumn = new FighterColumn(databaseTable, databaseColumn, -1, result.getString(databaseColumn.getColumnName()));
+          }else if(databaseColumn.isInt()){
+            fighterColumn = new FighterColumn(databaseTable, databaseColumn, result.getInt(databaseColumn.getColumnName()), null);
+          }else{
+            return null;
+          }
+          fighterColumns[i] = fighterColumn;
+        }
+      }
+      fighterTable = new FighterTable(databaseTable, fighterColumns);
+    } catch (SQLException e) {
+      e.printStackTrace();
+    }
+    return fighterTable;
   }
 
-  public int getStatInt() {
-
-    return 0;
+  public boolean uploadFighterTable(FighterTable fighterTable, UUID uuid, String playerName) {
+    DatabaseTable databaseTable = fighterTable.getDatabaseTable();
+    String SQL_QUERY = "UPDATE " + databaseTable.getTableName() + " SET ";
+    String sqlLines = "";
+    for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
+      sqlLines = sqlLines + fighterColumn.getDatabaseColumn().getColumnName() + " = ?, ";
+    }
+    sqlLines = sqlLines.substring(0, sqlLines.length() - 2);
+    SQL_QUERY = SQL_QUERY + sqlLines;
+    try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
+      int currentIndex = 1;
+      for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
+        if(fighterColumn.getDatabaseColumn().isVarChar()){
+          String fighterString = "";
+          if(fighterColumn.getValueString() == null){
+            fighterString = "error_set_to_null";
+          }else if(fighterColumn.getDatabaseColumn().getDefaultValueString().equals("func_uuid")){
+            fighterString = uuid.toString();
+          }else if(fighterColumn.getDatabaseColumn().getDefaultValueString().equals("func_player_name")){
+            fighterString = playerName;
+          }else{
+            fighterString = fighterColumn.getValueString();
+          }
+        } else if(fighterColumn.getDatabaseColumn().isInt()){
+          preparedStatement.setInt(currentIndex, fighterColumn.getValueInt());
+        }else{
+          VanaByte.sendConsoleMessageBad("DatabaseManager", "column is not true for int or varchar");
+          return false;
+        }
+        currentIndex++;
+      }
+      int rowsAffected = preparedStatement.executeUpdate();
+      return rowsAffected > 0;
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
-  public boolean updateStat(DatabaseTable databaseTable, DatabaseColumn databaseColumn) {
+//  public boolean updateStatInt(DatabaseTable databaseTable, DatabaseColumn databaseColumn, UUID uuid, int setter) {
+//    PreparedStatement statement;
+//    try {
+//      statement = connection.prepareStatement(
+//              "UPDATE " + databaseTable.getTableName() + " SET " + databaseColumn.getColumnName() + " = ? WHERE " + "uuid" + " = ?");
+//      statement.setInt(1, setter);
+//      statement.setString(2, uuid.toString());
+//      statement.executeUpdate();
+//      return true;
+//    } catch (SQLException e) {
+//      e.printStackTrace();
+//    }
+//    return false;
+//  }
 
-    return false;
-  }
-
-  public boolean insertStat(DatabaseTable databaseTable) {
-    String SQL_QUERY = "INSERT INTO " + databaseTable.getTableName() + " (player_name, health, strength) VALUES (?, ?, ?)";
+  private boolean insertStat(DatabaseTable databaseTable, UUID uuid, String playerName) {
+    String SQL_QUERY = "INSERT INTO " + databaseTable.getTableName();
     String colNames = " (";
     String colVals = " VALUES (";
     for(DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()){
@@ -448,20 +516,30 @@ public class DatabaseManager {
     colVals = colVals.substring(0, colVals.length() - 2);
     colNames = colNames + ")";
     colVals = colVals + ")";
+    SQL_QUERY = SQL_QUERY + colNames + colVals;
     try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
       int currentIndex = 1;
       for(DatabaseColumn databaseColumn : databaseTable.getDatabaseColumns()){
         if(databaseColumn.isVarChar()){
-          preparedStatement.setString(currentIndex, databaseColumn);
-        }
-        if(databaseColumn.isInt()){
+          String defaultString = "";
+          if(databaseColumn.getDefaultValueString() == null){
+            defaultString = "error_set_to_null";
+          }else if(databaseColumn.getDefaultValueString().equals("func_uuid")){
+            defaultString = uuid.toString();
+          }else if(databaseColumn.getDefaultValueString().equals("func_player_name")){
+            defaultString = playerName;
+          }else{
+            defaultString = databaseColumn.getDefaultValueString();
+          }
+          preparedStatement.setString(currentIndex, defaultString);
+        }else if(databaseColumn.isInt()){
           preparedStatement.setInt(currentIndex, databaseColumn.getDefaultValueInt());
+        }else{
+          VanaByte.sendConsoleMessageBad("DatabaseManager", "column is not true for int or varchar");
+          return false;
         }
         currentIndex++;
       }
-      preparedStatement.setString(1, playerName);
-      preparedStatement.setInt(2, health);
-      preparedStatement.setInt(3, strength);
       preparedStatement.executeUpdate();
     }
     catch (SQLException e) {
@@ -471,12 +549,12 @@ public class DatabaseManager {
   }
 
   //return true if player is in database after execution
-  private boolean addPlayerToDatabaseIfNotExist(UUID playerUUID, String playerName){
+  public boolean addPlayerToDatabaseIfNotExist(UUID playerUUID, String playerName){
     if(doesPlayerExist(playerUUID)){
       return true;
     }
     for(DatabaseTable databaseTable : DatabaseTable.getAllTables()){
-      if(!insertStat(databaseTable)){
+      if(!insertStat(databaseTable, playerUUID, playerName)){
         return false;
       }
     }
@@ -501,18 +579,18 @@ public class DatabaseManager {
     }
   }
 
-  private void updatePlayerName(UUID playerUUID, String newName) {
-    int index = 1;
-    PreparedStatement statement;
-    try {
-      statement = connection.prepareStatement(
-              "UPDATE " + DatabaseTable.getFighterTable().getTableName() + " SET " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " = ? WHERE " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName()  + " = ?");
-      statement.setString(2, playerUUID.toString());
-      statement.setString(1, newName);
-      statement.executeUpdate();
-    } catch (SQLException e) {
-      e.printStackTrace();
-    }
-  }
+//  private void updatePlayerName(UUID playerUUID, String newName) {
+//    int index = 1;
+//    PreparedStatement statement;
+//    try {
+//      statement = connection.prepareStatement(
+//              "UPDATE " + DatabaseTable.getFighterTable().getTableName() + " SET " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " = ? WHERE " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName()  + " = ?");
+//      statement.setString(2, playerUUID.toString());
+//      statement.setString(1, newName);
+//      statement.executeUpdate();
+//    } catch (SQLException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
 }
