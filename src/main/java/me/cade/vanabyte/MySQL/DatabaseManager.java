@@ -35,25 +35,10 @@ public class DatabaseManager {
     return connection != null && connection.isValid(5);
   }
 
-  private boolean doubleCheckAndDoQuery(String SQL_QUERY) throws SQLException {
+  private boolean doQuery(String SQL_QUERY) throws SQLException {
     Statement statement = connection.createStatement();
-    System.out.println("type yes to confirm " + SQL_QUERY);
-    Scanner scanner = new Scanner(System.in);
-    String USER_INPUT = scanner.nextLine();
-    while (true) {
-      if (USER_INPUT.equals("yes")) {
-        statement.execute(SQL_QUERY);
-        statement.close();
-        break;
-      } else if (USER_INPUT.equals("vana")) {
-        scanner.close();
-        return false;
-      } else {
-        System.out.println("type vana to exit");
-        continue;
-      }
-    }
-    scanner.close();
+    statement.execute(SQL_QUERY);
+    statement.close();
     return true;
   }
 
@@ -145,7 +130,6 @@ public class DatabaseManager {
 
   private boolean synchTableNames(List<DatabaseTable> code_TableNames, List<String> db_TableNames) throws SQLException {
     String SQL_QUERY = "";
-    Scanner scanner = new Scanner(System.in);
     List<String> matches = new ArrayList<>();
     List<DatabaseTable> matches_Tables = new ArrayList<>();
     for (DatabaseTable code_TableName : code_TableNames) {
@@ -165,11 +149,10 @@ public class DatabaseManager {
         i++;
       }
       while (true) {
-        String USER_INPUT = scanner.nextLine();
+        String USER_INPUT = "1";
         System.out.println("You entered '" + USER_INPUT + "'");
         int USER_INTEGER = 0;
         if (USER_INPUT.equals("vana")) {
-          scanner.close();
           return false;
         }
         try {
@@ -181,14 +164,13 @@ public class DatabaseManager {
         if (USER_INTEGER == 1) {
           //create new table code_TableName
           if (!createNewTable(code_TableName)) {
-            scanner.close();
             return false;
           }
           break;
         } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < db_TableNames.size())) {
           //rename db_TableNames.get(USER_INTERGER - 2) to code_TableName
           SQL_QUERY = "RENAME TABLE " + db_TableNames.get(USER_INTEGER - 2) + " TO " + code_TableName + ";";
-          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
+          if (!doQuery(SQL_QUERY)) {
             System.out.println("canceling table renaming");
             return false;
           }
@@ -206,10 +188,9 @@ public class DatabaseManager {
       System.out.println("1. ignore");
       System.out.println("2. delete table");
       while (true) {
-        String USER_INPUT = scanner.nextLine();
+        String USER_INPUT = "1";
         int USER_INTEGER = 0;
         if (USER_INPUT.equals("vana")) {
-          scanner.close();
           return false;
         }
         try {
@@ -222,7 +203,7 @@ public class DatabaseManager {
           break;
         } else if (USER_INTEGER == 2) {
           SQL_QUERY = "DROP TABLE IF EXISTS " + db_TableName;
-          doubleCheckAndDoQuery(SQL_QUERY);
+          doQuery(SQL_QUERY);
           break;
         } else {
           System.out.println("type vana to exit");
@@ -230,7 +211,6 @@ public class DatabaseManager {
         }
       }
     }
-    scanner.close();
     return true;
   }
 
@@ -323,7 +303,6 @@ public class DatabaseManager {
   private boolean syncColumnNames(DatabaseTable databaseTable) throws SQLException {
     String SQL_QUERY = "";
     boolean tableCreationSuccessful = false;
-    Scanner scanner = new Scanner(System.in);
     List<DatabaseColumn> code_ColNames = new ArrayList<>(Arrays.stream(databaseTable.getDatabaseColumns()).toList());
     List<String> db_ColNames = getColumnNamesIfTableExists(databaseTable.getTableName());
     Statement statement = connection.createStatement();
@@ -350,10 +329,9 @@ public class DatabaseManager {
         i++;
       }
       while (true) {
-        String USER_INPUT = scanner.nextLine();
+        String USER_INPUT = "1";
         int USER_INTEGER = 0;
         if (USER_INPUT.equals("vana")) {
-          scanner.close();
           return false;
         }
         try {
@@ -365,16 +343,14 @@ public class DatabaseManager {
         if (USER_INTEGER == 1) {
           //todo create a new row code_ColName in this table
           SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " ADD COLUMN " + code_ColName + " INT DEFAULT " + code_ColName.getDefaultValueInt();
-          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
-            scanner.close();
+          if (!doQuery(SQL_QUERY)) {
             return false;
           }
           break;
         } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < db_ColNames.size())) {
           SQL_QUERY = "RENAME TABLE " + db_ColNames.get(USER_INTEGER - 2) + " TO " + code_ColName + ";";
-          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
+          if (!doQuery(SQL_QUERY)) {
             System.out.println("canceling table renaming");
-            scanner.close();
             return false;
           }
           System.out.println("table successfully renamed");
@@ -385,17 +361,15 @@ public class DatabaseManager {
           continue;
         }
       }
-      scanner.close();
     }
     for (String db_ColName : db_ColNames) {
       System.out.println("Column \"" + db_ColName + "\" exists in database but not in code");
       System.out.println("1. ignore");
       System.out.println("2. delete column");
       while (true) {
-        String USER_INPUT = scanner.nextLine();
+        String USER_INPUT = "1";
         int USER_INTEGER = 0;
         if (USER_INPUT.equals("vana")) {
-          scanner.close();
           return false;
         }
         try {
@@ -410,7 +384,7 @@ public class DatabaseManager {
         } else if (USER_INTEGER == 2) {
           SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " DROP COLUMN " + db_ColName;
           //statement.executeUpdate(sql);
-          if (!doubleCheckAndDoQuery(SQL_QUERY)) {
+          if (!doQuery(SQL_QUERY)) {
             return false;
           }
           break;
@@ -420,13 +394,12 @@ public class DatabaseManager {
         }
       }
     }
-    scanner.close();
     return true;
   }
 
   public FighterTable downloadFighterTable(DatabaseTable databaseTable, UUID uuid) {
     FighterTable fighterTable = null;
-    FighterColumn[] fighterColumns = new FighterColumn[databaseTable.getDatabaseColumns().length];
+    ArrayList<FighterColumn> fighterColumns = new ArrayList<>();
     PreparedStatement statement;
     try {
       statement = connection
@@ -444,10 +417,10 @@ public class DatabaseManager {
           }else{
             return null;
           }
-          fighterColumns[i] = fighterColumn;
+          fighterColumns.add(fighterColumn);
         }
       }
-      fighterTable = new FighterTable(databaseTable, Arrays.stream(fighterColumns).toList());
+      fighterTable = new FighterTable(databaseTable, fighterColumns);
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -455,6 +428,64 @@ public class DatabaseManager {
   }
 
   public boolean uploadFighterTable(FighterTable fighterTable, UUID uuid, String playerName) {
+    if(fighterTable.getDatabaseTable().getInsertStyle().equals("UPDATE")){
+      return updateFighterTable(fighterTable, uuid, playerName);
+    } else if (fighterTable.getDatabaseTable().getInsertStyle().equals("INSERT")) {
+      return insertFighterTable(fighterTable, uuid, playerName);
+    }
+    return false;
+  }
+
+  //when a primary key has 2 fields like uuid and kitid, dont want to override old by using SET
+  public boolean insertFighterTable(FighterTable fighterTable, UUID uuid, String playerName) {
+    DatabaseTable databaseTable = fighterTable.getDatabaseTable();
+    String SQL_QUERY = "INSERT INTO " + databaseTable.getTableName() + " (";
+    String sqlLines = "";
+    for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
+      sqlLines = sqlLines + fighterColumn.getDatabaseColumn().getColumnName() + ", ";
+    }
+    sqlLines = sqlLines.substring(0, sqlLines.length() - 2);
+    SQL_QUERY = SQL_QUERY + sqlLines + ") VALUES (";
+    sqlLines = "";
+    for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
+      sqlLines = sqlLines + "?, ";
+    }
+    sqlLines = sqlLines.substring(0, sqlLines.length() - 2);
+    SQL_QUERY = SQL_QUERY + sqlLines + ")";
+    try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
+      int currentIndex = 1;
+      for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
+        if(fighterColumn.getDatabaseColumn().isVarChar()){
+          String fighterString = "";
+          if(fighterColumn.getValueString() == null){
+            fighterString = "error_set_to_null";
+          }else if(fighterColumn.getDatabaseColumn().getDefaultValueString().equals("func_uuid")){
+            fighterString = uuid.toString();
+          }else if(fighterColumn.getDatabaseColumn().getDefaultValueString().equals("func_player_name")){
+            fighterString = playerName;
+          }else{
+            fighterString = fighterColumn.getValueString();
+          }
+          preparedStatement.setString(currentIndex, fighterString);
+        } else if(fighterColumn.getDatabaseColumn().isInt()){
+          preparedStatement.setInt(currentIndex, fighterColumn.getValueInt());
+        }else{
+          VanaByte.sendConsoleMessageBad("DatabaseManager", "column is not true for int or varchar");
+          return false;
+        }
+        currentIndex++;
+      }
+      VanaByte.sendConsoleMessageBad("DatabaseManager", preparedStatement.toString());
+      int rowsAffected = preparedStatement.executeUpdate();
+      return rowsAffected > 0;
+    } catch (SQLException e) {
+//      throw new RuntimeException(e);
+      VanaByte.sendConsoleMessageBad("DatabaseManager", SQL_QUERY);
+    }
+    return false;
+  }
+
+  private boolean updateFighterTable(FighterTable fighterTable, UUID uuid, String playerName){
     DatabaseTable databaseTable = fighterTable.getDatabaseTable();
     String SQL_QUERY = "UPDATE " + databaseTable.getTableName() + " SET ";
     String sqlLines = "";
@@ -493,22 +524,7 @@ public class DatabaseManager {
     }
   }
 
-//  public boolean updateStatInt(DatabaseTable databaseTable, DatabaseColumn databaseColumn, UUID uuid, int setter) {
-//    PreparedStatement statement;
-//    try {
-//      statement = connection.prepareStatement(
-//              "UPDATE " + databaseTable.getTableName() + " SET " + databaseColumn.getColumnName() + " = ? WHERE " + "uuid" + " = ?");
-//      statement.setInt(1, setter);
-//      statement.setString(2, uuid.toString());
-//      statement.executeUpdate();
-//      return true;
-//    } catch (SQLException e) {
-//      e.printStackTrace();
-//    }
-//    return false;
-//  }
-
-  private boolean insertStat(DatabaseTable databaseTable, UUID uuid, String playerName) {
+  private boolean insertStatsFromDefault(DatabaseTable databaseTable, UUID uuid, String playerName) {
     String SQL_QUERY = "INSERT INTO " + databaseTable.getTableName();
     String colNames = " (";
     String colVals = " VALUES (";
@@ -558,7 +574,7 @@ public class DatabaseManager {
       return true;
     }
     for(DatabaseTable databaseTable : DatabaseTable.getAllTables()){
-      if(!insertStat(databaseTable, playerUUID, playerName)){
+      if(!insertStatsFromDefault(databaseTable, playerUUID, playerName)){
         return false;
       }
     }
@@ -581,6 +597,35 @@ public class DatabaseManager {
       e.printStackTrace();
       return false;
     }
+  }
+
+  public boolean deletePlayerFromEntireDatabase(UUID playerUUID){
+    if(!deletePlayerFromDatabaseTable(playerUUID, DatabaseTable.getUnlockedKitsTable())){
+      return false;
+    }
+    for(DatabaseTable databaseTable : DatabaseTable.getWeaponTables()){
+      if(!deletePlayerFromDatabaseTable(playerUUID, databaseTable)){
+        return false;
+      }
+    }
+    if(!deletePlayerFromDatabaseTable(playerUUID, DatabaseTable.getFighterTable())){
+      return false;
+    }
+    return true;
+  }
+
+  private boolean deletePlayerFromDatabaseTable(UUID playerUUID, DatabaseTable databaseTable){
+    PreparedStatement statement;
+    try {
+      statement = connection
+              .prepareStatement("DELETE FROM " + databaseTable.getTableName() + " WHERE " + "uuid" + " = ?");
+      statement.setString(1, playerUUID.toString());
+      statement.execute();
+    } catch (SQLException e) {
+      e.printStackTrace();
+      return false;
+    }
+    return true;
   }
 
 //  private void updatePlayerName(UUID playerUUID, String newName) {

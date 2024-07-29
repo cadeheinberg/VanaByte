@@ -1,5 +1,6 @@
 package me.cade.vanabyte.MySQL;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Enums.StatRow;
 import me.cade.vanabyte.Fighters.Enums.StatTable;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
@@ -12,14 +13,16 @@ public class DatabaseTable {
     private static final List<DatabaseTable> allTables = new ArrayList<>();
 
     private final String tableName;
+    private final String insertStyle;
     private final DatabaseColumn[] databaseColumns;
 
     private static DatabaseTable fighterTable = null;
     private static DatabaseTable unlockedKitsTable = null;
     private static DatabaseTable[] weaponTables = null;
 
-    public DatabaseTable(String tableName, DatabaseColumn[] databaseColumns){
+    public DatabaseTable(String tableName, String insertStyle, DatabaseColumn[] databaseColumns){
         this.tableName = tableName;
+        this.insertStyle = insertStyle;
         this.databaseColumns = databaseColumns;
     }
 
@@ -35,17 +38,17 @@ public class DatabaseTable {
         DatabaseColumn[] fighterColumns = new DatabaseColumn[6];
         fighterColumns[0] = new DatabaseColumn("uuid", true, false, null, false, true, 0, "func_uuid");
         fighterColumns[1] = new DatabaseColumn("player_name", false, false, null, false, true, 0, "func_player_name");
-        fighterColumns[2] = new DatabaseColumn("kit_id", false, false, null, false, true, 0, "W001");
+        fighterColumns[2] = new DatabaseColumn("kit_id", false, false, null, false, true, 0, KitType.AIRBENDER.getKitID());
         fighterColumns[3] = new DatabaseColumn("server_cakes", false, false, null, true, false, 100, null);
         fighterColumns[4] = new DatabaseColumn("server_level", false, false, null, true, false, 1, null);
         fighterColumns[5] = new DatabaseColumn("server_exp", false, false, null, true, false, 0, null);
-        fighterTable = new DatabaseTable("Fighter", fighterColumns);
+        fighterTable = new DatabaseTable("Fighter", "UPDATE", fighterColumns);
         allTables.add(fighterTable);
 
         DatabaseColumn[] unlockedKitsColumns = new DatabaseColumn[2];
         unlockedKitsColumns[0] = new DatabaseColumn("uuid", true, true, "Fighter (uuid)", false, true, 0, "func_uuid");
-        unlockedKitsColumns[1] = new DatabaseColumn("kit_id", true, false, null, false, true, 0, null);
-        unlockedKitsTable = new DatabaseTable("UnlockedKit", unlockedKitsColumns);
+        unlockedKitsColumns[1] = new DatabaseColumn("kit_id", true, false, null, false, true, 0, KitType.AIRBENDER.getKitID());
+        unlockedKitsTable = new DatabaseTable("UnlockedKit", "INSERT", unlockedKitsColumns);
         allTables.add(unlockedKitsTable);
 
         weaponTables = new DatabaseTable[WeaponType.values().length];
@@ -58,7 +61,7 @@ public class DatabaseTable {
                 StatRow statRow = statTable.getStatRows()[j - 1];
                 weaponColumns[j] = new DatabaseColumn(statRow.getStatName(), false, false, null, true, false, statRow.getDefaultUpgradeLevel(), null);
             }
-            weaponTables[i] = new DatabaseTable(weaponType.getWeaponID(), weaponColumns);
+            weaponTables[i] = new DatabaseTable(weaponType.getWeaponID(), "UPDATE", weaponColumns);
             allTables.add(weaponTables[i]);
         }
     }
@@ -89,5 +92,9 @@ public class DatabaseTable {
 
     public static List<DatabaseTable> getAllTables() {
         return allTables;
+    }
+
+    public String getInsertStyle() {
+        return insertStyle;
     }
 }

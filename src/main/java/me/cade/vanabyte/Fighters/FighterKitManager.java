@@ -44,6 +44,8 @@ public class FighterKitManager {
     protected void fighterJoined(){
         //remove all potions
         this.applyNightVision();
+        player.sendMessage("kit found: " + fighter.getFighterMYSQLManager().getFighterTable().getFighterColumns().get(2).getValueString());
+        this.setKitType(KitType.getKitTypeFromKitID(fighter.getFighterMYSQLManager().getFighterTable().getFighterColumns().get(2).getValueString()));
         this.giveKit();
     }
 
@@ -71,17 +73,12 @@ public class FighterKitManager {
 
     public void setKitType(KitType kitType){
         this.kitType = kitType;
-        fighter.setKitID(kitType.getKitID());
     }
 
     public void giveKit() {
         if(kitType == null){
-            KitType toGive = KitType.getKitTypeFromKitID(fighter.getKitID());
-            if(toGive == null){
-                player.sendMessage(ChatColor.RED + "Error retrieving your kit, contact a mod");
-                return;
-            }
-            this.setKitType(toGive);
+            player.sendMessage(ChatColor.RED + "Error retrieving your kit, contact a mod");
+            return;
         }
         this.clearFighterKitItems();
         if(weaponHolders != null){

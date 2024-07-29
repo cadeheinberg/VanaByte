@@ -2,7 +2,6 @@ package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Enums.StatRow;
-import me.cade.vanabyte.Fighters.Enums.StatTable;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.MySQL.DatabaseTable;
 import me.cade.vanabyte.MySQL.FighterColumn;
@@ -10,6 +9,7 @@ import me.cade.vanabyte.MySQL.FighterTable;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.entity.Player;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 public class FighterMYSQLManager {
@@ -20,8 +20,8 @@ public class FighterMYSQLManager {
     private FighterTable unlockedKitsTable;
     private FighterTable[] weaponTables = new FighterTable[DatabaseTable.getWeaponTables().length];
 
-    private HashMap<KitType, Boolean> INDEX_unlockedKits = new HashMap<>();
-    private HashMap<WeaponType, Double[]> INDEX_weaponStats = new HashMap<>();
+    private final HashMap<KitType, Boolean> INDEX_unlockedKits = new HashMap<>();
+    private final HashMap<WeaponType, Double[]> INDEX_weaponStats = new HashMap<>();
 
     private boolean buildINDEX_weaponStats(){
         //Integer[X] = Y means that upgrade Double[X][Y] has been unlocked. First level of each unlocked here.
@@ -44,15 +44,19 @@ public class FighterMYSQLManager {
                 }else{
                     if(databaseUpgradeLevel >= statRow.getStats().length || statRow.getStats()[databaseUpgradeLevel] < 0){
                         //somehow unlocked an invalid stat, just use base and report issue
-                        outputStats[X] = statRow.getStats()[0];
+                        outputStats[statRowIndex] = statRow.getStats()[0];
                         VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "invalid stat tried to be used");
                         return false;
                     }else{
-                        outputStats[X] = statRow.getStats()[databaseUpgradeLevel];
+                        outputStats[statRowIndex] = statRow.getStats()[databaseUpgradeLevel];
                     }
                 }
             }
             INDEX_weaponStats.put(weaponType, outputStats);
+            player.sendMessage(weaponType.toString());
+            for(int WHAT = 0; WHAT < outputStats.length; WHAT++){
+                player.sendMessage(WHAT + ": " + outputStats[WHAT]);
+            }
         }
         return true;
     }
@@ -128,8 +132,9 @@ public class FighterMYSQLManager {
     }
 
     protected void deleteMeFromDatabase(){
-//        VanaByte.databaseManager.deletePlayerFromTable(this.player);
-        //player.kickPlayer("Your stats have been cleared");
+        if(VanaByte.databaseManager.deletePlayerFromEntireDatabase(this.player.getUniqueId())){
+            player.sendMessage("You have been removed from database");
+        }
     }
 
     public boolean hasUnlockedKitType(KitType kitType) {
@@ -145,8 +150,11 @@ public class FighterMYSQLManager {
         INDEX_unlockedKits.put(kitType, true);
     }
 
-    public HashMap<WeaponType, Double[]> getFIGHTER_STATS() {
+    public HashMap<WeaponType, Double[]> getINDEX_weaponStats() {
         return INDEX_weaponStats;
     }
 
+    public FighterTable getFighterTable() {
+        return fighterTable;
+    }
 }

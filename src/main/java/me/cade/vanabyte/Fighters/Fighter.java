@@ -1,7 +1,6 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
-import me.cade.vanabyte.MySQL.DatabaseTable;
 import me.cade.vanabyte.NPCS.GUIs.GUIManager;
 import me.cade.vanabyte.NPCS.GUIs.QuestManager;
 import me.cade.vanabyte.NPCS.PacketHolograms.HologramManager;
@@ -22,7 +21,6 @@ public class Fighter {
 	private Plugin plugin = VanaByte.getPlugin(VanaByte.class);
 	private Player player = null;
 	private UUID uuid = null;
-	private String kitID;
 	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
 
 
@@ -52,7 +50,6 @@ public class Fighter {
 
 	public void fighterJoined(){
 		fighterMYSQLManager.fighterJoined();
-		fighterKitManager.fighterJoined();
 		fighterTaskManager.fighterJoined();
 		fighterPacketHologramsManager.fighterJoined();
 		//Need to do this after everything has been setup
@@ -99,10 +96,6 @@ public class Fighter {
 
 	public void fighterPurchasedKit() {
 		fighterPacketHologramsManager.fighterPurchasedKit();
-	}
-
-	public void setKitID(String kitID){
-		this.kitID = kitID;
 	}
 
 	protected void setFighterLevel(int fighterLevel) {
@@ -195,7 +188,6 @@ public class Fighter {
 		}
 	}
 
-	public String getKitID() {return kitID;};
 	public int getFighterLevel() {return fighterLevel;}
 	public int getCakes() {return cakes;}
 	public int getDeaths() {return deaths;}
@@ -240,12 +232,20 @@ public class Fighter {
 	}
 
 	public double getDoubleFromWeaponType(WeaponType weaponType, int index){
-		double num = fighterMYSQLManager.getFIGHTER_STATS().get(weaponType)[index];
+		if(fighterMYSQLManager.getINDEX_weaponStats().get(weaponType) == null){
+			player.sendMessage("what the fuck 1");
+			return 0;
+		}
+		double num = (fighterMYSQLManager.getINDEX_weaponStats().get(weaponType))[index];
 		return num;
 	}
 
 	public int getTickFromWeaponType(WeaponType weaponType, int index){
-		int num = VanaByte.convertDoubleToTicks(fighterMYSQLManager.getFIGHTER_STATS().get(weaponType)[index]);
+		if(fighterMYSQLManager.getINDEX_weaponStats().get(weaponType) == null){
+			player.sendMessage("what the fuck 2");
+			return 0;
+		}
+		int num = VanaByte.convertDoubleToTicks((fighterMYSQLManager.getINDEX_weaponStats().get(weaponType))[index]);
 		return num;
 	}
 
