@@ -46,12 +46,14 @@ public class DatabaseManager {
         statement.close();
         break;
       } else if (USER_INPUT.equals("vana")) {
+        scanner.close();
         return false;
       } else {
         System.out.println("type vana to exit");
         continue;
       }
     }
+    scanner.close();
     return true;
   }
 
@@ -383,6 +385,7 @@ public class DatabaseManager {
           continue;
         }
       }
+      scanner.close();
     }
     for (String db_ColName : db_ColNames) {
       System.out.println("Column \"" + db_ColName + "\" exists in database but not in code");
@@ -444,7 +447,7 @@ public class DatabaseManager {
           fighterColumns[i] = fighterColumn;
         }
       }
-      fighterTable = new FighterTable(databaseTable, fighterColumns);
+      fighterTable = new FighterTable(databaseTable, Arrays.stream(fighterColumns).toList());
     } catch (SQLException e) {
       e.printStackTrace();
     }
@@ -474,6 +477,7 @@ public class DatabaseManager {
           }else{
             fighterString = fighterColumn.getValueString();
           }
+          preparedStatement.setString(currentIndex, fighterString);
         } else if(fighterColumn.getDatabaseColumn().isInt()){
           preparedStatement.setInt(currentIndex, fighterColumn.getValueInt());
         }else{

@@ -4,11 +4,12 @@ import me.cade.vanabyte.Fighters.Enums.StatRow;
 import me.cade.vanabyte.Fighters.Enums.StatTable;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DatabaseTable {
 
-    private static List<DatabaseTable> allTables;
+    private static final List<DatabaseTable> allTables = new ArrayList<>();
 
     private final String tableName;
     private final DatabaseColumn[] databaseColumns;

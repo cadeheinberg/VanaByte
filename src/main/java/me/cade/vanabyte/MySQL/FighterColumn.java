@@ -1,5 +1,7 @@
 package me.cade.vanabyte.MySQL;
 
+import me.cade.vanabyte.Fighters.Enums.StatRow;
+
 public class FighterColumn {
 
     private final DatabaseTable databaseTable;

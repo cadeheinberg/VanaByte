@@ -17,16 +17,22 @@ public class StatTable {
         return statRows;
     }
 
-//    public String[] getNames() {
-//        return names;
-//    }
-//
-//    public Integer[] getUpgradeLevels() {
-//        return upgradeLevels;
-//    }
-//
-//    public Double[][] getStats() {
-//        return stats;
-//    }
+    public StatRow getStatRowWithName(String name){
+        for(StatRow statRow : statRows){
+            if(statRow.getStatName().equals(name)){
+                return statRow;
+            }
+        }
+        return null;
+    }
+
+    public int getStatRowIndexWithName(String name){
+        for(int i = 0; i < statRows.length; i++){
+            if(statRows[i].getStatName().equals(name)){
+                return i;
+            }
+        }
+        return -1;
+    }
 
 }

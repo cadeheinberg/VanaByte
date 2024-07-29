@@ -268,4 +268,14 @@ public enum WeaponType {
     public String getWeaponID() {
         return weaponID;
     }
+
+    public static WeaponType getWeaponTypeFromID(String weaponID) {
+        for(WeaponType weaponType : WeaponType.values()){
+            if(weaponType.getWeaponID().equals(weaponID)){
+                return weaponType;
+            }
+        }
+        return null;
+    }
+
 }

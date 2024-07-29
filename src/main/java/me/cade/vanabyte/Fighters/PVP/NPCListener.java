@@ -50,7 +50,7 @@ public class NPCListener implements Listener {
 		Fighter fighter = Fighter.fighters.get(player.getUniqueId());
 		for(KitType kitType : KitType.values()){
 			if(kitType.getSelectorLocation().getBlockX() == x){
-				if (fighter.getFighterMYSQLManager().getUnlockedKit(kitType)) {
+				if (fighter.getFighterMYSQLManager().hasUnlockedKitType(kitType)) {
 					//player owns this kit
 					fighter.getFighterKitManager().setKitType(kitType);
 					fighter.getFighterKitManager().giveKit();
@@ -58,7 +58,7 @@ public class NPCListener implements Listener {
 				else {
 					player.sendMessage(ChatColor.GREEN + "Server in beta, you have unlocked this kit for free!");
 					player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 8, 1);
-					fighter.getFighterMYSQLManager().setUnlockedKit(kitType);
+					fighter.getFighterMYSQLManager().setHasUnlockedKitType(kitType);
 					fighter.getFighterKitManager().setKitType(kitType);
 					fighter.getFighterKitManager().giveKit();
 				}

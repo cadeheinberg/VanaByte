@@ -1,12 +1,13 @@
 package me.cade.vanabyte.Fighters;
 
 import me.cade.vanabyte.Fighters.Enums.KitType;
+import me.cade.vanabyte.Fighters.Enums.StatRow;
+import me.cade.vanabyte.Fighters.Enums.StatTable;
 import me.cade.vanabyte.Fighters.Enums.WeaponType;
 import me.cade.vanabyte.MySQL.DatabaseTable;
+import me.cade.vanabyte.MySQL.FighterColumn;
 import me.cade.vanabyte.MySQL.FighterTable;
 import me.cade.vanabyte.VanaByte;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
@@ -19,40 +20,51 @@ public class FighterMYSQLManager {
     private FighterTable unlockedKitsTable;
     private FighterTable[] weaponTables = new FighterTable[DatabaseTable.getWeaponTables().length];
 
-    private final int[] INDEX_unlockedKits = new int[7];
+    private HashMap<KitType, Boolean> INDEX_unlockedKits = new HashMap<>();
     private HashMap<WeaponType, Double[]> INDEX_weaponStats = new HashMap<>();
 
-    private Double[] buildStatTable(Double[][] STATS_FROM_BLUEPRINT, Integer[] UPGRADES_FROM_BLUEPRINT){
+    private boolean buildINDEX_weaponStats(){
         //Integer[X] = Y means that upgrade Double[X][Y] has been unlocked. First level of each unlocked here.
         //Integer[X] = -1 means that this skill has not been unlocked at all
-        Double[] outputStats = new Double[UPGRADES_FROM_BLUEPRINT.length];
-        for(int X = 0; X < UPGRADES_FROM_BLUEPRINT.length; X++){
-            if(UPGRADES_FROM_BLUEPRINT[X] < 0){
-                //skill has not been unlocked at all
-                outputStats[X] = -1.0;
-            }else{
-                int Y = UPGRADES_FROM_BLUEPRINT[X];
-                if(Y >= STATS_FROM_BLUEPRINT[X].length || STATS_FROM_BLUEPRINT[X][Y] < 0){
-                    //somehow unlocked an invalid stat, just use base and report issue
-                    outputStats[X] = STATS_FROM_BLUEPRINT[X][0];
-                    VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "invalid stat tried to be used");
+        for (int i = 0; i < weaponTables.length; i++){
+            Double[] outputStats = new Double[weaponTables[i].getFighterColumns().size()];
+            WeaponType weaponType = WeaponType.getWeaponTypeFromID(weaponTables[i].getDatabaseTable().getTableName());
+            if(weaponType == null) return false;
+            for(int X = 0; X < outputStats.length; X++){
+                FighterColumn fColumn = weaponTables[i].getFighterColumns().get(X);
+                String fColumnName = fColumn.getDatabaseColumn().getColumnName();
+                StatRow statRow = weaponType.getStatTable().getStatRowWithName(fColumnName);
+                if(statRow == null) continue;
+                int statRowIndex = weaponType.getStatTable().getStatRowIndexWithName(fColumnName);
+                if(statRowIndex == -1) return false;
+                int databaseUpgradeLevel = fColumn.getValueInt();
+                if(databaseUpgradeLevel < 0){
+                    //skill has not been unlocked at all
+                    outputStats[statRowIndex] = -1.0;
                 }else{
-                    outputStats[X] = STATS_FROM_BLUEPRINT[X][Y];
+                    if(databaseUpgradeLevel >= statRow.getStats().length || statRow.getStats()[databaseUpgradeLevel] < 0){
+                        //somehow unlocked an invalid stat, just use base and report issue
+                        outputStats[X] = statRow.getStats()[0];
+                        VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "invalid stat tried to be used");
+                        return false;
+                    }else{
+                        outputStats[X] = statRow.getStats()[databaseUpgradeLevel];
+                    }
                 }
             }
+            INDEX_weaponStats.put(weaponType, outputStats);
         }
-        return outputStats;
+        return true;
     }
-    //fill stats to use for kits and weapons later
-    private void statsDoerThing(){
-        //if player is not in the mysql table
-        //build "stats" using WeaponType blueprint
-        for(int i = 0; i < WeaponType.values().length; i++){
-            if(WeaponType.values()[i] == WeaponType.UNKNOWN_WEAPON){
-                continue;
+
+    private boolean buildINDEX_unlockedKits(){
+        for(FighterColumn fighterColumn : unlockedKitsTable.getFighterColumns()){
+            KitType kitType = KitType.getKitTypeFromKitID(fighterColumn.getValueString());
+            if(kitType != null){
+                INDEX_unlockedKits.put(kitType, true);
             }
-            FIGHTER_STATS.put(WeaponType.values()[i], buildStatTable(WeaponType.values()[i].getStatTable().getStats(), WeaponType.values()[i].getStatTable().getUpgradeLevels()));
         }
+        return true;
     }
 
     protected FighterMYSQLManager(Player player, Fighter fighter){
@@ -91,6 +103,12 @@ public class FighterMYSQLManager {
 
     protected void fighterJoined(){
         this.downloadFighter();
+        if(!buildINDEX_weaponStats()){
+            VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "error with buildINDEX_weaponStats()");
+        }
+        if(!buildINDEX_unlockedKits()){
+            VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "error with buildINDEX_unlockedKits()");
+        }
     }
 
     protected void fighterLeftServer(){
@@ -114,13 +132,17 @@ public class FighterMYSQLManager {
         //player.kickPlayer("Your stats have been cleared");
     }
 
-    public boolean getUnlockedKit(KitType kitType) {
-        return INDEX_unlockedKits[kitID] == 1;
+    public boolean hasUnlockedKitType(KitType kitType) {
+        if(INDEX_unlockedKits.get(kitType) == null || INDEX_unlockedKits.get(kitType) == false){
+            return false;
+        }
+        return true;
     }
 
-    public void setUnlockedKit(KitType kit) {
+    public void setHasUnlockedKitType(KitType kitType) {
         fighter.fighterPurchasedKit();
-        INDEX_unlockedKits[kitID] = 1;
+        unlockedKitsTable.addFighterColumn(new FighterColumn(DatabaseTable.getUnlockedKitsTable(), DatabaseTable.getUnlockedKitsTable().getDatabaseColumns()[1], -1, kitType.getKitID()));
+        INDEX_unlockedKits.put(kitType, true);
     }
 
     public HashMap<WeaponType, Double[]> getFIGHTER_STATS() {

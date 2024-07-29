@@ -2,26 +2,24 @@ package me.cade.vanabyte.NPCS.PacketHolograms;
 
 import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.Fighters.Fighter;
-import me.cade.vanabyte.NPCS.RealEntities.MyArmorStand;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
-
-import java.util.Arrays;
 
 public class HologramManager {
 
     private Player player = null;
     private Fighter fighter = null;
-    private Hologram[] kitHolograms;
+    private final Hologram[] kitHolograms;
     private Hologram welcomeHologram;
 
     public HologramManager(Player player, Fighter fighter){
         this.player = player;
         this.fighter = fighter;
+        kitHolograms = new Hologram[KitType.values().length];
+        welcomeHologram = null;
     }
 
     public void fighterJoined(){
@@ -83,7 +81,6 @@ public class HologramManager {
 
     private void respawnKitHolograms(){
         Bukkit.getConsoleSender().sendMessage("respawning kit holograms");
-        kitHolograms = new Hologram[kitHolograms.length];
         int i = 0;
         for(KitType kitType : KitType.values()){
             if (kitHolograms[i] == null) {
@@ -94,7 +91,7 @@ public class HologramManager {
                 }
             }
             String locked = ChatColor.RED + " Free For Beta ";
-            if (fighter.getFighterMYSQLManager().getUnlockedKit(kitType)) {
+            if (fighter.getFighterMYSQLManager().hasUnlockedKitType(kitType)) {
                 locked = ChatColor.GREEN + " Unlocked ";
             }
             kitHolograms[i].setDisplayText(locked + "\n"
