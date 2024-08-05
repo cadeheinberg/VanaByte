@@ -1,5 +1,6 @@
 package me.cade.vanabyte.MySQL;
 
+import me.cade.vanabyte.Fighters.Enums.KitType;
 import me.cade.vanabyte.MySQL.HiddenPersonal.DatabaseAccess;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.Bukkit;
@@ -431,58 +432,45 @@ public class DatabaseManager {
     if(fighterTable.getDatabaseTable().getInsertStyle().equals("UPDATE")){
       return updateFighterTable(fighterTable, uuid, playerName);
     } else if (fighterTable.getDatabaseTable().getInsertStyle().equals("INSERT")) {
-      return insertFighterTable(fighterTable, uuid, playerName);
+      return insertUnlockedKitTable(fighterTable, uuid, playerName);
     }
     return false;
   }
 
   //when a primary key has 2 fields like uuid and kitid, dont want to override old by using SET
-  public boolean insertFighterTable(FighterTable fighterTable, UUID uuid, String playerName) {
+  public boolean insertUnlockedKitTable(FighterTable fighterTable, UUID uuid, String playerName) {
     DatabaseTable databaseTable = fighterTable.getDatabaseTable();
-    String SQL_QUERY = "INSERT INTO " + databaseTable.getTableName() + " (";
-    String sqlLines = "";
-    for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
-      sqlLines = sqlLines + fighterColumn.getDatabaseColumn().getColumnName() + ", ";
-    }
-    sqlLines = sqlLines.substring(0, sqlLines.length() - 2);
-    SQL_QUERY = SQL_QUERY + sqlLines + ") VALUES (";
-    sqlLines = "";
-    for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
-      sqlLines = sqlLines + "?, ";
-    }
-    sqlLines = sqlLines.substring(0, sqlLines.length() - 2);
-    SQL_QUERY = SQL_QUERY + sqlLines + ")";
-    try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
-      int currentIndex = 1;
-      for(FighterColumn fighterColumn : fighterTable.getFighterColumns()){
-        if(fighterColumn.getDatabaseColumn().isVarChar()){
-          String fighterString = "";
-          if(fighterColumn.getValueString() == null){
-            fighterString = "error_set_to_null";
-          }else if(fighterColumn.getDatabaseColumn().getDefaultValueString().equals("func_uuid")){
-            fighterString = uuid.toString();
-          }else if(fighterColumn.getDatabaseColumn().getDefaultValueString().equals("func_player_name")){
-            fighterString = playerName;
-          }else{
-            fighterString = fighterColumn.getValueString();
-          }
-          preparedStatement.setString(currentIndex, fighterString);
-        } else if(fighterColumn.getDatabaseColumn().isInt()){
-          preparedStatement.setInt(currentIndex, fighterColumn.getValueInt());
-        }else{
-          VanaByte.sendConsoleMessageBad("DatabaseManager", "column is not true for int or varchar");
-          return false;
-        }
-        currentIndex++;
+    for(FighterColumn fColumn : fighterTable.getFighterColumns()){
+      if(!fColumn.getDatabaseColumn().isVarChar()){
+        VanaByte.sendConsoleMessageBad("DatabaseManager", "insertTableUnlockedError 1");
+        return false;
       }
-      VanaByte.sendConsoleMessageBad("DatabaseManager", preparedStatement.toString());
-      int rowsAffected = preparedStatement.executeUpdate();
-      return rowsAffected > 0;
-    } catch (SQLException e) {
-//      throw new RuntimeException(e);
-      VanaByte.sendConsoleMessageBad("DatabaseManager", SQL_QUERY);
+      if(fColumn.getValueString() == null){
+        VanaByte.sendConsoleMessageBad("DatabaseManager", "insertTableUnlockedError 2");
+        return false;
+      }
+      if(fColumn.getDatabaseColumn().getDefaultValueString().equals("func_uuid")){
+        continue;
+      }
+      String kitID = fColumn.getValueString();
+      VanaByte.sendConsoleMessageBad("KitID 2", kitID);
+      if(KitType.getKitTypeFromKitID(kitID) == null){
+        VanaByte.sendConsoleMessageBad("DatabaseManager", "insertTableUnlockedError 3");
+        return false;
+      }
+      String SQL_QUERY = "INSERT IGNORE INTO " + databaseTable.getTableName() +
+              " (uuid, " + fColumn.getDatabaseColumn().getColumnName() + ") VALUES (?, ?)";
+      try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
+        preparedStatement.setString(1, uuid.toString());
+        preparedStatement.setString(2, fColumn.getValueString());
+        VanaByte.sendConsoleMessageBad("DatabaseManager Query To Send", preparedStatement.toString());
+        preparedStatement.executeUpdate();
+      } catch (SQLException e) {
+        VanaByte.sendConsoleMessageBad("DatabaseManager Bad Query", SQL_QUERY);
+        throw new RuntimeException(e);
+      }
     }
-    return false;
+    return true;
   }
 
   private boolean updateFighterTable(FighterTable fighterTable, UUID uuid, String playerName){

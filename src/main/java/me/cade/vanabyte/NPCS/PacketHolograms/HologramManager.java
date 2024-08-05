@@ -40,12 +40,14 @@ public class HologramManager {
     }
 
     public void fighterLeftServer(){
-        this.despawnHubHolograms();
+        this.despawnWelcomeHolograms();
+        this.despawnKitHolograms();
     }
 
     public void fighterChangedWorld(World from){
         if(from == VanaByte.hub){
-            this.despawnHubHolograms();
+            this.despawnWelcomeHolograms();
+            this.despawnKitHolograms();
         }else{
             this.respawnKitHolograms();
             this.respawnWelcomeHologram();
@@ -61,16 +63,21 @@ public class HologramManager {
 
     public void fighterPurchasedKit(){
         if(player.getWorld() == VanaByte.hub){
+            this.despawnKitHolograms();
             this.respawnKitHolograms();
         }
     }
 
-    private void despawnHubHolograms(){
-        Bukkit.getConsoleSender().sendMessage("despawning all holograms");
+    private void despawnWelcomeHolograms(){
+        Bukkit.getConsoleSender().sendMessage("despawning welcome holograms");
         if(welcomeHologram != null){
             welcomeHologram.removeFromServer();
             welcomeHologram = null;
         }
+    }
+
+    private void despawnKitHolograms(){
+        Bukkit.getConsoleSender().sendMessage("despawning kit holograms");
         for(int kitID = 0; kitID < kitHolograms.length; kitID++){
             if(kitHolograms[kitID] != null) {
                 kitHolograms[kitID].removeFromServer();
