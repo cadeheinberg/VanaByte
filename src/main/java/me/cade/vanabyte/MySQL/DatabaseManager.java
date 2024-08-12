@@ -142,75 +142,12 @@ public class DatabaseManager {
     code_TableNames.removeAll(matches_Tables);
     db_TableNames.removeAll(matches);
     for (DatabaseTable code_TableName : code_TableNames) {
+      VanaByte.sendConsoleMessageWarning("---------- Table \"" + code_TableName.getTableName() + "\" ----------", "");
       System.out.println("Table name \"" + code_TableName.getTableName() + "\" exists in code but not in database");
-      System.out.println("1. make a new table");
-      int i = 2;
-      for (String db_TableName : db_TableNames) {
-        System.out.println(i + ". rename \"" + db_TableName + "\" from database to \"" + code_TableName.getTableName() + "\"");
-        i++;
-      }
-      while (true) {
-        String USER_INPUT = "1";
-        System.out.println("You entered '" + USER_INPUT + "'");
-        int USER_INTEGER = 0;
-        if (USER_INPUT.equals("vana")) {
-          return false;
-        }
-        try {
-          USER_INTEGER = Integer.parseInt(USER_INPUT);
-        } catch (NumberFormatException e) {
-          System.out.println("type vana to exit");
-          continue;
-        }
-        if (USER_INTEGER == 1) {
-          //create new table code_TableName
-          if (!createNewTable(code_TableName)) {
-            return false;
-          }
-          break;
-        } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < db_TableNames.size())) {
-          //rename db_TableNames.get(USER_INTERGER - 2) to code_TableName
-          SQL_QUERY = "RENAME TABLE " + db_TableNames.get(USER_INTEGER - 2) + " TO " + code_TableName + ";";
-          if (!doQuery(SQL_QUERY)) {
-            System.out.println("canceling table renaming");
-            return false;
-          }
-          System.out.println("table successfully renamed");
-          db_TableNames.remove(code_TableName.getTableName());
-          break;
-        } else {
-          System.out.println("type vana to exit");
-          continue;
-        }
-      }
     }
     for (String db_TableName : db_TableNames) {
+      VanaByte.sendConsoleMessageWarning("---------- Table \"" + db_TableName + "\" ----------", "");
       System.out.println("Table name \"" + db_TableName + "\" exists in database but not in code");
-      System.out.println("1. ignore");
-      System.out.println("2. delete table");
-      while (true) {
-        String USER_INPUT = "1";
-        int USER_INTEGER = 0;
-        if (USER_INPUT.equals("vana")) {
-          return false;
-        }
-        try {
-          USER_INTEGER = Integer.parseInt(USER_INPUT);
-        } catch (NumberFormatException e) {
-          System.out.println("type vana to exit");
-          continue;
-        }
-        if (USER_INTEGER == 1) {
-          break;
-        } else if (USER_INTEGER == 2) {
-          SQL_QUERY = "DROP TABLE IF EXISTS " + db_TableName;
-          doQuery(SQL_QUERY);
-          break;
-        } else {
-          System.out.println("type vana to exit");
-          continue;
-        }
-      }
     }
     return true;
   }
@@ -307,8 +244,9 @@ public class DatabaseManager {
     List<DatabaseColumn> code_ColNames = new ArrayList<>(Arrays.stream(databaseTable.getDatabaseColumns()).toList());
     List<String> db_ColNames = getColumnNamesIfTableExists(databaseTable.getTableName());
     Statement statement = connection.createStatement();
+    VanaByte.sendConsoleMessageWarning("---------- Table \"" + databaseTable.getTableName() + "\" ----------", "");
     if (db_ColNames == null) {
-      VanaByte.sendConsoleMessageBad("DatabaseManager", "no columns found for " + databaseTable.getTableName() + "!");
+      System.out.println("No columns or no table found in database for this table!");
       return false;
     }
     List<String> matches = new ArrayList<>();
@@ -323,77 +261,9 @@ public class DatabaseManager {
     db_ColNames.removeAll(matches);
     for (DatabaseColumn code_ColName : code_ColNames) {
       System.out.println("Column \"" + code_ColName.getColumnName() + "\" exists in code but not in database");
-      System.out.println("1. make a new column");
-      int i = 2;
-      for (String db_ColName : db_ColNames) {
-        System.out.println(i + ". rename \"" + db_ColName + "\" from database to \"" + code_ColName.getColumnName() + "\"");
-        i++;
-      }
-      while (true) {
-        String USER_INPUT = "1";
-        int USER_INTEGER = 0;
-        if (USER_INPUT.equals("vana")) {
-          return false;
-        }
-        try {
-          USER_INTEGER = Integer.parseInt(USER_INPUT);
-        } catch (NumberFormatException e) {
-          System.out.println("type vana to exit");
-          continue;
-        }
-        if (USER_INTEGER == 1) {
-          //todo create a new row code_ColName in this table
-          SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " ADD COLUMN " + code_ColName + " INT DEFAULT " + code_ColName.getDefaultValueInt();
-          if (!doQuery(SQL_QUERY)) {
-            return false;
-          }
-          break;
-        } else if (USER_INTEGER > 1 && ((USER_INTEGER - 2) < db_ColNames.size())) {
-          SQL_QUERY = "RENAME TABLE " + db_ColNames.get(USER_INTEGER - 2) + " TO " + code_ColName + ";";
-          if (!doQuery(SQL_QUERY)) {
-            System.out.println("canceling table renaming");
-            return false;
-          }
-          System.out.println("table successfully renamed");
-          db_ColNames.remove(code_ColName.getColumnName());
-          break;
-        } else {
-          System.out.println("type vana to exit");
-          continue;
-        }
-      }
     }
     for (String db_ColName : db_ColNames) {
       System.out.println("Column \"" + db_ColName + "\" exists in database but not in code");
-      System.out.println("1. ignore");
-      System.out.println("2. delete column");
-      while (true) {
-        String USER_INPUT = "1";
-        int USER_INTEGER = 0;
-        if (USER_INPUT.equals("vana")) {
-          return false;
-        }
-        try {
-          USER_INTEGER = Integer.parseInt(USER_INPUT);
-        } catch (NumberFormatException e) {
-          System.out.println("type vana to exit");
-          continue;
-        }
-        if (USER_INTEGER == 1) {
-          //ignore
-          break;
-        } else if (USER_INTEGER == 2) {
-          SQL_QUERY = "ALTER TABLE " + databaseTable.getTableName() + " DROP COLUMN " + db_ColName;
-          //statement.executeUpdate(sql);
-          if (!doQuery(SQL_QUERY)) {
-            return false;
-          }
-          break;
-        } else {
-          System.out.println("type vana to exit");
-          continue;
-        }
-      }
     }
     return true;
   }
