@@ -9,7 +9,6 @@ import me.cade.vanabyte.MySQL.FighterTable;
 import me.cade.vanabyte.VanaByte;
 import org.bukkit.entity.Player;
 
-import java.util.Arrays;
 import java.util.HashMap;
 
 public class FighterMYSQLManager {
@@ -27,15 +26,21 @@ public class FighterMYSQLManager {
         //Integer[X] = Y means that upgrade Double[X][Y] has been unlocked. First level of each unlocked here.
         //Integer[X] = -1 means that this skill has not been unlocked at all
         for (int i = 0; i < weaponTables.length; i++){
-            Double[] outputStats = new Double[weaponTables[i].getFighterColumns().size()];
+            Double[] outputStats = new Double[weaponTables[i].getFighterColumns().size() - 1];
             WeaponType weaponType = WeaponType.getWeaponTypeFromID(weaponTables[i].getDatabaseTable().getTableName());
             if(weaponType == null) return false;
-            for(int X = 0; X < outputStats.length; X++){
+            //System.out.println("---------------weaponnType: " + weaponType);
+            //doing all this weird indexing because we have to skip the UUID (first) column!
+            for(int X = 1; X < outputStats.length + 1; X++){
                 FighterColumn fColumn = weaponTables[i].getFighterColumns().get(X);
+                //System.out.println("fColumn: " + fColumn);
                 String fColumnName = fColumn.getDatabaseColumn().getColumnName();
+                //System.out.println("fColumnName: " + fColumnName);
                 StatRow statRow = weaponType.getStatTable().getStatRowWithName(fColumnName);
+                //System.out.println("statRow: " + statRow);
                 if(statRow == null) continue;
                 int statRowIndex = weaponType.getStatTable().getStatRowIndexWithName(fColumnName);
+                //System.out.println("statRowIndex: " + statRowIndex);
                 if(statRowIndex == -1) return false;
                 int databaseUpgradeLevel = fColumn.getValueInt();
                 if(databaseUpgradeLevel < 0){
@@ -53,10 +58,10 @@ public class FighterMYSQLManager {
                 }
             }
             INDEX_weaponStats.put(weaponType, outputStats);
-            player.sendMessage(weaponType.toString());
-            for(int WHAT = 0; WHAT < outputStats.length; WHAT++){
-                player.sendMessage(WHAT + ": " + outputStats[WHAT]);
-            }
+//            player.sendMessage(weaponType.toString());
+//            for(int WHAT = 0; WHAT < outputStats.length; WHAT++){
+//                player.sendMessage(WHAT + ": " + outputStats[WHAT]);
+//            }
         }
         return true;
     }
@@ -78,8 +83,7 @@ public class FighterMYSQLManager {
 
     //If the stat is a -1 it wont upload anything
     protected boolean uploadFighter() {
-        boolean success = VanaByte.databaseManager.addPlayerToDatabaseIfNotExist(player.getUniqueId(), player.getName());
-        if(!success) return false;
+        boolean success = false;
         success = VanaByte.databaseManager.uploadFighterTable(fighterTable, player.getUniqueId(), player.getName());
         if(!success) return false;
         success = VanaByte.databaseManager.uploadFighterTable(unlockedKitsTable, player.getUniqueId(), player.getName());
@@ -92,21 +96,21 @@ public class FighterMYSQLManager {
     }
 
     private boolean downloadFighter() {
-        boolean success = VanaByte.databaseManager.addPlayerToDatabaseIfNotExist(player.getUniqueId(), player.getName());
-        if(!success) return false;
-        fighterTable = VanaByte.databaseManager.downloadFighterTable(DatabaseTable.getFighterTable(), player.getUniqueId());
+        fighterTable = VanaByte.databaseManager.downloadFighterTable(DatabaseTable.getFighterTable(), player.getUniqueId(), player.getName());
         if(fighterTable == null) return false;
-        unlockedKitsTable = VanaByte.databaseManager.downloadFighterTable(DatabaseTable.getUnlockedKitsTable(), player.getUniqueId());
+        unlockedKitsTable = VanaByte.databaseManager.downloadFighterTable(DatabaseTable.getUnlockedKitsTable(), player.getUniqueId(), player.getName());
         if(unlockedKitsTable == null) return false;
         for(int i = 0; i < DatabaseTable.getWeaponTables().length; i++){
-            weaponTables[i] = VanaByte.databaseManager.downloadFighterTable(DatabaseTable.getWeaponTables()[i], player.getUniqueId());
+            weaponTables[i] = VanaByte.databaseManager.downloadFighterTable(DatabaseTable.getWeaponTables()[i], player.getUniqueId(), player.getName());
             if(weaponTables[i] == null) return false;
         }
         return true;
     }
 
     protected void fighterJoined(){
-        this.downloadFighter();
+        if(!this.downloadFighter()){
+            VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "error with downloadFighter()");
+        }
         if(!buildINDEX_weaponStats()){
             VanaByte.sendConsoleMessageBad("FighterMYSQLManager.java", "error with buildINDEX_weaponStats()");
         }
@@ -138,6 +142,7 @@ public class FighterMYSQLManager {
     }
 
     public boolean hasUnlockedKitType(KitType kitType) {
+        System.out.println("has? kitType: " + kitType + " value: " + INDEX_unlockedKits.get(kitType));
         if(INDEX_unlockedKits.get(kitType) == null || INDEX_unlockedKits.get(kitType) == false){
             return false;
         }
@@ -145,9 +150,10 @@ public class FighterMYSQLManager {
     }
 
     public void setHasUnlockedKitType(KitType kitType) {
-        fighter.fighterPurchasedKit();
         unlockedKitsTable.addFighterColumn(new FighterColumn(DatabaseTable.getUnlockedKitsTable(), DatabaseTable.getUnlockedKitsTable().getDatabaseColumns()[1], -1, kitType.getKitID()));
         INDEX_unlockedKits.put(kitType, true);
+        fighter.fighterPurchasedKit();
+        System.out.println("set? kitType: " + kitType + " value: " + INDEX_unlockedKits.get(kitType));
     }
 
     public HashMap<WeaponType, Double[]> getINDEX_weaponStats() {

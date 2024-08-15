@@ -233,7 +233,6 @@ public class Fighter {
 
 	public double getDoubleFromWeaponType(WeaponType weaponType, int index){
 		if(fighterMYSQLManager.getINDEX_weaponStats().get(weaponType) == null){
-			player.sendMessage("what the fuck 1");
 			return 0;
 		}
 		double num = (fighterMYSQLManager.getINDEX_weaponStats().get(weaponType))[index];
@@ -242,7 +241,6 @@ public class Fighter {
 
 	public int getTickFromWeaponType(WeaponType weaponType, int index){
 		if(fighterMYSQLManager.getINDEX_weaponStats().get(weaponType) == null){
-			player.sendMessage("what the fuck 2");
 			return 0;
 		}
 		int num = VanaByte.convertDoubleToTicks((fighterMYSQLManager.getINDEX_weaponStats().get(weaponType))[index]);

@@ -55,6 +55,8 @@ public class Hologram {
     }
 
     public void removeFromServer(){
-        ((TextDisplay) Objects.requireNonNull(Bukkit.getServer().getEntity(entityUUid))).remove();
+        VanaByte.sendConsoleMessageBad("Hologram.java", "removing a hologram...");
+        Objects.requireNonNull(Bukkit.getServer().getEntity(entityUUid)).remove();
+        VanaByte.sendConsoleMessageBad("Hologram.java", "hologram removed!");
     }
 }

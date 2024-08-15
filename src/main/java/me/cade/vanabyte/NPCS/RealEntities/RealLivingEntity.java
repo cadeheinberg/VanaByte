@@ -9,7 +9,7 @@ import org.bukkit.entity.EntityType;
 
 public class RealLivingEntity {
 
-	private static int spawnAmount = 2;
+	private static int spawnAmount = 0;
 
 	private static String[] names = {
 			ChatColor.GOLD + "" + ChatColor.BOLD + "Join Anarchy",

@@ -14,7 +14,7 @@ public class SafeZone {
   }
 
   public static boolean ladderZone(Location location) {
-    if(location.getX() > -1060 && location.getX() < -1045 && location.getZ() > -156 && location.getZ() < -141) {
+    if(location.getX() > -1060 && location.getX() < -1045 && location.getZ() > -161 && location.getZ() < -146) {
       return true;
     }
     return false;

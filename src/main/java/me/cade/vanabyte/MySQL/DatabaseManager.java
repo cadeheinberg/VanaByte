@@ -141,13 +141,19 @@ public class DatabaseManager {
     }
     code_TableNames.removeAll(matches_Tables);
     db_TableNames.removeAll(matches);
-    for (DatabaseTable code_TableName : code_TableNames) {
-      VanaByte.sendConsoleMessageWarning("---------- Table \"" + code_TableName.getTableName() + "\" ----------", "");
-      System.out.println("Table name \"" + code_TableName.getTableName() + "\" exists in code but not in database");
+    for (DatabaseTable code_Table : code_TableNames) {
+      VanaByte.sendConsoleMessageWarning("---------- Table \"" + code_Table.getTableName() + "\" ----------", "");
+      System.out.println("Table named \"" + code_Table.getTableName() + "\" exists in code but not in database");
+      System.out.println("Creating new table...");
+      if(createNewTable(code_Table)){
+        System.out.println("Table named \"" + code_Table.getTableName() + "\" created!");
+      }else{
+        System.out.println("Table named \"" + code_Table.getTableName() + "\" failed to create!");
+      }
     }
     for (String db_TableName : db_TableNames) {
       VanaByte.sendConsoleMessageWarning("---------- Table \"" + db_TableName + "\" ----------", "");
-      System.out.println("Table name \"" + db_TableName + "\" exists in database but not in code");
+      System.out.println("Table named \"" + db_TableName + "\" exists in database but not in code");
     }
     return true;
   }
@@ -268,7 +274,9 @@ public class DatabaseManager {
     return true;
   }
 
-  public FighterTable downloadFighterTable(DatabaseTable databaseTable, UUID uuid) {
+  public FighterTable downloadFighterTable(DatabaseTable databaseTable, UUID uuid, String playerName) {
+    boolean success = VanaByte.databaseManager.addPlayerToDatabaseTableIfNotExist(databaseTable, uuid, playerName);
+    if(!success) return null;
     FighterTable fighterTable = null;
     ArrayList<FighterColumn> fighterColumns = new ArrayList<>();
     PreparedStatement statement;
@@ -309,6 +317,8 @@ public class DatabaseManager {
 
   //when a primary key has 2 fields like uuid and kitid, dont want to override old by using SET
   public boolean insertUnlockedKitTable(FighterTable fighterTable, UUID uuid, String playerName) {
+    boolean success = VanaByte.databaseManager.addPlayerToDatabaseTableIfNotExist(fighterTable.getDatabaseTable(), uuid, playerName);
+    if(!success) return false;
     DatabaseTable databaseTable = fighterTable.getDatabaseTable();
     for(FighterColumn fColumn : fighterTable.getFighterColumns()){
       if(!fColumn.getDatabaseColumn().isVarChar()){
@@ -323,7 +333,7 @@ public class DatabaseManager {
         continue;
       }
       String kitID = fColumn.getValueString();
-      VanaByte.sendConsoleMessageBad("KitID 2", kitID);
+      //VanaByte.sendConsoleMessageBad("KitID 2", kitID);
       if(KitType.getKitTypeFromKitID(kitID) == null){
         VanaByte.sendConsoleMessageBad("DatabaseManager", "insertTableUnlockedError 3");
         return false;
@@ -333,7 +343,7 @@ public class DatabaseManager {
       try (PreparedStatement preparedStatement = connection.prepareStatement(SQL_QUERY)) {
         preparedStatement.setString(1, uuid.toString());
         preparedStatement.setString(2, fColumn.getValueString());
-        VanaByte.sendConsoleMessageBad("DatabaseManager Query To Send", preparedStatement.toString());
+        //VanaByte.sendConsoleMessageBad("DatabaseManager Query To Send", preparedStatement.toString());
         preparedStatement.executeUpdate();
       } catch (SQLException e) {
         VanaByte.sendConsoleMessageBad("DatabaseManager Bad Query", SQL_QUERY);
@@ -344,6 +354,8 @@ public class DatabaseManager {
   }
 
   private boolean updateFighterTable(FighterTable fighterTable, UUID uuid, String playerName){
+    boolean success = VanaByte.databaseManager.addPlayerToDatabaseTableIfNotExist(fighterTable.getDatabaseTable(), uuid, playerName);
+    if(!success) return false;
     DatabaseTable databaseTable = fighterTable.getDatabaseTable();
     String SQL_QUERY = "UPDATE " + databaseTable.getTableName() + " SET ";
     String sqlLines = "";
@@ -427,23 +439,21 @@ public class DatabaseManager {
   }
 
   //return true if player is in database after execution
-  public boolean addPlayerToDatabaseIfNotExist(UUID playerUUID, String playerName){
-    if(doesPlayerExist(playerUUID)){
+  public boolean addPlayerToDatabaseTableIfNotExist(DatabaseTable databaseTable, UUID playerUUID, String playerName){
+    if(doesPlayerExist(databaseTable, playerUUID)){
       return true;
     }
-    for(DatabaseTable databaseTable : DatabaseTable.getAllTables()){
-      if(!insertStatsFromDefault(databaseTable, playerUUID, playerName)){
+    if(!insertStatsFromDefault(databaseTable, playerUUID, playerName)){
         return false;
-      }
     }
     return true;
   }
 
-  private boolean doesPlayerExist(UUID playerUUID) {
-    int index = 0;
+  private boolean doesPlayerExist(DatabaseTable databaseTable, UUID playerUUID) {
+    int uuidIndex = 0;
     PreparedStatement statement;
     try {
-      statement = connection.prepareStatement("SELECT " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " FROM " + DatabaseTable.getFighterTable().getTableName() + " WHERE " + DatabaseTable.getFighterTable().getDatabaseColumns()[index].getColumnName() + " = ?");
+      statement = connection.prepareStatement("SELECT " + databaseTable.getDatabaseColumns()[uuidIndex].getColumnName() + " FROM " + databaseTable.getTableName() + " WHERE " + databaseTable.getDatabaseColumns()[uuidIndex].getColumnName() + " = ?");
       statement.setString(1, playerUUID.toString());
       ResultSet results = statement.executeQuery();
       if (results.next()) {

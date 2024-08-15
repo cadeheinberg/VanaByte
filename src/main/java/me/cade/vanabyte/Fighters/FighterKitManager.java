@@ -44,7 +44,7 @@ public class FighterKitManager {
     protected void fighterJoined(){
         //remove all potions
         this.applyNightVision();
-        player.sendMessage("kit found: " + fighter.getFighterMYSQLManager().getFighterTable().getFighterColumns().get(2).getValueString());
+        player.sendMessage("FighterKitManager, kit found: " + fighter.getFighterMYSQLManager().getFighterTable().getFighterColumns().get(2).getValueString());
         this.setKitType(KitType.getKitTypeFromKitID(fighter.getFighterMYSQLManager().getFighterTable().getFighterColumns().get(2).getValueString()));
         this.giveKit();
     }
