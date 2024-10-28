@@ -21,7 +21,7 @@ public class Fighter {
 	private Plugin plugin = VanaByte.getPlugin(VanaByte.class);
 	private Player player = null;
 	private UUID uuid = null;
-	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = -1;
+	private int fighterLevel, fighterXP, kills,killStreak,deaths,cakes = 0;
 
 
 	protected HologramManager fighterPacketHologramsManager = null;
@@ -55,6 +55,7 @@ public class Fighter {
 		//Need to do this after everything has been setup
 		fighterKitManager.fighterJoined();
 		fighterAbilityManager.fighterJoined();
+		this.setCakes(fighterMYSQLManager.getFighterTable().getFighterColumns().get(3).getValueInt());
 	}
 
 	public void fighterRespawn() {
@@ -66,11 +67,12 @@ public class Fighter {
 	}
 
 	public void fighterLeftServer() {
-		fighterMYSQLManager.fighterLeftServer();
-		fighterTaskManager.fighterLeftServer();
+		fighterMYSQLManager.getFighterTable().getFighterColumns().get(3).setValueInt(this.cakes);
 		fighterKitManager.fighterLeftServer();
+		fighterTaskManager.fighterLeftServer();
 		fighterAbilityManager.fighterLeftServer();
 		fighterPacketHologramsManager.fighterLeftServer();
+		fighterMYSQLManager.fighterLeftServer();
 	}
 
 	public void fighterDeath() {
